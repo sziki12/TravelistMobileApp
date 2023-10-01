@@ -1,8 +1,11 @@
 package hu.bme.aut.android.gyakorlas
 
 
-import androidx.appcompat.app.AppCompatActivity
+
+import android.Manifest
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -11,15 +14,24 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.bme.aut.android.gyakorlas.databinding.ActivityMapsBinding
+import android.location.Location
+import android.util.Log
+import android.widget.Toast
+import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
+    GoogleMap.OnMyLocationClickListener
+    {
 
-    private lateinit var mMap: GoogleMap
-    private lateinit var binding: ActivityMapsBinding
-    private var markers: ArrayList<MapMarker> = ArrayList<MapMarker>()
-   //private lateinit var locationClient: FusedLocationProviderClient
-    private lateinit var currentLocation:LatLng;
+
+        private lateinit var  mMap: GoogleMap
+        private var permissionHandler: PermissionHandler = PermissionHandler(this)
+        private lateinit var binding: ActivityMapsBinding
+        private var markers: ArrayList<MapMarker> = ArrayList()
+       //private lateinit var locationClient: FusedLocationProviderClient
+        private lateinit var currentLocation:LatLng;
+
 
     companion object
     {
@@ -85,6 +97,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun enableGestures()
+    {
+        if(mMap!=null)
+        {
+            mMap.uiSettings.isScrollGesturesEnabled = true
+            mMap.uiSettings.isRotateGesturesEnabled = true
+            mMap.uiSettings.isZoomGesturesEnabled = true
+            mMap.uiSettings.isTiltGesturesEnabled = true
+        }
+    }
+
+
+
+
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -95,12 +122,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        permissionHandler.setMap(mMap)
+        permissionHandler.requestPermission(LOCATION_PERMISSION_REQUEST_CODE)
 
+        //Show Markers
         for(marker in markers)
         {
             mMap.addMarker(MarkerOptions().position(marker.getLatLng()).title(marker.name))
         }
 
+        //Move Camera
         var mapLocation: CameraPosition = CameraPosition.Builder()
             .target(currentLocation?:LatLng(10.0,10.0))
             .zoom(11.0f)
@@ -109,5 +140,60 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .build()
 
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(mapLocation))
+
+        //Enable Gestures
+       enableGestures()
+       googleMap.setOnMyLocationButtonClickListener(this)
+       googleMap.setOnMyLocationClickListener(this)
+    }
+
+        /*override fun onResumeFragments() {
+            super.onResumeFragments()
+            if (permissionHandler.permissionDenied) {
+                // Permission was not granted, display error dialog.
+                showMissingPermissionError()
+                permissionHandler.permissionDenied = false
+            }
+        }*/
+
+        override fun onResume()
+        {
+            //TODO First check shows denied automatically
+            super.onResume()
+           if (permissionHandler.permissionDenied) {
+                // TODO Permission was not granted, display error dialog.
+                Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
+                permissionHandler.permissionDenied = false
+           }
+            else
+           {
+               //Log.i("PERMISSION","permissionGranted")
+           }
+        }
+
+        /**
+         * Displays a dialog with error message explaining that the location permission is missing.
+         */
+      /*  private fun showMissingPermissionError() {
+            newInstance(true).show(supportFragmentManager, "dialog")
+        }*/
+
+    /**
+     * If we click on the GPS sign, which centers the camera around the device.
+     */
+    override fun onMyLocationButtonClick(): Boolean {
+        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT)
+            .show()
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
+        return false
+    }
+
+    /**
+     * If we click on the device location marker.
+     */
+    override fun onMyLocationClick(location: Location) {
+        Toast.makeText(this, "Current location:\n$location", Toast.LENGTH_LONG)
+            .show()
     }
 }
