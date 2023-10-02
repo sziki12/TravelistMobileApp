@@ -158,17 +158,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
 
         override fun onResume()
         {
-            //TODO First check shows denied automatically
             super.onResume()
-           if (permissionHandler.permissionDenied) {
+          /* if (permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true) {
                 // TODO Permission was not granted, display error dialog.
-                Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
-                permissionHandler.permissionDenied = false
-           }
-            else
-           {
+               Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
                //Log.i("PERMISSION","permissionGranted")
            }
+            else if(permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==false)
+           {
+               Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
+               //Log.i("PERMISSION","permissionDenied")
+           }*/
         }
 
         /**

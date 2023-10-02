@@ -25,13 +25,19 @@ import com.google.android.gms.maps.SupportMapFragment
  */
 class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.OnRequestPermissionsResultCallback{
 
-    var permissionDenied = true
+    //var permissionDenied = true
     private lateinit var mMap:GoogleMap
     private var isOnePermissionEnaught:Boolean = true
+    var hasPermission:HashMap<Int,Boolean?> = HashMap()
+
     companion object
     {
-         const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
+    init {
+        hasPermission[LOCATION_PERMISSION_REQUEST_CODE] = null
+    }
+
 
     fun setMap(googleMap: GoogleMap)
     {
@@ -101,10 +107,10 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
                 when(permissionCode)
                 {
                     LOCATION_PERMISSION_REQUEST_CODE -> {
+                        hasPermission[LOCATION_PERMISSION_REQUEST_CODE]=true
                         enableMyLocation()
                     }
                 }
-                permissionDenied=false
                 Log.i("PERMISSION","permissionGranted")
             }
 
@@ -152,7 +158,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
                     // Permission is granted. Continue the action or workflow
                     // in your app.
                     Log.i("PERMISSION","permissionGranted")
-                    permissionDenied=false
+                    hasPermission[LOCATION_PERMISSION_REQUEST_CODE]=true
                     enableMyLocation()
                 } else {
                     // Explain to the user that the feature is unavailable because
@@ -161,7 +167,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
                     // system settings in an effort to convince the user to change
                     // their decision.
                     Log.i("PERMISSION","permissionDenied")
-                    permissionDenied=true
+                    hasPermission[LOCATION_PERMISSION_REQUEST_CODE]=false
                 }
                 return
             }
@@ -180,9 +186,14 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
      */
     @SuppressLint("MissingPermission")
     fun enableMyLocation() {
-        if(!permissionDenied)
+        if(hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true)
         {
             mMap.isMyLocationEnabled = true
+            Log.i("PERMISSION","Map Enabled")
+        }
+        else
+        {
+            Log.i("PERMISSION","Map Disabled")
         }
     }
 }
