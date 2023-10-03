@@ -23,7 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 /**
  * Utility class for access to runtime permissions.
  */
-class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.OnRequestPermissionsResultCallback{
+class PermissionHandler(private var mapsActivity: MapsActivity){
 
     //var permissionDenied = true
     private lateinit var mMap:GoogleMap
@@ -47,7 +47,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
     /**
      * Set the isOnePermissionEnaught flag and add the required permissions to the ArrayList
      */
-    private fun getPermissions(permissionCode:Int): ArrayList<String>
+    fun getPermissions(permissionCode:Int): ArrayList<String>
     {
         var permissionString : ArrayList<String> = ArrayList()
         when(permissionCode)
@@ -61,7 +61,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
         return permissionString
     }
 
-    private fun checkPermissions(permissionCode:Int):Boolean
+    fun checkPermissions(permissionCode:Int):Boolean
     {
         var permissions = getPermissions(permissionCode)
         //getPermission() sets the isOnePermissionEnaught flag
@@ -123,6 +123,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
                 // showInContextUI(...)
                 showRationale(permissionCode)
 
+                 Log.i("PERMISSION","Request")
                 // You can directly ask for the permission.
                 requestPermissions(mapsActivity,
                     getPermissions(permissionCode).toTypedArray(),
@@ -131,7 +132,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
         }
     }
 
-    private fun checkResult(grantResults: IntArray):Boolean
+    fun checkResult(grantResults: IntArray):Boolean
     {
         var granted = !isOnePermissionEnaught
 
@@ -149,10 +150,12 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
         return granted;
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    fun onRequestPermissionsResult(requestCode: Int,
+                                   permissions: Array<String>, grantResults: IntArray) {
+        Log.i("PERMISSION","IN")
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST_CODE -> {
+                Log.i("PERMISSION","Code Same")
                 // If request is cancelled, the result arrays are empty.
                 if (checkResult(grantResults)) {
                     // Permission is granted. Continue the action or workflow
@@ -179,7 +182,6 @@ class PermissionHandler(private var mapsActivity: MapsActivity):ActivityCompat.O
             }
         }
     }
-
 
     /**
      * Enables the My Location layer if the fine location permission has been granted.

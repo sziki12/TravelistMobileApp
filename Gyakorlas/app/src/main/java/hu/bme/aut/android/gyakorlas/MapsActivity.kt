@@ -17,11 +17,12 @@ import hu.bme.aut.android.gyakorlas.databinding.ActivityMapsBinding
 import android.location.Location
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
-    GoogleMap.OnMyLocationClickListener
+    GoogleMap.OnMyLocationClickListener,ActivityCompat.OnRequestPermissionsResultCallback
     {
 
 
@@ -159,16 +160,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         override fun onResume()
         {
             super.onResume()
-          /* if (permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true) {
+            Log.i("PERMISSION","OnResume4")
+           if (permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true) {
                 // TODO Permission was not granted, display error dialog.
                Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
-               //Log.i("PERMISSION","permissionGranted")
+
            }
             else if(permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==false)
            {
                Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
                //Log.i("PERMISSION","permissionDenied")
-           }*/
+           }
+            else
+           {
+               Toast.makeText(this,"Permission NULL",Toast.LENGTH_SHORT).show()
+           }
         }
 
         /**
@@ -196,4 +202,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         Toast.makeText(this, "Current location:\n$location", Toast.LENGTH_LONG)
             .show()
     }
+
+        override fun onRequestPermissionsResult(requestCode: Int,
+                                                permissions: Array<String>, grantResults: IntArray) {
+           super.onRequestPermissionsResult(requestCode,permissions,grantResults)
+            permissionHandler.onRequestPermissionsResult(requestCode,permissions,grantResults)
+        }
+
+
 }
