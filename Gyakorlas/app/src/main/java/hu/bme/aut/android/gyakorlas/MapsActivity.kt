@@ -18,6 +18,8 @@ import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.Marker
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 
@@ -109,10 +111,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         }
     }
 
-
-
-
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -146,7 +144,40 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
        enableGestures()
        googleMap.setOnMyLocationButtonClickListener(this)
        googleMap.setOnMyLocationClickListener(this)
+
+        mMap.setOnMarkerClickListener { marker ->
+
+            //marker.isDraggable=true
+            if (marker.isInfoWindowShown) {
+                marker.hideInfoWindow()
+            } else {
+                marker.showInfoWindow()
+            }
+            true
+        }
+
+        mMap.setOnMapLongClickListener { latLang ->
+
+                var isMarkerClicked = false
+                for (marker in markers) {
+                    if (marker.getLatLng() == (latLang)) {
+                        isMarkerClicked = true
+                    }
+                }
+
+                if (!isMarkerClicked) {
+                    var newMarker = MarkerOptions()
+                        .position(latLang)
+                        .title("New Marker $latLang")
+                        .icon(BitmapDescriptorFactory.defaultMarker())
+                    mMap.addMarker(newMarker)
+            }
+
+
+
+        }
     }
+
 
         /*override fun onResumeFragments() {
             super.onResumeFragments()
@@ -171,18 +202,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
                //Log.i("PERMISSION","permissionDenied")
            }
-            else
-           {
-               Toast.makeText(this,"Permission NULL",Toast.LENGTH_SHORT).show()
-           }
         }
-
-        /**
-         * Displays a dialog with error message explaining that the location permission is missing.
-         */
-      /*  private fun showMissingPermissionError() {
-            newInstance(true).show(supportFragmentManager, "dialog")
-        }*/
 
     /**
      * If we click on the GPS sign, which centers the camera around the device.
@@ -203,6 +223,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             .show()
     }
 
+        /**
+         * Delegates the result to the PermissionHandler
+         */
         override fun onRequestPermissionsResult(requestCode: Int,
                                                 permissions: Array<String>, grantResults: IntArray) {
            super.onRequestPermissionsResult(requestCode,permissions,grantResults)

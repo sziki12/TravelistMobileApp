@@ -24,7 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="/private/var/folders/bx/nz8y_lnx62n7m1xxl9v_96k00000gn/T/ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\SZIKSZ~1\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -62,13 +62,24 @@
                                 <PersistentState>
                                   <option name="children">
                                     <map>
+                                      <entry key="backgroundImage">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="scalingPercent" value="0" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
                                       <entry key="foregroundClipArt">
                                         <value>
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="/private/var/folders/bx/nz8y_lnx62n7m1xxl9v_96k00000gn/T/baseline_food_bank_24.xml" />
+                                                <entry key="color" value="002efd" />
+                                                <entry key="imagePath" value="C:\Users\SZIKSZ~1\AppData\Local\Temp\baseline_person_pin_circle_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -79,7 +90,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="file:$USER_HOME$/Library/Android/sdk/icons/material/materialicons/food_bank/baseline_food_bank_24.xml" />
+                                                <entry key="url" value="file:/D:/Android/icons/material/materialicons/person_pin_circle/baseline_person_pin_circle_24.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -122,10 +133,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="9e1acb" />
+                                      <entry key="backgroundColor" value="a116d0" />
                                       <entry key="foregroundAssetType" value="CLIP_ART" />
-                                      <entry key="outputName" value="restaurant" />
+                                      <entry key="outputName" value="person_pin" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -142,7 +152,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="/private/var/folders/bx/nz8y_lnx62n7m1xxl9v_96k00000gn/T/ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\SZIKSZ~1\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -186,7 +196,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="imagePath" value="/private/var/folders/bx/nz8y_lnx62n7m1xxl9v_96k00000gn/T/ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\SZIKSZ~1\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -250,7 +260,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="imagePath" value="/private/var/folders/bx/nz8y_lnx62n7m1xxl9v_96k00000gn/T/ic_android_black_24dp.xml" />
+                                                <entry key="imagePath" value="C:\Users\SZIKSZ~1\AppData\Local\Temp\ic_android_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
