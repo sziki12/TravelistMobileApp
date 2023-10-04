@@ -15,18 +15,32 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.barImageButton.setOnClickListener()
-        {
-            var intent = Intent(this, MapsActivity::class.java)
-            intent.putExtra("MARKERS",MapsActivity.BAR_MARKERS)
-            startActivity(intent)
+        binding.btnLogin.setOnClickListener {
+            if (binding.etUsername.text.toString().isEmpty()){
+                binding.etUsername.requestFocus()
+                binding.etUsername.error = "Please enter your username"
+            }
+            else if (binding.etPassword.text.toString().isEmpty()) {
+                binding.etPassword.requestFocus()
+                binding.etPassword.error = "Please enter your password"
+            }
+            else {
+                startActivity(Intent(this, MenuActivity::class.java))
+            }
         }
 
-        binding.restaurantImageButton.setOnClickListener()
-        {
-            var intent = Intent(this, MapsActivity::class.java)
-            intent.putExtra("MARKERS",MapsActivity.RESTAURANT_MARKERS)
-            startActivity(intent)
+        binding.btnSignUp.setOnClickListener {
+            if (binding.etUsername.text.toString().isEmpty()){
+                binding.etUsername.requestFocus()
+                binding.etUsername.error = "Please enter your username"
+            }
+            else if (binding.etPassword.text.toString().isEmpty()) {
+                binding.etPassword.requestFocus()
+                binding.etPassword.error = "Please enter your password"
+            }
+            else {
+                startActivity(Intent(this, MenuActivity::class.java))
+            }
         }
 
 
