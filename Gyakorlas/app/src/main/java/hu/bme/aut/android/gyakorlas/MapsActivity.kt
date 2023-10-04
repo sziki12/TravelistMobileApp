@@ -168,13 +168,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 if (!isMarkerClicked) {
                     var newMarker = MarkerOptions()
                         .position(latLang)
-                        .title("New Marker $latLang")
+                        .title("New Marker By Click At: $latLang")
                         .icon(BitmapDescriptorFactory.defaultMarker())
                     mMap.addMarker(newMarker)
-            }
+                }
+        }
 
-
-
+        binding.btnPlaceNewMarker.setOnClickListener {
+            view ->
+            val latLang = mMap.cameraPosition.target
+                var newMarker = MarkerOptions()
+                    .position(latLang)
+                    .title("New Marker By Button At: $latLang")
+                    .icon(BitmapDescriptorFactory.defaultMarker())
+                    .draggable(true)
+            mMap.addMarker(newMarker)
         }
     }
 

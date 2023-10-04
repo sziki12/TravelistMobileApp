@@ -89,11 +89,13 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
     }
 
     private fun showRationale(permissionCode:Int) {
-        var out = true
         for (permission in getPermissions(permissionCode)) {
 
             if (shouldShowRequestPermissionRationale(mapsActivity, permission)) {
-                //TODO Show Rationale
+                when(permissionCode)
+                {
+                    LOCATION_PERMISSION_REQUEST_CODE -> Toast.makeText(mapsActivity,"You should grant permission to access your location to fully use the app",Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
