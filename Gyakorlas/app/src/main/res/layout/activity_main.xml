@@ -52,6 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
+            android:backgroundTint="@color/darkblue"
             android:text="Login" />
 
         <Button
@@ -60,6 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
+            android:backgroundTint="@color/darkblue"
             android:text="Sign Up" />
 
     </LinearLayout>
