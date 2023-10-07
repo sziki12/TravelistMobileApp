@@ -2,7 +2,7 @@ package hu.bme.aut.android.gyakorlas
 
 
 
-import android.Manifest
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
@@ -19,7 +19,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.Marker
+import hu.bme.aut.android.gyakorlas.MapData.MapMarker
+import hu.bme.aut.android.gyakorlas.MapData.PlaceData
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 
@@ -154,6 +155,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 marker.showInfoWindow()
             }
             true
+        }
+
+        mMap.setOnInfoWindowClickListener {marker ->
+            var place = PlaceData("Place")
+            place.description = "Place description"
+            var intent = Intent(this, PlaceActivity::class.java)
+            intent.putExtra("PLACE", place)
+            startActivity(intent)
         }
 
         mMap.setOnMapLongClickListener { latLang ->
