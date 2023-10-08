@@ -11,19 +11,25 @@ class MenuActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
-        binding.barImageButton.setOnClickListener()
+        binding.btnMenuSearch.setOnClickListener()
         {
             var intent = Intent(this, MapsActivity::class.java)
             intent.putExtra("MARKERS", MapsActivity.BAR_MARKERS)
             startActivity(intent)
         }
 
-        binding.restaurantImageButton.setOnClickListener()
+        binding.btnTrackOthers.setOnClickListener()
         {
             var intent = Intent(this, MapsActivity::class.java)
             intent.putExtra("MARKERS", MapsActivity.RESTAURANT_MARKERS)
             startActivity(intent)
         }
+
+        binding.imgbtnMap.setOnClickListener(){
+
+        }
+
     }
 }

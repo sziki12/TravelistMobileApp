@@ -1,59 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MenuActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/darkblue">
+
+        <ImageView
+            android:id="@+id/imgbtnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginEnd="9dp"
+            android:src="@drawable/menu_mapicon" />
+
+        <ImageView
+            android:id="@+id/imgbtnMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="9dp"
+            android:src="@drawable/menu" />
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="275dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="60dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
-            android:layout_height="61dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textSize="34sp" />
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/btnMenuProfile"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:backgroundTint="@color/darkblue"
+            android:text="@string/profile"
+            android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/btnMenuSearch"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:backgroundTint="@color/darkblue"
+            android:text="@string/search"
+            android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/btnMenuRecommended"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:backgroundTint="@color/darkblue"
+            android:text="@string/recommended_for_you"
+            android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/btnTrackOthers"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:backgroundTint="@color/darkblue"
+            android:text="@string/track_others"
+            android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/btnUploadNewPlace"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:backgroundTint="@color/darkblue"
+            android:text="@string/upload_new_place"
+            android:textColor="@color/white"/>
+        <Button
+            android:id="@+id/btnRequestHelp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:backgroundTint="@color/darkblue"
+            android:text="@string/request_help"
+            android:textColor="@color/white"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+    </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/barImageButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/bar_foreground" />
-
-                <ImageButton
-                    android:id="@+id/restaurantImageButton"
-                    android:layout_width="399dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:src="@drawable/restaurant_foreground" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
 
 </LinearLayout>
+

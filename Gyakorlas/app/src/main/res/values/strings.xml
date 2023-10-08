@@ -4,4 +4,10 @@
     <string name="permission_required_toast">Permission Required!</string>
     <string name="location_permission_denied">Location Permission Denied!</string>
     <string name="permission_rationale_location">Grant Location Permission For The Correct Functionality</string>
+    <string name="profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="recommended_for_you">Recommended For You</string>
+    <string name="track_others">Track Others</string>
+    <string name="upload_new_place">Upload New Place</string>
+    <string name="request_help">Request Help</string>
 </resources>

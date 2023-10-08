@@ -9,10 +9,12 @@
     <style name="Theme.Travelist" parent="Base.Theme.Travelist" />
 
     <style name="Theme.Travelist.Starting" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#051D40</item>
+        <item name="windowSplashScreenBackground">@color/darkblue</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/travelistlogo</item>
-        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="s">#051D40</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="s">@color/darkblue</item>
         <item name="postSplashScreenTheme">@style/Theme.Travelist</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>
