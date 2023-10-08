@@ -8,6 +8,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -17,6 +18,7 @@ import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 
@@ -26,7 +28,8 @@ import com.google.android.gms.maps.SupportMapFragment
 class PermissionHandler(private var mapsActivity: MapsActivity){
 
     //var permissionDenied = true
-    private lateinit var mMap:GoogleMap
+    var mMap:GoogleMap? = null
+    var locationClient: FusedLocationProviderClient? = null
     private var isOnePermissionEnaught:Boolean = true
     var hasPermission:HashMap<Int,Boolean?> = HashMap()
 
@@ -36,12 +39,6 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
     }
     init {
         hasPermission[LOCATION_PERMISSION_REQUEST_CODE] = null
-    }
-
-
-    fun setMap(googleMap: GoogleMap)
-    {
-        mMap = googleMap
     }
 
     /**
@@ -192,7 +189,10 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
     fun enableMyLocation() {
         if(hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true)
         {
-            mMap.isMyLocationEnabled = true
+            mMap?.isMyLocationEnabled = true
+            locationClient?.lastLocation?.addOnSuccessListener { location : Location? ->
+                    mapsActivity.currentLocation = location
+                }
             Log.i("PERMISSION","Map Enabled")
         }
         else

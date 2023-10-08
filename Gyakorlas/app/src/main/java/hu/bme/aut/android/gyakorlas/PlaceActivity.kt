@@ -18,8 +18,8 @@ class PlaceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         place = this.intent.getSerializableExtra("PLACE",PlaceData::class.java)
-        binding.textView10.text = place?.name ?: ""
-        binding.textView11.text = place?.description ?: ""
+        binding.tvName.text = place?.name ?: ""
+        binding.tvDescription.text = place?.description ?: ""
 
 
     }

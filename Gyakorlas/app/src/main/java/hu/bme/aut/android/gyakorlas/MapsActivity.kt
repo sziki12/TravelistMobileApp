@@ -2,7 +2,10 @@ package hu.bme.aut.android.gyakorlas
 
 
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
@@ -18,7 +21,13 @@ import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.tasks.CancellationTokenSource
+import hu.bme.aut.android.gyakorlas.MapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.MapData.MapMarker
 import hu.bme.aut.android.gyakorlas.MapData.PlaceData
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
@@ -33,8 +42,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         private var permissionHandler: PermissionHandler = PermissionHandler(this)
         private lateinit var binding: ActivityMapsBinding
         private var markers: ArrayList<MapMarker> = ArrayList()
-       //private lateinit var locationClient: FusedLocationProviderClient
-        private lateinit var currentLocation:LatLng;
+        private var mapDataProvider = MapDataProvider()
+        private lateinit var locationClient: FusedLocationProviderClient
+        var currentLocation:Location? = null
 
 
     companion object
@@ -44,14 +54,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        //Layout
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //Location
+        locationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        //Map Data
         setUpMapData(this.intent.getIntExtra("MARKERS",-1))
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
+       val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
@@ -59,47 +73,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     /**
      * Contains the initiations of the markers ArrayList, and gets the current location
      */
+
     private fun setUpMapData(markerType : Int)
     {
         markers.clear()
-        //locationClient = LocationServices.getFusedLocationProviderClient(this)
-        getMarkers(markerType)
-        var result: LatLng? =  getCurrentLocation()
-        if (result != null) {
-            currentLocation = result
-
-        } else {
-            if(markers.isNotEmpty())
-                currentLocation = markers[0].getLatLng()
-        }
-    }
-
-    private fun getCurrentLocation():LatLng?
-    {
-        return LatLng(47.5,19.0)
+        markers = mapDataProvider.getMarkers(markerType)
     }
 
     /**
-     * Get and load the Markers from a dedicated location
-     */
-    private fun getMarkers(markerType : Int)
+    * Updates the current location, needs location permission and if center camera is true than
+    * mMap needs to be initialized
+    */
+    @SuppressLint("MissingPermission")
+    private fun updateCurrentLocation(centerCamera:Boolean)
     {
-        if(markerType == BAR_MARKERS)
+        val priority = Priority.PRIORITY_HIGH_ACCURACY
+        val cancellationTokenSource = CancellationTokenSource()
+        if(permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true)
         {
-            markers.add(MapMarker("BarCraft Nyugati",47.50867271248256, 19.055384710139474))
-            markers.add(MapMarker("BarCraft Buda",47.4816601353997, 19.0525543254818))
-            markers.add(MapMarker("4es6os Wesselényi",47.500386932768905, 19.068751383155128))
+            locationClient!!.getCurrentLocation(priority, cancellationTokenSource.token)
+            .addOnSuccessListener { location ->
+                currentLocation=location
+
+                if(centerCamera)
+                {
+                    centerCamera()
+                }
+                Log.i("LOCATION","GettingLocationSuccessful: $currentLocation")
         }
-        else if(markerType == RESTAURANT_MARKERS)
-        {
-            markers.add(MapMarker("Wasabi Running Sushi & Wok Restaurant",47.50828901836447, 19.057431346616017))
-            markers.add(MapMarker("The MAGIC Budapest",47.5041399741706, 19.057411806181104))
-        }
-        else
-        {
-            println("INVALID MARKERS INPUT")
+            .addOnFailureListener { exception ->
+                Log.i("LOCATION","GettingLocationFailed: $exception")
+            }
         }
     }
+
+
+
 
     private fun enableGestures()
     {
@@ -120,32 +129,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        permissionHandler.setMap(mMap)
+        permissionHandler.mMap = mMap
         permissionHandler.requestPermission(LOCATION_PERMISSION_REQUEST_CODE)
+        updateCurrentLocation(true)
 
         //Show Markers
-        for(marker in markers)
+        for(mapMarker in markers)
         {
-            mMap.addMarker(MarkerOptions().position(marker.getLatLng()).title(marker.name))
+            mMap.addMarker(mapMarker.marker)
         }
-
-        //Move Camera
-        var mapLocation: CameraPosition = CameraPosition.Builder()
-            .target(currentLocation?:LatLng(10.0,10.0))
-            .zoom(11.0f)
-            .bearing(0f)
-            .tilt(50f)
-            .build()
-
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(mapLocation))
+        //Set Map Center
+        centerCamera()
 
         //Enable Gestures
-       enableGestures()
-       googleMap.setOnMyLocationButtonClickListener(this)
-       googleMap.setOnMyLocationClickListener(this)
-
+        enableGestures()
+        //Set MapCLickListeners
+        googleMap.setOnMyLocationButtonClickListener(this)
+        googleMap.setOnMyLocationClickListener(this)
         mMap.setOnMarkerClickListener { marker ->
 
             //marker.isDraggable=true
@@ -156,15 +159,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             }
             true
         }
-
         mMap.setOnInfoWindowClickListener {marker ->
-            var place = PlaceData("Place")
-            place.description = "Place description"
-            var intent = Intent(this, PlaceActivity::class.java)
-            intent.putExtra("PLACE", place)
-            startActivity(intent)
-        }
 
+            //Finds the appropriate MapMarker by its position
+            for(mapMarker in markers)
+            {
+                if(mapMarker.isOwnMarker(marker)&&mapMarker.place!=null)
+                {
+                    var intent = Intent(this, PlaceActivity::class.java)
+                    intent.putExtra("PLACE",mapMarker.place)
+                    startActivity(intent)
+                }
+            }
+        }
         mMap.setOnMapLongClickListener { latLang ->
 
                 var isMarkerClicked = false
@@ -211,12 +218,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             Log.i("PERMISSION","OnResume4")
            if (permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true) {
                 // TODO Permission was not granted, display error dialog.
-               Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
+               //Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
 
            }
             else if(permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==false)
            {
-               Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
+               //Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
                //Log.i("PERMISSION","permissionDenied")
            }
         }
@@ -249,5 +256,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
             permissionHandler.onRequestPermissionsResult(requestCode,permissions,grantResults)
         }
 
+        /**
+         * Centers the camera around user's location or if its null, around Budapest
+         */
+        private fun centerCamera()
+        {
+            var mapCenter = LatLng(47.5,19.05)
+            if(currentLocation!=null)
+            {
+                mapCenter = LatLng(currentLocation!!.latitude,currentLocation!!.longitude)
+            }
+            var mapLocation: CameraPosition = CameraPosition.Builder()
+                .target(mapCenter)
+                .zoom(11.0f)
+                .bearing(0f)
+                .tilt(50f)
+                .build()
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(mapLocation))
+        }
 
 }

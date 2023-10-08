@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".PlaceActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,22 +12,25 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/tvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="28dp"
             android:text="TextView"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/tvDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="240dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="296dp"
             android:text="TextView"
+            android:textAlignment="center"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
