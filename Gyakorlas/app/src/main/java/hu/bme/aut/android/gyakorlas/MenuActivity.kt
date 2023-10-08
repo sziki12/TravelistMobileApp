@@ -13,6 +13,12 @@ class MenuActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        binding.btnMenuProfile.setOnClickListener()
+        {
+            var intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.btnMenuSearch.setOnClickListener()
         {
             var intent = Intent(this, MapsActivity::class.java)

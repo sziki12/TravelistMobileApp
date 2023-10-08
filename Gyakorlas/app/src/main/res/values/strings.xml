@@ -10,4 +10,8 @@
     <string name="track_others">Track Others</string>
     <string name="upload_new_place">Upload New Place</string>
     <string name="request_help">Request Help</string>
+    <string name="upload_new_picture">Upload New Picture</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 </resources>
