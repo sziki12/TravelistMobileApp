@@ -85,9 +85,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     * mMap needs to be initialized
     */
     @SuppressLint("MissingPermission")
-    private fun updateCurrentLocation(centerCamera:Boolean)
+    private fun updateCurrentLocation(highAccuracyRequired:Boolean,centerCamera:Boolean)
     {
-        val priority = Priority.PRIORITY_HIGH_ACCURACY
+        var priority = Priority.PRIORITY_HIGH_ACCURACY
+        if(!highAccuracyRequired)
+            priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY
         val cancellationTokenSource = CancellationTokenSource()
         if(permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true)
         {
@@ -134,7 +136,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         mMap = googleMap
         permissionHandler.mMap = mMap
         permissionHandler.requestPermission(LOCATION_PERMISSION_REQUEST_CODE)
-        updateCurrentLocation(true)
+        updateCurrentLocation(highAccuracyRequired = true, centerCamera = true)
 
         //Show Markers
         for(mapMarker in markers)

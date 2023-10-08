@@ -11,5 +11,5 @@ data class PlaceData (var name:String):Serializable{
     {
         description=desc
     }
-    //var images : ArrayList<Bitmap> = ArrayList()
+    var images : ArrayList<Bitmap> = ArrayList()
 }

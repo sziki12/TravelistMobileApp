@@ -13,6 +13,23 @@ class MapDataProvider {
         when (markerType) {
             MapsActivity.BAR_MARKERS -> {
                 var barCraftNyugati = PlaceData("BarCraft Nyugati")
+                barCraftNyugati.description = "Service options: Dine-in · No takeaway · No delivery\n" +
+                        "Address: Budapest, Bajcsy-Zsilinszky út 59, 1065\n" +
+                        "\n"+
+                        "Hours: \n" +
+                        "\tSunday\t2 PM–12 AM\n" +
+                        "\tMonday\t4 PM–12 AM\n" +
+                        "\tTuesday\t4 PM–12 AM\n" +
+                        "\tWednesday\t4 PM–12 AM\n" +
+                        "\tThursday\t4 PM–12 AM\n" +
+                        "\tFriday\t4 PM–2 AM\n" +
+                        "\tSaturday\t2 PM–2 AM\n" +
+                        "\n"+
+                        "Phone: (06 1) 406 2201\n"+
+                        "A város szívében, egy ugrásnyira a Nyugati pályaudvartól, autentikus fantasy pincében vár Rád a Barcraft 2!\n" +
+                        "\n" +
+                        "Description:\n" +
+                        "Hamisítatlan fantasy taverna érzéssel, és hideg italokkal várja az arra tévedő kalandorokat! A konzolok szerelmesei otthonra lelnek kanapéinkon, miközben kontrollerrel a kezükben múlatják az időt, egy teremmel arréb pedig a társasjátékok rajongói élvezhetik a több mint 200 darabból álló társasjáték gyűjteményünk gyönyöreit. Az online bajnokokra pedig vár a Hősök Csarnoka, 10 high end gaming PCvel, NobleChair és Vertagear székekkel, így a győzelem garantált!"
                 markers.add(MapMarker(barCraftNyugati,47.50867271248256, 19.055384710139474))
 
                 var barCraftBuda = PlaceData("BarCraft Buda")
