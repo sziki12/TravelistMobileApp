@@ -1,9 +1,12 @@
 package hu.bme.aut.android.gyakorlas.MapData
 
+import android.app.Activity
+import android.graphics.BitmapFactory
 import android.util.Log
 import hu.bme.aut.android.gyakorlas.MapsActivity
 
-class MapDataProvider {
+
+class MapDataProvider(var activity: Activity){
     /**
      * Get and load the Markers from a dedicated location
      */
@@ -30,6 +33,21 @@ class MapDataProvider {
                         "\n" +
                         "Description:\n" +
                         "Hamisítatlan fantasy taverna érzéssel, és hideg italokkal várja az arra tévedő kalandorokat! A konzolok szerelmesei otthonra lelnek kanapéinkon, miközben kontrollerrel a kezükben múlatják az időt, egy teremmel arréb pedig a társasjátékok rajongói élvezhetik a több mint 200 darabból álló társasjáték gyűjteményünk gyönyöreit. Az online bajnokokra pedig vár a Hősök Csarnoka, 10 high end gaming PCvel, NobleChair és Vertagear székekkel, így a győzelem garantált!"
+
+
+                barCraftNyugati!!.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft01.jpg")))
+                barCraftNyugati!!.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft02.jpg")))
+                barCraftNyugati!!.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
+                /*dr = Drawable.createFromStream(activity.assets.open("images/nyugati_barcraft03.jpg"),null)
+                barCraftNyugati!!.images.add(resizeDrawable(dr,600,600))*/
+
+
+                /*var options = BitmapFactory.Options()
+                options.inSampleSize = 2*/
+               /* barCraftNyugati.images.add(Drawable.createFromStream(activity.assets.open("images/nyugati_barcraft01.jpg"), null))
+                barCraftNyugati.images.add(Drawable.createFromStream(activity.assets.open("images/nyugati_barcraft02.jpg"), null))
+                barCraftNyugati.images.add(Drawable.createFromStream(activity.assets.open("images/nyugati_barcraft03.jpg"), null))*/
+
                 markers.add(MapMarker(barCraftNyugati,47.50867271248256, 19.055384710139474))
 
                 var barCraftBuda = PlaceData("BarCraft Buda")
@@ -51,4 +69,6 @@ class MapDataProvider {
         }
         return markers
     }
+
+
 }

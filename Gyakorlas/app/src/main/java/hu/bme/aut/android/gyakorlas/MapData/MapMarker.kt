@@ -17,7 +17,7 @@ data class MapMarker(var name: String,var lat: Double, var lng: Double,var place
         return marker.position == getLatLng()
     }
 
-    constructor(place:PlaceData,lat:Double,lng: Double):this(place.name,lat, lng,place)
+    constructor(place:PlaceData,lat:Double,lng: Double):this(place.name.toString(),lat, lng,place)
 
 
 

@@ -42,7 +42,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         private var permissionHandler: PermissionHandler = PermissionHandler(this)
         private lateinit var binding: ActivityMapsBinding
         private var markers: ArrayList<MapMarker> = ArrayList()
-        private var mapDataProvider = MapDataProvider()
+        private var mapDataProvider = MapDataProvider(this)
         private lateinit var locationClient: FusedLocationProviderClient
         var currentLocation:Location? = null
 
