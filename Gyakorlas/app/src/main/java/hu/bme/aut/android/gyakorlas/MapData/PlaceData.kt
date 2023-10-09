@@ -22,6 +22,7 @@ data class PlaceData(var name: String?):Parcelable{
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(description)
+        parcel.createTypedArrayList(Bitmap::class.java)
     }
 
     override fun describeContents(): Int {

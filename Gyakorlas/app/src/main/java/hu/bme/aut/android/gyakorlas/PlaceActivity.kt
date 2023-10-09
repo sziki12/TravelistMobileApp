@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -39,10 +40,11 @@ class PlaceActivity : AppCompatActivity() {
             //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft02.jpg"), null))
             //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft03.jpg"), null))
             var size = min(3, place!!.images.size)
+            Log.i("IMAGES",size.toString())
             for(i in 0 until size)
             {
                 images[i].setImageDrawable(resizeDrawable(place!!.images[i],600,600))
-                //Log.i("IMAGE",images[i].toString())
+
                 //images[i].setImageDrawable(R.)
             }
         }
