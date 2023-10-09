@@ -24,5 +24,11 @@ class ProfileActivity : AppCompatActivity() {
             var intent = Intent(this, MenuActivity::class.java)
             startActivity(intent)
         }
+
+        binding.imgbtnMenu.setOnClickListener()
+        {
+            var intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
