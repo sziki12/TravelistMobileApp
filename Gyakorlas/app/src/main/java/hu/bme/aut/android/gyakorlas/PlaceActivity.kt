@@ -1,5 +1,6 @@
-package hu.bme.aut.android.gyakorlas
+package hu.bme.a
 
+import hu.bme.aut.android.gyakorlas.ImageViewActivity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -25,6 +26,7 @@ class PlaceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         place = this.intent.getParcelableExtra("PLACE",PlaceData::class.java)
+        place?.images = this.intent.getParcelableArrayListExtra("IMAGES",Bitmap::class.java)!!
         binding.tvName.text = place?.name ?: ""
         binding.tvDescription.text = place?.description ?: ""
         var images:ArrayList<ImageButton> = ArrayList()

@@ -27,6 +27,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.tasks.CancellationTokenSource
+import hu.bme.a.PlaceActivity
 import hu.bme.aut.android.gyakorlas.MapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.MapData.MapMarker
 import hu.bme.aut.android.gyakorlas.MapData.PlaceData
@@ -169,6 +170,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 if(mapMarker.isOwnMarker(marker)&&mapMarker.place!=null)
                 {
                     var intent = Intent(this, PlaceActivity::class.java)
+                    intent.putParcelableArrayListExtra("IMAGES", mapMarker.place!!.images)
                     intent.putExtra("PLACE",mapMarker.place)
                     startActivity(intent)
                 }
