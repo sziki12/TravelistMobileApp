@@ -2,10 +2,8 @@ package hu.bme.aut.android.gyakorlas
 
 
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
@@ -22,37 +20,26 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.tasks.CancellationTokenSource
-import hu.bme.a.PlaceActivity
-import hu.bme.aut.android.gyakorlas.MapData.MapDataProvider
-import hu.bme.aut.android.gyakorlas.MapData.MapMarker
-import hu.bme.aut.android.gyakorlas.MapData.PlaceData
+import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
+import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener,ActivityCompat.OnRequestPermissionsResultCallback
     {
-
-
         private lateinit var  mMap: GoogleMap
         private var permissionHandler: PermissionHandler = PermissionHandler(this)
         private lateinit var binding: ActivityMapsBinding
         private var markers: ArrayList<MapMarker> = ArrayList()
-        private var mapDataProvider = MapDataProvider(this)
+        private lateinit var mapDataProvider:MapDataProvider
         private lateinit var locationClient: FusedLocationProviderClient
         var currentLocation:Location? = null
 
-
-    companion object
-    {
-        val BAR_MARKERS:Int = 1
-        val RESTAURANT_MARKERS:Int = 2
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Layout
@@ -63,7 +50,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         locationClient = LocationServices.getFusedLocationProviderClient(this)
 
         //Map Data
-        setUpMapData(this.intent.getIntExtra("MARKERS",-1))
+        mapDataProvider = MapDataProvider(this)
+        setUpMapData("All")
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
        val mapFragment = supportFragmentManager
@@ -75,10 +63,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
      * Contains the initiations of the markers ArrayList, and gets the current location
      */
 
-    private fun setUpMapData(markerType : Int)
+    private fun setUpMapData(selectedLocation: String)
     {
         markers.clear()
-        markers = mapDataProvider.getMarkers(markerType)
+        markers = mapDataProvider.getSelectedMarkers(selectedLocation)
     }
 
     /**
@@ -170,8 +158,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 if(mapMarker.isOwnMarker(marker)&&mapMarker.place!=null)
                 {
                     var intent = Intent(this, PlaceActivity::class.java)
-                    intent.putParcelableArrayListExtra("IMAGES", mapMarker.place!!.images)
-                    intent.putExtra("PLACE",mapMarker.place)
+                    //intent.putParcelableArrayListExtra("IMAGES", mapMarker.place!!.images)
+                    intent.putExtra("PLACE",mapDataProvider.getIDByMarker(mapMarker))
                     startActivity(intent)
                 }
             }

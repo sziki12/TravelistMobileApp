@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas.MapData
+package hu.bme.aut.android.gyakorlas.mapData
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
@@ -18,6 +18,11 @@ data class MapMarker(var name: String,var lat: Double, var lng: Double,var place
     }
 
     constructor(place:PlaceData,lat:Double,lng: Double):this(place.name.toString(),lat, lng,place)
+
+    override fun equals(other: Any?): Boolean {
+        var marker = other as MapMarker?
+        return marker!=null&&marker.lat==this.lat&&marker.lng==this.lng&&marker.name==this.name
+    }
 
 
 

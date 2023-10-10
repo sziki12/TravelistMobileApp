@@ -1,32 +1,36 @@
-package hu.bme.a
+package hu.bme.aut.android.gyakorlas
 
-import hu.bme.aut.android.gyakorlas.ImageViewActivity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import hu.bme.aut.android.gyakorlas.MapData.PlaceData
+import hu.bme.aut.android.gyakorlas.mapData.PlaceData
 import hu.bme.aut.android.gyakorlas.databinding.ActivityPlaceBinding
+import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import java.lang.Math.min
 
 
 class PlaceActivity : AppCompatActivity() {
+    var markerID: Int = 0
     var place: PlaceData? = null
     lateinit var binding: ActivityPlaceBinding
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private lateinit var mapDataProvider:MapDataProvider
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        place = this.intent.getParcelableExtra("PLACE",PlaceData::class.java)
-        place?.images = this.intent.getParcelableArrayListExtra("IMAGES",Bitmap::class.java)!!
+
+        mapDataProvider = MapDataProvider(this)
+        markerID = this.intent.getIntExtra("PLACE",0)
+        place = mapDataProvider.getMarkerByID(markerID).place
+        //this.intent.getParcelableExtra("PLACE",PlaceData::class.java)
+        //place?.images = this.intent.getParcelableArrayListExtra("IMAGES",Bitmap::class.java)!!
         binding.tvName.text = place?.name ?: ""
         binding.tvDescription.text = place?.description ?: ""
         var images:ArrayList<ImageButton> = ArrayList()
@@ -58,7 +62,7 @@ class PlaceActivity : AppCompatActivity() {
             image.setOnClickListener()
             {
                 var intent = Intent(this, ImageViewActivity::class.java)
-                intent.putExtra("PLACE",place)
+                intent.putExtra("PLACE",markerID)
                 intent.putExtra("INDEX",index)
                 startActivity(intent)
             }

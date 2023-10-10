@@ -1,26 +1,26 @@
 package hu.bme.aut.android.gyakorlas
 
-import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.ImageView
 import androidx.annotation.RequiresApi
-import hu.bme.aut.android.gyakorlas.MapData.PlaceData
+import hu.bme.aut.android.gyakorlas.mapData.PlaceData
 import hu.bme.aut.android.gyakorlas.databinding.ActivityImageViewBinding
+import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 
 class ImageViewActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityImageViewBinding
     private var place: PlaceData? = null
+    var mapDataProvider: MapDataProvider = MapDataProvider(this)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImageViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        place = this.intent.getParcelableExtra("PLACE",PlaceData::class.java)
+        place = mapDataProvider.getMarkerByID(this.intent.getIntExtra("PLACE",0)).place
+        //place = this.intent.getParcelableExtra("PLACE",PlaceData::class.java)
         var index = this.intent.getIntExtra("INDEX",0)
 
 
