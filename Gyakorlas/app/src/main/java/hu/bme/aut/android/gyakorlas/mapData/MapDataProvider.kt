@@ -1,8 +1,10 @@
 package hu.bme.aut.android.gyakorlas.mapData
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 
 
 class MapDataProvider(var activity: Activity){
@@ -88,5 +90,17 @@ class MapDataProvider(var activity: Activity){
             }
         }
         return ID
+    }
+
+    fun resizeDrawable(bitmap: Bitmap?, dstWidth:Int, dstHeight:Int): Drawable?{
+
+        var drawableOut: Drawable? = null
+        if(bitmap!=null)
+        {
+            //var bitmap = (drawable as BitmapDrawable).bitmap
+            drawableOut= BitmapDrawable(activity.resources, Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, true))
+        }
+
+        return drawableOut
     }
 }

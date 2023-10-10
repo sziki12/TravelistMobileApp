@@ -41,24 +41,27 @@ class PlaceActivity : AppCompatActivity() {
 
         if(place!=null)
         {
-
-
             //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft02.jpg"), null))
             //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft03.jpg"), null))
             var size = min(3, place!!.images.size)
             Log.i("IMAGES",size.toString())
+
             for(i in 0 until size)
             {
-                images[i].setImageDrawable(resizeDrawable(place!!.images[i],600,600))
+                if(i==0)
+                {
+                    images[i].setImageDrawable(mapDataProvider.resizeDrawable(place!!.images[i],800,800))
+                }else
+                {
+                    images[i].setImageDrawable(mapDataProvider.resizeDrawable(place!!.images[i],600,600))
+                }
+
 
                 //images[i].setImageDrawable(R.)
             }
         }
-
-        for(image in images)
+        for((index, image) in images.withIndex())
         {
-            var index = 0
-
             image.setOnClickListener()
             {
                 var intent = Intent(this, ImageViewActivity::class.java)
@@ -66,7 +69,6 @@ class PlaceActivity : AppCompatActivity() {
                 intent.putExtra("INDEX",index)
                 startActivity(intent)
             }
-            index++
         }
 
         //var options = BitmapFactory.Options()
@@ -76,16 +78,6 @@ class PlaceActivity : AppCompatActivity() {
         images[2].setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft03)))*/
 
     }
-    private fun resizeDrawable(bitmap:Bitmap?,dstWidth:Int,dstHeight:Int):Drawable?{
 
-        var drawableOut: Drawable? = null
-        if(bitmap!=null)
-        {
-            //var bitmap = (drawable as BitmapDrawable).bitmap
-            drawableOut= BitmapDrawable(resources, Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, true))
-        }
-
-        return drawableOut
-    }
 
 }
