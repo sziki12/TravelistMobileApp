@@ -160,6 +160,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                     var intent = Intent(this, PlaceActivity::class.java)
                     //intent.putParcelableArrayListExtra("IMAGES", mapMarker.place!!.images)
                     intent.putExtra("PLACE",mapDataProvider.getIDByMarker(mapMarker))
+                    Log.i("PLACE","Place ID:${mapDataProvider.getIDByMarker(mapMarker)}")
                     startActivity(intent)
                 }
             }
@@ -207,7 +208,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         override fun onResume()
         {
             super.onResume()
-            Log.i("PERMISSION","OnResume4")
+            Log.i("PERMISSION","OnResume")
            if (permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true) {
                 // TODO Permission was not granted, display error dialog.
                //Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()

@@ -1,5 +1,6 @@
 package hu.bme.aut.android.gyakorlas
 
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,7 +17,7 @@ class ImageViewActivity : AppCompatActivity() {
     private lateinit var binding:ActivityImageViewBinding
     private var place: PlaceData? = null
     private lateinit var mapDataProvider: MapDataProvider
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImageViewBinding.inflate(layoutInflater)
@@ -32,20 +33,28 @@ class ImageViewActivity : AppCompatActivity() {
 
        if(place!=null)
         {
-            binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(place!!.images[index],1000,1000))
-            //binding.imageView.setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft02)))
-            for(bitMap in place!!.images)
-            {
-                var image = ImageButton(this)
-                image.setOnClickListener()
-                {
-                    binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,1000,1000))
-                }
-                //image.layoutParams.height = MATCH_PARENT
-                //image.layoutParams.height = 300
-                image.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,200,200))
-                binding.linearLayout.addView(image)
-            }
+           if(place!!.images.isNotEmpty())
+           {
+               binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(place!!.images[index],1000,1000))
+               //binding.imageView.setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft02)))
+               for(bitMap in place!!.images)
+               {
+                   var image = ImageButton(this)
+                   image.setOnClickListener()
+                   {
+                       binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,1000,1000))
+                   }
+                   //image.layoutParams.height = MATCH_PARENT
+                   //image.layoutParams.height = 300
+                   image.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,300,300))
+                   binding.linearLayout.addView(image)
+               }
+           }
+            else{
+                //TODO Ez valamiért nem jó
+               //binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(BitmapFactory.decodeResource(resources,R.drawable.travelistlogo),1000,1000))
+           }
+
         }
         //binding.scrollView.requestLayout()
         //binding.linearLayout.requestLayout()

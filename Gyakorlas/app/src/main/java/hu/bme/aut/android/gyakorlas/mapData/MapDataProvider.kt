@@ -36,6 +36,10 @@ class MapDataProvider(var activity: Activity){
         barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft01.jpg")))
         barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft02.jpg")))
         barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
+        barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
+        barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
+        barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
+
         markers.add(MapMarker(barCraftNyugati,47.50867271248256, 19.055384710139474))
 
         var barCraftBuda = PlaceData("BarCraft Buda","Budapest")
@@ -86,7 +90,7 @@ class MapDataProvider(var activity: Activity){
         {
             if(markers[i] == targetMarker)
             {
-
+                ID = i
             }
         }
         return ID
