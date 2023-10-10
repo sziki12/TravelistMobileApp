@@ -22,14 +22,12 @@ class MenuActivity : AppCompatActivity() {
         binding.btnMenuSearch.setOnClickListener()
         {
             var intent = Intent(this, MapsActivity::class.java)
-            intent.putExtra("MARKERS", MapsActivity.BAR_MARKERS)
             startActivity(intent)
         }
 
         binding.btnTrackOthers.setOnClickListener()
         {
             var intent = Intent(this, MapsActivity::class.java)
-            intent.putExtra("MARKERS", MapsActivity.RESTAURANT_MARKERS)
             startActivity(intent)
         }
 
