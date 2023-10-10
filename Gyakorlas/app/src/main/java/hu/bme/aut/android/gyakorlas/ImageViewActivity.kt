@@ -47,6 +47,14 @@ class ImageViewActivity : AppCompatActivity() {
                 binding.linearLayout.addView(image)
             }
         }
+        //binding.scrollView.requestLayout()
+        //binding.linearLayout.requestLayout()
+        //binding.scrollView.requestLayout()
+        Log.i("IMAGES","Scroll View Width: ${binding.scrollView.width}")
+        Log.i("IMAGES","Scroll View Height: ${binding.scrollView.height}")
+
+        Log.i("IMAGES","Root Width: ${binding.root.width}")
+        Log.i("IMAGES","Root Height: ${binding.root.height}")
        /* images[0].setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft01)))
         images[1].setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft02)))
         images[2].setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft03)))*/
