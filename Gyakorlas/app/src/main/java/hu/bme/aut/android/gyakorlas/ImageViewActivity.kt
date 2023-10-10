@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import hu.bme.aut.android.gyakorlas.mapData.PlaceData
@@ -35,7 +36,11 @@ class ImageViewActivity : AppCompatActivity() {
             //binding.imageView.setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft02)))
             for(bitMap in place!!.images)
             {
-                var image = ImageView(this)
+                var image = ImageButton(this)
+                image.setOnClickListener()
+                {
+                    binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,1000,1000))
+                }
                 //image.layoutParams.height = MATCH_PARENT
                 //image.layoutParams.height = 300
                 image.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,200,200))
