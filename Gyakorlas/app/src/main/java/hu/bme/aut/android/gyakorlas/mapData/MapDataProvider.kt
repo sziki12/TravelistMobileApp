@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import com.google.android.gms.location.LocationServices
 
 
 class MapDataProvider(var activity: Activity){
@@ -107,4 +108,5 @@ class MapDataProvider(var activity: Activity){
 
         return drawableOut
     }
+
 }
