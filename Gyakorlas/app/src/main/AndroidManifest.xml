@@ -49,8 +49,7 @@
         <activity
             android:name=".MapsActivity"
             android:exported="false"
-            android:label="@string/title_activity_maps"
-            android:theme="@style/Theme.AppCompat" />
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
