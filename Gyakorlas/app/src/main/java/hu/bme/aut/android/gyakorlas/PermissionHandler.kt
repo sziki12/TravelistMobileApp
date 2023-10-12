@@ -1,26 +1,17 @@
 package hu.bme.aut.android.gyakorlas
 
 import android.Manifest
-import android.Manifest.permission
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
+import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 
 /**
  * Utility class for access to runtime permissions.
@@ -29,6 +20,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
 
     //var permissionDenied = true
     var mMap:GoogleMap? = null
+    private var geofenceHandler = GeofenceHandler()
     var locationClient: FusedLocationProviderClient? = null
     private var isOnePermissionEnaught:Boolean = true
     var hasPermission:HashMap<Int,Boolean?> = HashMap()
@@ -36,9 +28,12 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
     companion object
     {
         const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        const val BACKGROUND_LOCATION_REQUEST_CODE = 2
     }
     init {
         hasPermission[LOCATION_PERMISSION_REQUEST_CODE] = null
+        hasPermission[BACKGROUND_LOCATION_REQUEST_CODE] = null
+        geofenceHandler.setUpGeofencingClient(mapsActivity)
     }
 
     /**
@@ -53,6 +48,11 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
                 isOnePermissionEnaught=true
                 permissionString.add( Manifest.permission.ACCESS_FINE_LOCATION)
                 permissionString.add( Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+            BACKGROUND_LOCATION_REQUEST_CODE ->
+            {
+                isOnePermissionEnaught=true
+                permissionString.add( Manifest.permission.ACCESS_BACKGROUND_LOCATION)
             }
         }
         return permissionString
@@ -92,6 +92,8 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
                 when(permissionCode)
                 {
                     LOCATION_PERMISSION_REQUEST_CODE -> Toast.makeText(mapsActivity,"You should grant permission to access your location to fully use the app",Toast.LENGTH_SHORT).show()
+
+                    BACKGROUND_LOCATION_REQUEST_CODE ->Toast.makeText(mapsActivity,"You should grant permission to access your background location to use the Recommended For You feature",Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -108,9 +110,18 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
                     LOCATION_PERMISSION_REQUEST_CODE -> {
                         hasPermission[LOCATION_PERMISSION_REQUEST_CODE]=true
                         enableMyLocation()
+                        Log.i("PERMISSION"," LOCATION_PERMISSION_REQUEST_CODE permissionGranted")
+                    }
+
+                    BACKGROUND_LOCATION_REQUEST_CODE ->
+                    {
+
+                        hasPermission[BACKGROUND_LOCATION_REQUEST_CODE]=true
+                        enableGeofencing()
+                        Log.i("PERMISSION"," BACKGROUND_LOCATION_REQUEST_CODE permissionGranted")
                     }
                 }
-                Log.i("PERMISSION","permissionGranted")
+
             }
 
              else -> {
@@ -159,7 +170,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
                 if (checkResult(grantResults)) {
                     // Permission is granted. Continue the action or workflow
                     // in your app.
-                    Log.i("PERMISSION","permissionGranted")
+                    Log.i("PERMISSION","LOCATION_PERMISSION_REQUEST_CODE permissionGranted")
                     hasPermission[LOCATION_PERMISSION_REQUEST_CODE]=true
                     enableMyLocation()
                 } else {
@@ -168,8 +179,27 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
                     // At the same time, respect the user's decision. Don't link to
                     // system settings in an effort to convince the user to change
                     // their decision.
-                    Log.i("PERMISSION","permissionDenied")
+                    Log.i("PERMISSION","LOCATION_PERMISSION_REQUEST_CODE permissionDenied")
                     hasPermission[LOCATION_PERMISSION_REQUEST_CODE]=false
+                }
+                return
+            }
+            BACKGROUND_LOCATION_REQUEST_CODE ->
+            {
+                if (checkResult(grantResults)) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                    Log.i("PERMISSION","BACKGROUND_LOCATION_REQUEST_CODE permissionGranted")
+                    hasPermission[BACKGROUND_LOCATION_REQUEST_CODE]=true
+                    enableGeofencing()
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the feature requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                    Log.i("PERMISSION","BACKGROUND_LOCATION_REQUEST_CODE permissionDenied")
+                    hasPermission[BACKGROUND_LOCATION_REQUEST_CODE]=false
                 }
                 return
             }
@@ -191,13 +221,27 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
         {
             mMap?.isMyLocationEnabled = true
             locationClient?.lastLocation?.addOnSuccessListener { location : Location? ->
-                    mapsActivity.currentLocation = location
+                    MapsActivity.currentLocation = location
                 }
+            requestPermission(BACKGROUND_LOCATION_REQUEST_CODE)
             Log.i("PERMISSION","Map Enabled")
         }
         else
         {
             Log.i("PERMISSION","Map Disabled")
+        }
+    }
+
+    fun enableGeofencing()
+    {
+        if(hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true&&hasPermission[BACKGROUND_LOCATION_REQUEST_CODE]==true)
+        {
+            geofenceHandler.setUpGeofences(mapsActivity.markers)
+            Log.i("PERMISSION","Geofence enabled")
+        }
+        else
+        {
+            Log.i("PERMISSION","Geofence disabled")
         }
     }
 }

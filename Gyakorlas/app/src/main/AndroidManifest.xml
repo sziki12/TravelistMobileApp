@@ -18,8 +18,15 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
+            android:name=".RecommendedActivity"
+            android:exported="false" />
+
+        <receiver android:name=".mapData.GeofenceHandler" />
+
+        <activity
             android:name=".SignUpActivity"
             android:exported="false" />
+
         <activity
             android:name=".ImageViewActivity"
             android:exported="false" />

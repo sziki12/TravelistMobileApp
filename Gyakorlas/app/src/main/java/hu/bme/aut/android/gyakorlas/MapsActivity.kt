@@ -33,12 +33,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     GoogleMap.OnMyLocationClickListener,ActivityCompat.OnRequestPermissionsResultCallback
     {
         private lateinit var  mMap: GoogleMap
-        private var permissionHandler: PermissionHandler = PermissionHandler(this)
+        private lateinit var permissionHandler: PermissionHandler
         private lateinit var binding: ActivityMapsBinding
-        private var markers: ArrayList<MapMarker> = ArrayList()
+        var markers: ArrayList<MapMarker> = ArrayList()
         private lateinit var mapDataProvider:MapDataProvider
         private lateinit var locationClient: FusedLocationProviderClient
-        var currentLocation:Location? = null
+        companion object {
+            var currentLocation:Location? = null
+        }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +49,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //Permissions
+        permissionHandler = PermissionHandler(this)
+
         //Location
         locationClient = LocationServices.getFusedLocationProviderClient(this)
 

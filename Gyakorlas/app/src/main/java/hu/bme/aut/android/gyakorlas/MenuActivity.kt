@@ -34,6 +34,11 @@ class MenuActivity : AppCompatActivity() {
         binding.imgbtnMap.setOnClickListener(){
 
         }
+        binding.btnMenuRecommended.setOnClickListener()
+        {
+            var intent = Intent(this, RecommendedActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 }
