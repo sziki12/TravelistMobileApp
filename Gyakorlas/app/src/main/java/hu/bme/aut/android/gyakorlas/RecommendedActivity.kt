@@ -18,9 +18,13 @@ class RecommendedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRecommendedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
 
+    override fun onResume() {
+        super.onResume()
         markers = geofenceHandler.calculateNearbyMarkers()
-
+        binding.linearLayout.removeAllViews()
+        binding.linearLayout.requestLayout()
         if(MapsActivity.currentLocation!=null)
         {
             for(marker in markers)
@@ -39,7 +43,6 @@ class RecommendedActivity : AppCompatActivity() {
                 binding.linearLayout.addView(textView)
             }
         }
-
     }
 
 

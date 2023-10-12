@@ -150,8 +150,11 @@ class GeofenceHandler : BroadcastReceiver() {
                 {
                     for(geofence in triggeringGeofences)
                     {
-                        activeGeofences.add(geofence)
-                        Log.i("GEOFENCE","Added lat: ${geofence.latitude} lng:${geofence.longitude}")
+                        if(!activeGeofences.contains(geofence))
+                        {
+                            activeGeofences.add(geofence)
+                            Log.i("GEOFENCE","Added lat: ${geofence.latitude} lng:${geofence.longitude}")
+                        }
                     }
                 }
             }
