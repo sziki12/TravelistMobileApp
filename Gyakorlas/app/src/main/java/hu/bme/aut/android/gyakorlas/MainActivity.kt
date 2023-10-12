@@ -1,15 +1,10 @@
 package hu.bme.aut.android.gyakorlas
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.google.android.gms.location.GeofencingClient
 import hu.bme.aut.android.gyakorlas.databinding.ActivityMainBinding
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
@@ -24,9 +19,12 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //Initialize Map Data, load MapMarkers and geofences
+        //Initialize PermissionHandler
+        PermissionHandler.initialize()
+        //Initialize Map Data, load MapMarkers
         MapDataProvider.initMarkers(this)
         geofenceHandler.setUpGeofencingClient(this)
+        //Initialize Location Service
         LocationService.activity=this
         startService(Intent(this,LocationService::class.java))
 

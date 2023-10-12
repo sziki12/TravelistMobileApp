@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import com.google.android.gms.location.LocationServices
 
 
 class MapDataProvider() {
@@ -96,7 +95,6 @@ class MapDataProvider() {
 
                 var drawableOut: Drawable? = null
                 if (bitmap != null) {
-                    //var bitmap = (drawable as BitmapDrawable).bitmap
                     drawableOut = BitmapDrawable(
                         activity.resources,
                         Bitmap.createScaledBitmap(bitmap, dstWidth, dstHeight, true)

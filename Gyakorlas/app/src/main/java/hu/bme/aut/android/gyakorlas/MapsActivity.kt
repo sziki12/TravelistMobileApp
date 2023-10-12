@@ -19,11 +19,7 @@ import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.tasks.CancellationTokenSource
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
@@ -175,22 +171,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 permissionHandler.permissionDenied = false
             }
         }*/
-
-        override fun onResume()
-        {
-            super.onResume()
-            Log.i("PERMISSION","OnResume")
-           if (PermissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true) {
-                // TODO Permission was not granted, display error dialog.
-               //Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
-
-           }
-            else if(PermissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==false)
-           {
-               //Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
-               //Log.i("PERMISSION","permissionDenied")
-           }
-        }
+        
 
     /**
      * If we click on the GPS sign, which centers the camera around the device.

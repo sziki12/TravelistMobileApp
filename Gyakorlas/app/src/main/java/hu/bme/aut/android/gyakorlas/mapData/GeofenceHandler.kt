@@ -8,7 +8,6 @@ import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingClient
@@ -16,7 +15,6 @@ import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import hu.bme.aut.android.gyakorlas.PermissionHandler
-import kotlin.concurrent.thread
 
 class GeofenceHandler : BroadcastReceiver() {
     var activity: Activity? = null

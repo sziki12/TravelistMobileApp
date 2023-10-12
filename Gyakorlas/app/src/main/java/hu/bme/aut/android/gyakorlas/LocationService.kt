@@ -1,15 +1,12 @@
 package hu.bme.aut.android.gyakorlas
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Service
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.location.Location
 import android.os.IBinder
 import android.util.Log
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -82,7 +79,6 @@ class LocationService() : Service(){
         return super.stopService(name)
     }
     override fun onBind(intent: Intent): IBinder? {
-        TODO("Return the communication channel to the service.")
         return null
     }
 }
