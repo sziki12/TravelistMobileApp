@@ -63,6 +63,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
        val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        binding.imgbtnMenu.setOnClickListener()
+        {
+            var intent = Intent(this, MenuActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     /**

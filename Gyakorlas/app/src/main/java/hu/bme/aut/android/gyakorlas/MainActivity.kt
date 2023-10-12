@@ -30,20 +30,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnSignUp.setOnClickListener {
-            if (binding.etUsername.text.toString().isEmpty()){
-                binding.etUsername.requestFocus()
-                binding.etUsername.error = "Please enter your username"
-            }
-            else if (binding.etPassword.text.toString().isEmpty()) {
-                binding.etPassword.requestFocus()
-                binding.etPassword.error = "Please enter your password"
-            }
-            else {
-                startActivity(Intent(this, MenuActivity::class.java))
-            }
+            var intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
         }
-
-
-
     }
 }
