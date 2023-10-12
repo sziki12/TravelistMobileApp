@@ -17,6 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
+        <service
+            android:name=".LocationService"
+            android:stopWithTask="true"
+            android:enabled="true"
+            android:exported="true"/>
+
         <activity
             android:name=".RecommendedActivity"
             android:exported="false" />
@@ -26,7 +32,6 @@
         <activity
             android:name=".SignUpActivity"
             android:exported="false" />
-
         <activity
             android:name=".ImageViewActivity"
             android:exported="false" />

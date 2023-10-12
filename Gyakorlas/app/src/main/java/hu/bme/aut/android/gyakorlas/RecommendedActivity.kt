@@ -2,6 +2,7 @@ package hu.bme.aut.android.gyakorlas
 
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
@@ -25,8 +26,9 @@ class RecommendedActivity : AppCompatActivity() {
         markers = geofenceHandler.calculateNearbyMarkers()
         binding.linearLayout.removeAllViews()
         binding.linearLayout.requestLayout()
-        if(MapsActivity.currentLocation!=null)
+        if(LocationService.currentLocation!=null)
         {
+            Log.i("GEOFENCE","Location Not Null")
             for(marker in markers)
             {
                 var markerLocaton = Location("Provider")
@@ -36,13 +38,14 @@ class RecommendedActivity : AppCompatActivity() {
                 val results = FloatArray(1)
                 Location.distanceBetween(
                     markerLocaton.latitude, markerLocaton.longitude,
-                    MapsActivity.currentLocation!!.latitude, MapsActivity.currentLocation!!.longitude, results
+                    LocationService.currentLocation!!.latitude, LocationService.currentLocation!!.longitude, results
                 )
                 var textView = TextView(this)
                 textView.text="${marker.name} distance: ${Math.round(results[0])}m"
                 binding.linearLayout.addView(textView)
             }
         }
+        Log.i("GEOFENCE","Shown")
     }
 
 

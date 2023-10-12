@@ -19,11 +19,7 @@ import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.tasks.CancellationTokenSource
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
@@ -33,30 +29,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     GoogleMap.OnMyLocationClickListener,ActivityCompat.OnRequestPermissionsResultCallback
     {
         private lateinit var  mMap: GoogleMap
-        private lateinit var permissionHandler: PermissionHandler
         private lateinit var binding: ActivityMapsBinding
         var markers: ArrayList<MapMarker> = ArrayList()
-        private lateinit var mapDataProvider:MapDataProvider
-        private lateinit var locationClient: FusedLocationProviderClient
-        companion object {
-            var currentLocation:Location? = null
-        }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Layout
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //Permissions
-        permissionHandler = PermissionHandler(this)
-
-        //Location
-        locationClient = LocationServices.getFusedLocationProviderClient(this)
 
         //Map Data
-        mapDataProvider = MapDataProvider(this)
         setUpMapData("All")
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -78,40 +60,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     private fun setUpMapData(selectedLocation: String)
     {
         markers.clear()
-        markers = mapDataProvider.getSelectedMarkers(selectedLocation)
+        markers = MapDataProvider.getSelectedMarkers(selectedLocation)
     }
-
-    /**
-    * Updates the current location, needs location permission and if center camera is true than
-    * mMap needs to be initialized
-    */
-    @SuppressLint("MissingPermission")
-    private fun updateCurrentLocation(highAccuracyRequired:Boolean,centerCamera:Boolean)
-    {
-        var priority = Priority.PRIORITY_HIGH_ACCURACY
-        if(!highAccuracyRequired)
-            priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY
-        val cancellationTokenSource = CancellationTokenSource()
-        if(permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true)
-        {
-            locationClient!!.getCurrentLocation(priority, cancellationTokenSource.token)
-            .addOnSuccessListener { location ->
-                currentLocation=location
-
-                if(centerCamera)
-                {
-                    centerCamera()
-                }
-                Log.i("LOCATION","GettingLocationSuccessful: $currentLocation")
-        }
-            .addOnFailureListener { exception ->
-                Log.i("LOCATION","GettingLocationFailed: $exception")
-            }
-        }
-    }
-
-
-
 
     private fun enableGestures()
     {
@@ -135,9 +85,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        permissionHandler.mMap = mMap
-        permissionHandler.requestPermission(LOCATION_PERMISSION_REQUEST_CODE)
-        updateCurrentLocation(highAccuracyRequired = true, centerCamera = true)
+        PermissionHandler.requestPermission(this,LOCATION_PERMISSION_REQUEST_CODE,
+            {
+                mMap?.isMyLocationEnabled = true
+            Log.i("PERMISSION","Map Enabled")
+            })
+        {
+            Log.i("PERMISSION","Map Disabled")
+        }
 
         //Show Markers
         for(mapMarker in markers)
@@ -171,8 +126,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 {
                     var intent = Intent(this, PlaceActivity::class.java)
                     //intent.putParcelableArrayListExtra("IMAGES", mapMarker.place!!.images)
-                    intent.putExtra("PLACE",mapDataProvider.getIDByMarker(mapMarker))
-                    Log.i("PLACE","Place ID:${mapDataProvider.getIDByMarker(mapMarker)}")
+                    intent.putExtra("PLACE",MapDataProvider.getIDByMarker(mapMarker))
+                    Log.i("PLACE","Place ID:${MapDataProvider.getIDByMarker(mapMarker)}")
                     startActivity(intent)
                 }
             }
@@ -216,22 +171,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 permissionHandler.permissionDenied = false
             }
         }*/
-
-        override fun onResume()
-        {
-            super.onResume()
-            Log.i("PERMISSION","OnResume")
-           if (permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==true) {
-                // TODO Permission was not granted, display error dialog.
-               //Toast.makeText(this,"Permission Granted",Toast.LENGTH_SHORT).show()
-
-           }
-            else if(permissionHandler.hasPermission[LOCATION_PERMISSION_REQUEST_CODE]==false)
-           {
-               //Toast.makeText(this,"Permission Not Granted",Toast.LENGTH_SHORT).show()
-               //Log.i("PERMISSION","permissionDenied")
-           }
-        }
+        
 
     /**
      * If we click on the GPS sign, which centers the camera around the device.
@@ -258,7 +198,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         override fun onRequestPermissionsResult(requestCode: Int,
                                                 permissions: Array<String>, grantResults: IntArray) {
            super.onRequestPermissionsResult(requestCode,permissions,grantResults)
-            permissionHandler.onRequestPermissionsResult(requestCode,permissions,grantResults)
+            PermissionHandler.onRequestPermissionsResult(requestCode,permissions,grantResults)
         }
 
         /**
@@ -267,9 +207,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         private fun centerCamera()
         {
             var mapCenter = LatLng(47.5,19.05)
-            if(currentLocation!=null)
+            if(LocationService.currentLocation!=null)
             {
-                mapCenter = LatLng(currentLocation!!.latitude,currentLocation!!.longitude)
+                mapCenter = LatLng(LocationService.currentLocation!!.latitude,LocationService.currentLocation!!.longitude)
             }
             var mapLocation: CameraPosition = CameraPosition.Builder()
                 .target(mapCenter)
@@ -279,5 +219,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
                 .build()
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(mapLocation))
         }
-
-}
+    }
