@@ -1,28 +1,17 @@
 package hu.bme.aut.android.gyakorlas
 
 import android.Manifest
-import android.Manifest.permission
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.SupportMapFragment
-import hu.bme.aut.android.gyakorlas.MapData.GeofenceHandler
+import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 
 /**
  * Utility class for access to runtime permissions.
@@ -232,7 +221,7 @@ class PermissionHandler(private var mapsActivity: MapsActivity){
         {
             mMap?.isMyLocationEnabled = true
             locationClient?.lastLocation?.addOnSuccessListener { location : Location? ->
-                    mapsActivity.currentLocation = location
+                    MapsActivity.currentLocation = location
                 }
             requestPermission(BACKGROUND_LOCATION_REQUEST_CODE)
             Log.i("PERMISSION","Map Enabled")

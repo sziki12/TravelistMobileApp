@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas.MapData
+package hu.bme.aut.android.gyakorlas.mapData
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -14,12 +14,29 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
-import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 
 class GeofenceHandler : BroadcastReceiver() {
     var activity: Activity? = null
     var geofencingClient:GeofencingClient? = null
-    val geofenceRadius = 5000f
+    val geofenceRadius = 7500f
+
+    fun calculateNearbyMarkers():ArrayList<MapMarker>
+    {
+        var nearbyMarkers:ArrayList<MapMarker> = ArrayList()
+        for(geofence in activeGeofences)
+        {
+            for(marker in markers)
+            {
+                if(marker.lat==geofence.latitude&&marker.lng==geofence.longitude)
+                {
+                    nearbyMarkers.add(marker)
+                    Log.i("GEOFENCE","Adding Marker: ${marker.name}")
+                }
+            }
+        }
+        return nearbyMarkers
+    }
+
 
     fun setUpGeofencingClient(activity: Activity)
     {
@@ -75,12 +92,13 @@ class GeofenceHandler : BroadcastReceiver() {
 
 
     @SuppressLint("MissingPermission")
-    fun setUpGeofences(markers:ArrayList<MapMarker>)
+    fun setUpGeofences(allMarkers:ArrayList<MapMarker>)
     {
-        for(marker in markers)
+        for(marker in allMarkers)
         {
             addGeofence(marker,geofenceRadius)
         }
+        markers = allMarkers
         geofencingClient?.addGeofences(getGeofencingRequest(), geofencePendingIntent)?.run {
             addOnSuccessListener {
                 // Geofences added
@@ -178,7 +196,8 @@ class GeofenceHandler : BroadcastReceiver() {
     }
     companion object
     {
-        var activeGeofences : ArrayList<Geofence> = ArrayList()
-        var geofenceList : ArrayList<Geofence> = ArrayList()
+        private var activeGeofences : ArrayList<Geofence> = ArrayList()
+        private var geofenceList : ArrayList<Geofence> = ArrayList()
+        private var markers:ArrayList<MapMarker> = ArrayList()
     }
 }

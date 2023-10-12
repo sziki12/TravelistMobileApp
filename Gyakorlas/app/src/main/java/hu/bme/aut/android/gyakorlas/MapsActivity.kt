@@ -24,7 +24,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.tasks.CancellationTokenSource
-import hu.bme.aut.android.gyakorlas.MapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.PermissionHandler.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
@@ -39,7 +38,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLoca
         var markers: ArrayList<MapMarker> = ArrayList()
         private lateinit var mapDataProvider:MapDataProvider
         private lateinit var locationClient: FusedLocationProviderClient
-        var currentLocation:Location? = null
+        companion object {
+            var currentLocation:Location? = null
+        }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

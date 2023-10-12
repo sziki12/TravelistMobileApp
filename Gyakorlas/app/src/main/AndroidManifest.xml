@@ -17,7 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
-        <receiver android:name=".MapData.GeofenceHandler"/>
+        <activity
+            android:name=".RecommendedActivity"
+            android:exported="false" />
+
+        <receiver android:name=".mapData.GeofenceHandler" />
+
         <activity
             android:name=".ImageViewActivity"
             android:exported="false" />
