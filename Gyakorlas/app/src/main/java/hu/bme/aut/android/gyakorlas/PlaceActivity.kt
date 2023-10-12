@@ -18,7 +18,6 @@ class PlaceActivity : AppCompatActivity() {
     var markerID: Int = 0
     var place: PlaceData? = null
     lateinit var binding: ActivityPlaceBinding
-    private lateinit var mapDataProvider:MapDataProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +25,8 @@ class PlaceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        mapDataProvider = MapDataProvider(this)
         markerID = this.intent.getIntExtra("PLACE",0)
-        place = mapDataProvider.getMarkerByID(markerID).place
+        place = MapDataProvider.getMarkerByID(markerID).place
         //this.intent.getParcelableExtra("PLACE",PlaceData::class.java)
         //place?.images = this.intent.getParcelableArrayListExtra("IMAGES",Bitmap::class.java)!!
         binding.tvName.text = place?.name ?: ""
@@ -50,10 +48,10 @@ class PlaceActivity : AppCompatActivity() {
             {
                 if(i==0)
                 {
-                    images[i].setImageDrawable(mapDataProvider.resizeDrawable(place!!.images[i],800,800))
+                    images[i].setImageDrawable(MapDataProvider.resizeDrawable(this,place!!.images[i],800,800))
                 }else
                 {
-                    images[i].setImageDrawable(mapDataProvider.resizeDrawable(place!!.images[i],600,600))
+                    images[i].setImageDrawable(MapDataProvider.resizeDrawable(this,place!!.images[i],600,600))
                 }
 
 

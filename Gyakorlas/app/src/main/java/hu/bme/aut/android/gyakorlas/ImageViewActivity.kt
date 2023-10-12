@@ -16,15 +16,13 @@ class ImageViewActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityImageViewBinding
     private var place: PlaceData? = null
-    private lateinit var mapDataProvider: MapDataProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityImageViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mapDataProvider = MapDataProvider(this)
-        place = mapDataProvider.getMarkerByID(this.intent.getIntExtra("PLACE",0)).place
+        place = MapDataProvider.getMarkerByID(this.intent.getIntExtra("PLACE",0)).place
         //place = this.intent.getParcelableExtra("PLACE",PlaceData::class.java)
         var index = this.intent.getIntExtra("INDEX",0)
 
@@ -35,18 +33,18 @@ class ImageViewActivity : AppCompatActivity() {
         {
            if(place!!.images.isNotEmpty())
            {
-               binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(place!!.images[index],1000,1000))
+               binding.imageView.setImageDrawable(MapDataProvider.resizeDrawable(this,place!!.images[index],1000,1000))
                //binding.imageView.setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft02)))
                for(bitMap in place!!.images)
                {
                    var image = ImageButton(this)
                    image.setOnClickListener()
                    {
-                       binding.imageView.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,1000,1000))
+                       binding.imageView.setImageDrawable(MapDataProvider.resizeDrawable(this,bitMap,1000,1000))
                    }
                    //image.layoutParams.height = MATCH_PARENT
                    //image.layoutParams.height = 300
-                   image.setImageDrawable(mapDataProvider.resizeDrawable(bitMap,300,300))
+                   image.setImageDrawable(MapDataProvider.resizeDrawable(this,bitMap,300,300))
                    binding.linearLayout.addView(image)
                }
            }
