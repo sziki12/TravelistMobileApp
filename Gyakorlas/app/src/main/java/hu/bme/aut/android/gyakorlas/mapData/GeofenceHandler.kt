@@ -15,6 +15,7 @@ import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import hu.bme.aut.android.gyakorlas.PermissionHandler
+import kotlin.concurrent.thread
 
 class GeofenceHandler : BroadcastReceiver() {
     var activity: Activity? = null
@@ -27,23 +28,29 @@ class GeofenceHandler : BroadcastReceiver() {
 
     }
     fun setUpGeofencingClient(activity: Activity) {
-
-        PermissionHandler.requestPermission(activity,PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,{
-            PermissionHandler.requestPermission(activity,PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,{
-                this.activity=activity
-                geofencingClient = LocationServices.getGeofencingClient(activity)
-                setUpGeofences(MapDataProvider.markers)
-                Log.i("PERMISSION","Geofence Set Up Successfull")
-            })
-            {
-                Log.i("PERMISSION","Geofencing Location Access Denied")
-            }
-
-        })
+        var initSuccess = false
+        thread(start=true)
         {
-            Log.i("PERMISSION","Geofencing Background Location Access Denied")
-        }
+            while(!initSuccess)
+            {
+                PermissionHandler.requestPermission(activity,PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,{
+                    PermissionHandler.requestPermission(activity,PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,{
+                        this.activity=activity
+                        geofencingClient = LocationServices.getGeofencingClient(activity)
+                        setUpGeofences(MapDataProvider.markers)
+                        Log.i("PERMISSION","Geofence Set Up Successfull")
+                    })
+                    {
+                        Log.i("PERMISSION","Geofencing Location Access Denied")
+                    }
 
+                })
+                {
+                    Log.i("PERMISSION","Geofencing Background Location Access Denied")
+                }
+                Thread.sleep(3000)
+            }
+        }
     }
     @SuppressLint("MissingPermission")
     private fun setUpGeofences(allMarkers:ArrayList<MapMarker>)
@@ -51,8 +58,10 @@ class GeofenceHandler : BroadcastReceiver() {
         for(marker in allMarkers)
         {
             addGeofence(marker,geofenceRadius)
+            //Log.i("GEOFENCE","Added ${marker.name}")
         }
         markers = allMarkers
+        //Log.i("GEOFENCE","setUpGeofences Markers.Size ${markers.size}")
         geofencingClient?.addGeofences(getGeofencingRequest(), geofencePendingIntent)?.run {
             addOnSuccessListener {
                 // Geofences added
@@ -69,13 +78,15 @@ class GeofenceHandler : BroadcastReceiver() {
                 }*/
             }
         }
-        Log.i("GEOFENCE","Add Called")
+        //Log.i("GEOFENCE","Add Called")
     }
     fun calculateNearbyMarkers():ArrayList<MapMarker>
     {
         var nearbyMarkers:ArrayList<MapMarker> = ArrayList()
+       // Log.i("GEOFENCE","activeGeofences.size: ${activeGeofences.size}")
         for(geofence in activeGeofences)
         {
+           // Log.i("GEOFENCE","Markers.size: ${markers.size}")
             for(marker in markers)
             {
                 if(marker.lat==geofence.latitude&&marker.lng==geofence.longitude)
@@ -113,10 +124,12 @@ class GeofenceHandler : BroadcastReceiver() {
 
     private fun onTransition(geofenceTransition: Int, triggeringGeofences: List<Geofence>?) {
 
+        Log.i("GEOFENCE","onTransition")
         when(geofenceTransition)
         {
             Geofence.GEOFENCE_TRANSITION_ENTER ->
             {
+                //Log.i("GEOFENCE","Enter")
                 if(triggeringGeofences!=null)
                 {
                     for(geofence in triggeringGeofences)
@@ -132,6 +145,7 @@ class GeofenceHandler : BroadcastReceiver() {
 
             Geofence.GEOFENCE_TRANSITION_EXIT ->
             {
+                //Log.i("GEOFENCE","Exit")
                 if(triggeringGeofences!=null)
                 {
                     for(geofence in triggeringGeofences)

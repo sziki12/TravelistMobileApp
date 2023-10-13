@@ -3,6 +3,7 @@ package hu.bme.aut.android.gyakorlas
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import hu.bme.aut.android.gyakorlas.databinding.ActivityMainBinding
@@ -21,12 +22,23 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
 
         //Initialize PermissionHandler
         PermissionHandler.initialize()
+
         //Initialize Map Data, load MapMarkers
         MapDataProvider.initMarkers(this)
-        geofenceHandler.setUpGeofencingClient(this)
+
         //Initialize Location Service
-        LocationService.activity=this
-        startService(Intent(this,LocationService::class.java))
+        PermissionHandler.requestPermission(this,PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,
+            {
+                PermissionHandler.requestPermission(this, PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,
+                    {
+                        Log.i("PERMISSION", "LocationService Starting")
+                        startService(Intent(this, LocationService::class.java))
+                    })
+                {Log.i("PERMISSION", " FAIL LocationService Starting")}
+            })
+        { Log.i("PERMISSION", " FAIL LocationService Starting")}
+
+        geofenceHandler.setUpGeofencingClient(this)
 
         binding.btnLogin.setOnClickListener {
             if (binding.etUsername.text.toString().isEmpty()){

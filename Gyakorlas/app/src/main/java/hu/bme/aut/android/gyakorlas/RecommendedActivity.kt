@@ -29,6 +29,7 @@ class RecommendedActivity : AppCompatActivity() {
         if(LocationService.currentLocation!=null)
         {
             Log.i("GEOFENCE","Location Not Null")
+            Log.i("GEOFENCE","Markers.Size: ${markers.size}")
             for(marker in markers)
             {
                 var markerLocaton = Location("Provider")

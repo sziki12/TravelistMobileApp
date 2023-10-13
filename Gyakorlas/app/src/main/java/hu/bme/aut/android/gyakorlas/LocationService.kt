@@ -14,39 +14,44 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import kotlin.concurrent.Volatile
 import kotlin.concurrent.thread
 
-class LocationService() : Service(){
+class LocationService() : Service()
+{
 
     private lateinit var locationClient: FusedLocationProviderClient
     @Volatile
     private var isRunning:Boolean = true
     private var callbacks: ArrayList<()->Unit> = ArrayList()
     private var useHighAccuracy = false
-    companion object {
+    companion object
+    {
         @Volatile
         var currentLocation: Location? = null
-        lateinit var activity:Activity
     }
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if(activity!=null)
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
+    {
+        //Thread.sleep(1000)
+        locationClient = LocationServices.getFusedLocationProviderClient(this)
+        thread(start=true)
         {
-            locationClient = LocationServices.getFusedLocationProviderClient(this)
-            PermissionHandler.requestPermission(activity,PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,{
-                PermissionHandler.requestPermission(activity,PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,{
-                    thread {
-                        Log.i("PERMISSION","LocationService Started")
-                        while (isRunning) {
-                            updateCurrentLocation(useHighAccuracy)
-                            Thread.sleep(5000)
-                        }
-                    }
-                })
-                {
-                    Log.i("PERMISSION","Location Access Denied")
-                }
-
-            })
+            while (isRunning)
             {
-                Log.i("PERMISSION","Background Location Access Denied")
+            if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
+            {
+                if(PermissionHandler.hasPermission[PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE] == true)
+                {
+                    Log.i("PERMISSION", "LocationService RUNNING")
+
+                        updateCurrentLocation(useHighAccuracy)
+                        Thread.sleep(5000)
+
+                } else
+                {
+                    Log.i("PERMISSION","Background Location Access Denied")
+                }
+            } else
+            {
+                Log.i("PERMISSION","Location Access Denied")
+            }
             }
         }
         return super.onStartCommand(intent, flags, startId)
