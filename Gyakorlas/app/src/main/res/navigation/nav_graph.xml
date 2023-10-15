@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_loginFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/menuFragment"
@@ -33,7 +36,11 @@
         android:id="@+id/profileFragment"
         android:name="hu.bme.aut.android.gyakorlas.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mapsFragment"
         android:name="hu.bme.aut.android.gyakorlas.MapsFragment"
@@ -42,6 +49,9 @@
         <action
             android:id="@+id/action_mapsFragment_to_placeFragment"
             app:destination="@id/placeFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
     <fragment
         android:id="@+id/recommendedFragment"
@@ -52,5 +62,36 @@
         android:id="@+id/placeFragment"
         android:name="hu.bme.aut.android.gyakorlas.PlaceFragment"
         android:label="fragment_place"
-        tools:layout="@layout/fragment_place" />
+        tools:layout="@layout/fragment_place" >
+        <argument
+            android:name="markerID"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_placeFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewFragment"
+        android:name="hu.bme.aut.android.gyakorlas.ImageViewFragment"
+        android:label="fragment_image_view"
+        tools:layout="@layout/fragment_image_view" >
+        <argument
+            android:name="markerID"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="index"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="hu.bme.aut.android.gyakorlas.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

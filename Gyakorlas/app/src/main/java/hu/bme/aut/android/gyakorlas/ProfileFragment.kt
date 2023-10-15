@@ -28,6 +28,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //TODO ez igy megy?
         binding.btnCancel.setOnClickListener {
             findNavController()
                 .previousBackStackEntry
@@ -36,8 +37,9 @@ class ProfileFragment : Fragment() {
             findNavController()
                 .previousBackStackEntry
         }
-//        binding.imgbtnMenu.setOnClickListener {
-//
-//        }
+
+        binding.imgbtnMenu.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_menuFragment)
+        }
     }
 }

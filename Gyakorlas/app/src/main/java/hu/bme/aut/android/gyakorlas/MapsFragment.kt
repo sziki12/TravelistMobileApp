@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -54,9 +55,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.imgbtnMenu.setOnClickListener {
-//
-//        }
+        binding.imgbtnMenu.setOnClickListener {
+            findNavController().navigate(R.id.action_mapsFragment_to_menuFragment)
+        }
     }
 
     /**
@@ -131,11 +132,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback, GoogleMap.OnMyLocationButto
             {
                 if(mapMarker.isOwnMarker(marker)&&mapMarker.place!=null)
                 {
-                    var intent = Intent(this, PlaceActivity::class.java)
-                    //intent.putParcelableArrayListExtra("IMAGES", mapMarker.place!!.images)
-                    intent.putExtra("PLACE", MapDataProvider.getIDByMarker(mapMarker))
-                    Log.i("PLACE","Place ID:${MapDataProvider.getIDByMarker(mapMarker)}")
-                    startActivity(intent)
+//                    var intent = Intent(this, PlaceActivity::class.java)
+//                    //intent.putParcelableArrayListExtra("IMAGES", mapMarker.place!!.images)
+//                    intent.putExtra("PLACE", MapDataProvider.getIDByMarker(mapMarker))
+//                    Log.i("PLACE","Place ID:${MapDataProvider.getIDByMarker(mapMarker)}")
+//                    startActivity(intent)
+
+                    val markerID = MapDataProvider.getIDByMarker(mapMarker)
+
+                    // create an action and pass the required user object to it
+                    val action = MapsFragmentDirections.actionMapsFragmentToPlaceFragment(markerID)
+
+                    //this will navigate the MapsFragment to the PlaceFragment
+                    findNavController().navigate(action)
                 }
             }
         }

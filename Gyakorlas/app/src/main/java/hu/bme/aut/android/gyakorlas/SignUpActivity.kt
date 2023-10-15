@@ -21,26 +21,26 @@ class SignUpActivity : AppCompatActivity() {
                 binding.etFullName.error = "Please enter your full name"
             }
             else if (binding.etEmail.text.toString().isEmpty()) {
-                binding.etEmail.requestFocus()
-                binding.etEmail.error = "Please enter your email"
-            }
-            else if (binding.etUsername.text.toString().isEmpty()) {
-                binding.etUsername.requestFocus()
-                binding.etUsername.error = "Please enter your username"
-            }
-            else if (binding.etPassword.text.toString().isEmpty()) {
-                binding.etPassword.requestFocus()
-                binding.etPassword.error = "Please enter your password"
-            }
-            else if (binding.etConfirmPassword.text.toString().isEmpty()) {
-                binding.etConfirmPassword.requestFocus()
-                binding.etConfirmPassword.error = "Please confirm your password"
-            }
-            else if (binding.etPassword.text.toString() != binding.etConfirmPassword.text.toString()) {
-                binding.etConfirmPassword.requestFocus()
-                binding.etConfirmPassword.error = "Passwords not matching!"
-            }
-            else {
+            binding.etEmail.requestFocus()
+            binding.etEmail.error = "Please enter your email"
+        }
+        else if (binding.etUsername.text.toString().isEmpty()) {
+            binding.etUsername.requestFocus()
+            binding.etUsername.error = "Please enter your username"
+        }
+        else if (binding.etPassword.text.toString().isEmpty()) {
+            binding.etPassword.requestFocus()
+            binding.etPassword.error = "Please enter your password"
+        }
+        else if (binding.etConfirmPassword.text.toString().isEmpty()) {
+            binding.etConfirmPassword.requestFocus()
+            binding.etConfirmPassword.error = "Please confirm your password"
+        }
+        else if (binding.etPassword.text.toString() != binding.etConfirmPassword.text.toString()) {
+            binding.etConfirmPassword.requestFocus()
+            binding.etConfirmPassword.error = "Passwords not matching!"
+        }
+        else {
                 startActivity(Intent(this, MainActivity::class.java))
             }
         }
