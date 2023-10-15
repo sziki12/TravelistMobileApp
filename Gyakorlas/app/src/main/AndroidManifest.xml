@@ -17,9 +17,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
 
         <service
             android:name=".LocationService"
@@ -27,28 +24,8 @@
             android:exported="true"
             android:stopWithTask="true" />
 
-        <activity
-            android:name=".RecommendedActivity"
-            android:exported="false" />
-
         <receiver android:name=".mapData.GeofenceHandler" />
 
-        <activity
-            android:name=".SignUpActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ImageViewActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".PlaceActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat" />
-        <activity
-            android:name=".MenuActivity"
-            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -64,10 +41,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

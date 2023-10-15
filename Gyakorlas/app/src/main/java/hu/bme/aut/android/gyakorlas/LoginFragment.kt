@@ -39,8 +39,8 @@ class LoginFragment : Fragment() {
             }
         }
 
-//        binding.btnSignUp.setOnClickListener {
-//            findNavController().navigate(R.id.action_menuFragment_to_holidayFragment)
-//        }
+        binding.btnSignUp.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
+        }
     }
 }

@@ -17,11 +17,6 @@ class RecommendedFragment : Fragment() {
     private var geofenceHandler = GeofenceHandler()
     private lateinit var binding: FragmentRecommendedBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

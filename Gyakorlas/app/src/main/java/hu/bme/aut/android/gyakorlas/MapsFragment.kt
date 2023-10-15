@@ -20,7 +20,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import hu.bme.aut.android.gyakorlas.databinding.ActivityMapsBinding
 import hu.bme.aut.android.gyakorlas.databinding.FragmentMapsBinding
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker

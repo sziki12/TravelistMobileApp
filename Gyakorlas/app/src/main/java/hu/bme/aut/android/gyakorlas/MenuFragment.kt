@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import hu.bme.aut.android.gyakorlas.databinding.ActivityMenuBinding
 import hu.bme.aut.android.gyakorlas.databinding.FragmentMenuBinding
 
 class MenuFragment : Fragment() {
@@ -37,9 +36,6 @@ class MenuFragment : Fragment() {
         binding.btnMenuRecommended.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_recommendedFragment)
         }
-//        binding.imgbtnMenu.setOnClickListener {
-//            findNavController().navigate(R.id.action_menuFragment_to_holidayFragment)
-//        }
     }
 
 
