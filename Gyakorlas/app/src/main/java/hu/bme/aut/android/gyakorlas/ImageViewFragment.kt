@@ -1,5 +1,6 @@
 package hu.bme.aut.android.gyakorlas
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -39,16 +40,24 @@ class ImageViewFragment : Fragment() {
         {
             if(place!!.images.isNotEmpty())
             {
-                binding.imageView.setImageDrawable(MapDataProvider.resizeDrawable(this,place!!.images[index],1000,1000))
+                binding.imageView.setImageDrawable(this.activity?.let {
+                    MapDataProvider.resizeDrawable(
+                        it,place!!.images[index],1000,1000)
+                })
                 for(bitMap in place!!.images)
                 {
                     var image = ImageButton(this.context)
                     image.setOnClickListener()
                     {
-                        binding.imageView.setImageDrawable(MapDataProvider.resizeDrawable(this,bitMap,1000,1000))
+                        binding.imageView.setImageDrawable(this.activity?.let {
+                            MapDataProvider.resizeDrawable(
+                                it,place!!.images[index],1000,1000)
+                        })
                     }
-                    image.setImageDrawable(MapDataProvider.resizeDrawable(this,bitMap,300,300))
-                    binding.linearLayout.addView(image)
+                    image.setImageDrawable(this.activity?.let {
+                        MapDataProvider.resizeDrawable(
+                            it,place!!.images[index],300,300)
+                    })
                 }
             }
         }

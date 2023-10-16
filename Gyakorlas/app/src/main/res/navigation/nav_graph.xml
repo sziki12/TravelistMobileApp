@@ -27,7 +27,8 @@
             app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_menuFragment_to_mapsFragment"
-            app:destination="@id/mapsFragment" />
+            app:destination="@id/mapsFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_menuFragment_to_recommendedFragment"
             app:destination="@id/recommendedFragment" />
@@ -65,8 +66,7 @@
         tools:layout="@layout/fragment_place" >
         <argument
             android:name="markerID"
-            app:argType="integer"
-            android:defaultValue="0" />
+            app:argType="integer" />
         <action
             android:id="@+id/action_placeFragment_to_imageViewFragment"
             app:destination="@id/imageViewFragment" />
@@ -78,12 +78,10 @@
         tools:layout="@layout/fragment_image_view" >
         <argument
             android:name="markerID"
-            app:argType="integer"
-            android:defaultValue="0" />
+            app:argType="integer" />
         <argument
             android:name="index"
-            app:argType="integer"
-            android:defaultValue="0" />
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"

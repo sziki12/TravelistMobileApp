@@ -36,8 +36,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        tools:context=".MapsActivity" />
+        android:layout_below="@id/toolbar" />
 
     <Button
         android:id="@+id/btnPlaceNewMarker"

@@ -1,5 +1,6 @@
 package hu.bme.aut.android.gyakorlas
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -51,10 +52,16 @@ class PlaceFragment : Fragment() {
             {
                 if(i==0)
                 {
-                    images[i].setImageDrawable(MapDataProvider.resizeDrawable(this,place!!.images[i],800,800))
+                    images[i].setImageDrawable(this.activity?.let {
+                        MapDataProvider.resizeDrawable(
+                            it,place!!.images[i],800,800)
+                    })
                 }else
                 {
-                    images[i].setImageDrawable(MapDataProvider.resizeDrawable(this,place!!.images[i],600,600))
+                    images[i].setImageDrawable(this.activity?.let {
+                        MapDataProvider.resizeDrawable(
+                            it,place!!.images[i],600,600)
+                    })
                 }
 
 
@@ -70,7 +77,7 @@ class PlaceFragment : Fragment() {
 //                intent.putExtra("INDEX",index)
 //                startActivity(intent)
 
-                val action = PlaceFragmentDirections.actionPlaceFragmentToImageViewFragment(markerID, index)
+                val action = PlaceFragmentDirections.actionPlaceFragmentToImageViewFragment(markerID, index)//
                 findNavController().navigate(action)
             }
         }
@@ -86,9 +93,9 @@ class PlaceFragment : Fragment() {
         return binding.root;
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-    }
+    }*/
 }
