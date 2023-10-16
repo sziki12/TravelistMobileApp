@@ -31,6 +31,9 @@ class ImageViewFragment : Fragment() {
     ): View {
         binding = FragmentImageViewBinding.inflate(inflater, container, false)
 
+        //Somehow the markers get deleted from MapDataProvider
+        this.activity?.let { MapDataProvider.initMarkers(it) }
+
         place = MapDataProvider.getMarkerByID(args.markerID).place
         var index = args.index
 

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRecommendedBinding
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
+import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 
 class RecommendedFragment : Fragment() {
@@ -29,10 +30,9 @@ class RecommendedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-    }
+        //Somehow the markers get deleted from MapDataProvider
+        this.activity?.let { MapDataProvider.initMarkers(it) }
 
-    override fun onResume() {
-        super.onResume()
         markers = geofenceHandler.calculateNearbyMarkers()
         binding.linearLayout.removeAllViews()
         binding.linearLayout.requestLayout()
@@ -58,5 +58,11 @@ class RecommendedFragment : Fragment() {
             }
         }
         Log.i("GEOFENCE", "Shown")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 }

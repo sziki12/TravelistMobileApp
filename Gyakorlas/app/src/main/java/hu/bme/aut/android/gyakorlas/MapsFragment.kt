@@ -65,8 +65,12 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     private fun setUpMapData(selectedLocation: String) {
         markers.clear()
+
+        //Somehow the markers get deleted from MapDataProvider
+        this.activity?.let { MapDataProvider.initMarkers(it) }
+
         markers = MapDataProvider.getSelectedMarkers(selectedLocation)
-        Log.i("PLACE","setUpMapData")
+        Log.i("PLACE","setUpMapData markers.size: ${markers.size}")
     }
 
     private fun enableGestures() {
@@ -89,6 +93,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
 
+        Log.i("PLACE","map ready callback")
         mMap = googleMap
         this.activity?.let {
             PermissionHandler.requestPermission(

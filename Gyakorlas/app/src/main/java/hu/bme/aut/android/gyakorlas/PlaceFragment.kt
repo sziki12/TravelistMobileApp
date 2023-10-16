@@ -29,6 +29,9 @@ class PlaceFragment : Fragment() {
     ): View {
         binding = FragmentPlaceBinding.inflate(inflater, container, false)
 
+        //Somehow the markers get deleted from MapDataProvider
+        this.activity?.let { MapDataProvider.initMarkers(it) }
+
         //receive the arguments in a variable
         markerID = args.markerID
         place = MapDataProvider.getMarkerByID(markerID).place
