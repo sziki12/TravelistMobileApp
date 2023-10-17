@@ -56,12 +56,10 @@ class SignUpFragment : Fragment() {
             else {
                 findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
             }
-
-            binding.imgbtnArrowBack.setOnClickListener()
-            {
-                findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
-            }
         }
-
+        binding.imgbtnArrowBack.setOnClickListener()
+        {
+            findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+        }
     }
 }
