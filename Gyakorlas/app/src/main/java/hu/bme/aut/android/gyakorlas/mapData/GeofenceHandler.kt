@@ -29,7 +29,7 @@ class GeofenceHandler : BroadcastReceiver() {
     }
     fun setUpGeofencingClient(activity: Activity) {
         var initSuccess = false
-        thread(start=true)
+        thread(start=true, isDaemon = true)
         {
             while(!initSuccess)
             {

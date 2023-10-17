@@ -56,13 +56,13 @@ class PlaceFragment : Fragment() {
                 if(i==0)
                 {
                     images[i].setImageDrawable(this.activity?.let {
-                        MapDataProvider.resizeDrawable(
+                        MapDataProvider.resizeBitmap(
                             it,place!!.images[i],800,800)
                     })
                 }else
                 {
                     images[i].setImageDrawable(this.activity?.let {
-                        MapDataProvider.resizeDrawable(
+                        MapDataProvider.resizeBitmap(
                             it,place!!.images[i],600,600)
                     })
                 }

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import androidx.core.graphics.drawable.toBitmap
 
 
 class MapDataProvider() {
@@ -86,7 +87,7 @@ class MapDataProvider() {
                 return ID
             }
 
-            fun resizeDrawable(
+            fun resizeBitmap(
                 activity: Activity,
                 bitmap: Bitmap?,
                 dstWidth: Int,
@@ -103,5 +104,21 @@ class MapDataProvider() {
 
                 return drawableOut
             }
+
+        fun resizeDrawable(
+            activity: Activity,
+            drawable: Drawable?,
+            dstWidth: Int,
+            dstHeight: Int
+        ): Drawable? {
+
+            var drawableOut: Drawable? = null
+            var bitmap:Bitmap? = null
+            if (drawable != null)
+                bitmap = drawable.toBitmap()
+
+            drawableOut = resizeBitmap(activity,bitmap,dstWidth,dstHeight)
+            return drawableOut
+        }
     }
 }
