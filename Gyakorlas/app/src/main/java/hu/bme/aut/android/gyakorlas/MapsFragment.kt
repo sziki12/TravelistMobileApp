@@ -143,7 +143,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
                     val markerID = MapDataProvider.getIDByMarker(mapMarker)
                     Log.i("PLACE","Place ID:$markerID")
-                    // create an action and pass the required user object to it
+                    // create an action and pass the required object to it
                     val action =
                         markerID?.let { MapsFragmentDirections.actionMapsFragmentToPlaceFragment(it) }//
 
