@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_menuFragment_to_recommendedFragment"
             app:destination="@id/recommendedFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_uploadNewPlaceFragment"
+            app:destination="@id/uploadNewPlaceFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -92,4 +95,9 @@
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/uploadNewPlaceFragment"
+        android:name="hu.bme.aut.android.gyakorlas.UploadNewPlaceFragment"
+        android:label="fragment_upload_new_place"
+        tools:layout="@layout/fragment_upload_new_place" />
 </navigation>
