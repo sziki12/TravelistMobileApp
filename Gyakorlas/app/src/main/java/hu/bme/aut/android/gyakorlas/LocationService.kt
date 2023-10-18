@@ -22,6 +22,8 @@ class LocationService() : Service()
     private var isRunning:Boolean = true
     private var callbacks: ArrayList<()->Unit> = ArrayList()
     private var useHighAccuracy = false
+    private val waitOfFaileur:Long = 2000
+    private val waitOnSuccess:Long = 5000
     companion object
     {
         @Volatile
@@ -31,27 +33,29 @@ class LocationService() : Service()
     {
         //Thread.sleep(1000)
         locationClient = LocationServices.getFusedLocationProviderClient(this)
-        thread(start=true)
+        thread(start=true, isDaemon = true)
         {
             while (isRunning)
             {
-            if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
-            {
-                if(PermissionHandler.hasPermission[PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE] == true)
+                if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
                 {
-                    Log.i("PERMISSION", "LocationService RUNNING")
+                    if(PermissionHandler.hasPermission[PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE] == true)
+                    {
+                        Log.i("PERMISSION", "LocationService RUNNING")
 
-                        updateCurrentLocation(useHighAccuracy)
-                        Thread.sleep(5000)
+                            updateCurrentLocation(useHighAccuracy)
+                            Thread.sleep(waitOnSuccess)
 
+                    } else
+                    {
+                        Log.i("PERMISSION","Background Location Access Denied")
+                        Thread.sleep(waitOfFaileur)
+                    }
                 } else
                 {
-                    Log.i("PERMISSION","Background Location Access Denied")
+                    Log.i("PERMISSION","Location Access Denied")
+                    Thread.sleep(waitOfFaileur)
                 }
-            } else
-            {
-                Log.i("PERMISSION","Location Access Denied")
-            }
             }
         }
         return super.onStartCommand(intent, flags, startId)

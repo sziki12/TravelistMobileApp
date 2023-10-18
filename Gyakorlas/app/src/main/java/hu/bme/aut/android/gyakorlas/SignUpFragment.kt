@@ -1,21 +1,34 @@
 package hu.bme.aut.android.gyakorlas
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import hu.bme.aut.android.gyakorlas.databinding.ActivityMainBinding
-import hu.bme.aut.android.gyakorlas.databinding.ActivitySignUpBinding
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import hu.bme.aut.android.gyakorlas.databinding.FragmentSignUpBinding
 
-class SignUpActivity : AppCompatActivity() {
-    private lateinit var binding : ActivitySignUpBinding
+class SignUpFragment : Fragment() {
+    private lateinit var binding : FragmentSignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignUpBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    }
 
-        binding.btnSignUp.setOnClickListener()
-        {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSignUpBinding.inflate(inflater, container, false)
+        return binding.root;
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnSignUp.setOnClickListener {
             if (binding.etFullName.text.toString().isEmpty()){
                 binding.etFullName.requestFocus()
                 binding.etFullName.error = "Please enter your full name"
@@ -41,14 +54,12 @@ class SignUpActivity : AppCompatActivity() {
                 binding.etConfirmPassword.error = "Passwords not matching!"
             }
             else {
-                startActivity(Intent(this, MainActivity::class.java))
+                findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
             }
         }
-
         binding.imgbtnArrowBack.setOnClickListener()
         {
-            var intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
         }
     }
 }
