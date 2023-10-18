@@ -44,7 +44,7 @@ class ImageViewFragment : Fragment() {
             if(place!!.images.isNotEmpty())
             {
                 binding.imageView.setImageDrawable(this.activity?.let {
-                    MapDataProvider.resizeDrawable(
+                    MapDataProvider.resizeBitmap(
                         it,place!!.images[index],1000,1000)
                 })
                 for(bitMap in place!!.images)
@@ -53,12 +53,12 @@ class ImageViewFragment : Fragment() {
                     image.setOnClickListener()
                     {
                         binding.imageView.setImageDrawable(this.activity?.let {
-                            MapDataProvider.resizeDrawable(
+                            MapDataProvider.resizeBitmap(
                                 it,place!!.images[index],1000,1000)
                         })
                     }
                     image.setImageDrawable(this.activity?.let {
-                        MapDataProvider.resizeDrawable(
+                        MapDataProvider.resizeBitmap(
                             it,place!!.images[index],300,300)
                     })
                 }
