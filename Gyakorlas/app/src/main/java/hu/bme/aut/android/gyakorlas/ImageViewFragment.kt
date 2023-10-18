@@ -16,6 +16,8 @@ import hu.bme.aut.android.gyakorlas.mapData.PlaceData
 class ImageViewFragment : Fragment() {
     private lateinit var binding : FragmentImageViewBinding
     private var place: PlaceData? = null
+    private val smallImageSize = 300
+    private val bigImageSize = 1000
 
     private val args : ImageViewFragmentArgs by navArgs()
 
@@ -45,7 +47,7 @@ class ImageViewFragment : Fragment() {
             {
                 binding.imageView.setImageDrawable(this.activity?.let {
                     MapDataProvider.resizeBitmap(
-                        it,place!!.images[index],1000,1000)
+                        it,place!!.images[index],bigImageSize,bigImageSize)
                 })
                 for(bitMap in place!!.images)
                 {
@@ -54,21 +56,22 @@ class ImageViewFragment : Fragment() {
                     {
                         binding.imageView.setImageDrawable(this.activity?.let {
                             MapDataProvider.resizeBitmap(
-                                it,place!!.images[index],1000,1000)
+                                it,bitMap,bigImageSize,bigImageSize)
                         })
                     }
                     image.setImageDrawable(this.activity?.let {
                         MapDataProvider.resizeBitmap(
-                            it,place!!.images[index],300,300)
+                            it,bitMap,smallImageSize,smallImageSize)
                     })
+                    binding.linearLayout.addView(image)
                 }
             }
         }
-        Log.i("IMAGES","Scroll View Width: ${binding.scrollView.width}")
-        Log.i("IMAGES","Scroll View Height: ${binding.scrollView.height}")
+        //Log.i("IMAGES","Scroll View Width: ${binding.scrollView.width}")
+        //Log.i("IMAGES","Scroll View Height: ${binding.scrollView.height}")
 
-        Log.i("IMAGES","Root Width: ${binding.root.width}")
-        Log.i("IMAGES","Root Height: ${binding.root.height}")
+        //Log.i("IMAGES","Root Width: ${binding.root.width}")
+        //Log.i("IMAGES","Root Height: ${binding.root.height}")
 
         return binding.root;
     }
