@@ -38,21 +38,16 @@ class RecommendedFragment : Fragment() {
 
         markers = geofenceHandler.calculateNearbyMarkers()
 
-        val customAdapter = this?.activity?.let { PlaceAdapter(it,markers) }
+        val customAdapter = PlaceAdapter(this,markers)
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this.activity)
         recyclerView.adapter = customAdapter
         Log.i("GEOFENCE", "markers size: ${markers.size}")
-        //binding.linearLayout.removeAllViews()
-        //binding.linearLayout.requestLayout()
-       /* if (LocationService.currentLocation != null) {
-            Log.i("GEOFENCE", "Location Not Null")
-            Log.i("GEOFENCE", "Markers.Size: ${markers.size}")
+        /*
             for (marker in markers) {
                 var markerLocaton = Location("Provider")
                 markerLocaton.latitude = marker.lat
                 markerLocaton.longitude = marker.lng
-
                 val results = FloatArray(1)
                 Location.distanceBetween(
                     markerLocaton.latitude,
@@ -63,8 +58,6 @@ class RecommendedFragment : Fragment() {
                 )
                 var textView = TextView(this.context)
                 textView.text = "${marker.name} distance: ${Math.round(results[0])}m"
-                //binding.linearLayout.addView(textView)
-            }
         }*/
         Log.i("GEOFENCE", "Shown")
 

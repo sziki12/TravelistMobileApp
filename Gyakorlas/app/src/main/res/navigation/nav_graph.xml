@@ -61,7 +61,14 @@
         android:id="@+id/recommendedFragment"
         android:name="hu.bme.aut.android.gyakorlas.RecommendedFragment"
         android:label="fragment_recommended"
-        tools:layout="@layout/fragment_recommended" />
+        tools:layout="@layout/fragment_recommended" >
+        <action
+            android:id="@+id/action_recommendedFragment_to_placeFragment"
+            app:destination="@id/placeFragment" />
+        <action
+            android:id="@+id/action_recommendedFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/placeFragment"
         android:name="hu.bme.aut.android.gyakorlas.PlaceFragment"

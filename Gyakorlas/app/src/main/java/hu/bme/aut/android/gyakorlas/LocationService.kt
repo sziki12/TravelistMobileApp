@@ -10,6 +10,7 @@ import android.util.Log
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlin.concurrent.Volatile
 import kotlin.concurrent.thread
@@ -28,6 +29,27 @@ class LocationService() : Service()
     {
         @Volatile
         var currentLocation: Location? = null
+
+        fun calculateDistance(dest: LatLng):Float?
+
+        {   var distance:Float? = null
+            if(currentLocation!=null)
+            {
+                var markerLocaton = Location("Provider")
+                markerLocaton.latitude = dest.latitude
+                markerLocaton.longitude = dest.longitude
+                val results = FloatArray(1)
+                Location.distanceBetween(
+                    markerLocaton.latitude,
+                    markerLocaton.longitude,
+                    currentLocation!!.latitude,
+                    currentLocation!!.longitude,
+                    results
+                )
+                distance =results[0]
+            }
+            return distance
+        }
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {

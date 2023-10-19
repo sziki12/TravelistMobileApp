@@ -13,7 +13,7 @@ class MapDataProvider() {
         var markers: ArrayList<MapMarker> = ArrayList()
         fun initMarkers(activity: Activity) {
             if (markers.isEmpty()) {
-                var barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest")
+                var barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest","",4.5f,200)
                 barCraftNyugati.description =
                     "Service options: Dine-in · No takeaway · No delivery\n" +
                             "Address: Budapest, Bajcsy-Zsilinszky út 59, 1065\n" +
