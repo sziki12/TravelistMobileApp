@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_menuFragment_to_uploadNewPlaceFragment"
             app:destination="@id/uploadNewPlaceFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -111,4 +114,8 @@
             android:id="@+id/action_uploadNewPlaceFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="hu.bme.aut.android.gyakorlas.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

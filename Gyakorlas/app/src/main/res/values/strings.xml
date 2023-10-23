@@ -40,5 +40,7 @@
     <string name="accurate">Accurate</string>
     <string name="location_and_geofencing">Location and Geofencing</string>
     <string name="location_update_interval">Location Update Interval</string>
+    <string name="location_update_interval_on_failure">Location Update Interval On Failure</string>
     <string name="remember_username">Remember Username</string>
+    <string name="recommendend_for_you">Recommendend For You</string>
 </resources>

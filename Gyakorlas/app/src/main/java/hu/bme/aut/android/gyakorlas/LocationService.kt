@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Service
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.IBinder
 import android.util.Log
@@ -23,8 +24,9 @@ class LocationService() : Service()
     private var isRunning:Boolean = true
     private var callbacks: ArrayList<()->Unit> = ArrayList()
     private var useHighAccuracy = false
-    private val waitOfFaileur:Long = 2000
-    private val waitOnSuccess:Long = 5000
+    private var waitOfFaileur:Long = 2000
+    private var waitOnSuccess:Long = 5000
+    private var stringIndex = 0
     companion object
     {
         @Volatile
@@ -59,6 +61,8 @@ class LocationService() : Service()
         {
             while (isRunning)
             {
+                //waitOfFaileur = 0
+                //waitOnSuccess = 1
                 if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
                 {
                     if(PermissionHandler.hasPermission[PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE] == true)
@@ -80,6 +84,23 @@ class LocationService() : Service()
                 }
             }
         }
+
+        //TODO Nem működik, SharedPreferences
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, s ->
+            Log.i("LOCATION","SharedPreferences: $s")
+            if(s.contains("locationUpdateIntervalOnFailure"))
+            {
+                waitOnSuccess = sharedPreferences.getLong("locationUpdateIntervalOnFailure",waitOnSuccess)
+                Log.i("LOCATION","locationUpdateIntervalOnFailure: $waitOnSuccess")
+            }
+
+            if(s.contains("locationUpdateInterval"))
+            {
+                waitOfFaileur = sharedPreferences.getLong("locationUpdateIntervalOnFailure",waitOfFaileur)
+                Log.i("LOCATION","locationUpdateIntervalOnFailure: $waitOfFaileur")
+            }
+        }
+
         return super.onStartCommand(intent, flags, startId)
     }
 

@@ -24,6 +24,14 @@
             app:key="locationUpdateInterval"
             app:title="@string/location_update_interval"
             app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="5 s"
+            app:entries="@array/update_location_interval"
+            app:entryValues="@array/update_location_interval"
+            app:key="locationUpdateIntervalOnFailure"
+            app:title="@string/location_update_interval_on_failure"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/profile">
