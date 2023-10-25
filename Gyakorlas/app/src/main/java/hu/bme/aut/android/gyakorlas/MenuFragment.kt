@@ -39,6 +39,9 @@ class MenuFragment : Fragment() {
         binding.btnUploadNewPlace.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_uploadNewPlaceFragment)
         }
+        binding.btnRequestHelp.setOnClickListener {
+            findNavController().navigate(R.id.action_menuFragment_to_requestHelpFragment)
+        }
     }
 
 

@@ -340,9 +340,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="baseline_add_24" />
-                            <entry key="sourceFile" value="D:\egyetem\5.felev\temalabor\profilepicture.svg" />
+                            <entry key="outputName" value="requesthelp" />
+                            <entry key="sourceFile" value="D:\egyetem\5.felev\temalabor\requesthelp.svg" />
                           </map>
                         </option>
                       </PersistentState>
