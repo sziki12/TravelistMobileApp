@@ -11,8 +11,8 @@
     <PreferenceCategory app:title="@string/location_and_geofencing">
         <ListPreference
             app:defaultValue="@string/accurate"
-            app:entries="@array/location_accuray_values"
-            app:entryValues="@array/location_accuray_values"
+            app:entries="@array/location_accuray"
+            app:entryValues="@array/location_accuray"
             app:key="locationAccuracy"
             app:title="Location Accuracy"
             app:useSimpleSummaryProvider="true" />

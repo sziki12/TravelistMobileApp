@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas
+package hu.bme.aut.android.gyakorlas.location
 
 import android.annotation.SuppressLint
 import android.app.Service
@@ -13,6 +13,10 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
+import hu.bme.aut.android.gyakorlas.PermissionHandler
+import hu.bme.aut.android.gyakorlas.R
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.concurrent.Volatile
 import kotlin.concurrent.thread
 
@@ -22,26 +26,31 @@ class LocationService() : Service()
     private lateinit var locationClient: FusedLocationProviderClient
 
     private var callbacks: ArrayList<()->Unit> = ArrayList()
-    private var useHighAccuracy = false
+
     private lateinit var preferences:SharedPreferences
     private var locationUpdateIntervalMap:HashMap<String,Int> = HashMap()
     private var locationUpdateIntervalOnFaleurMap:HashMap<String,Int> = HashMap()
-    private var updateThread :Thread? = null
+    private var updateThread :LocationThread? = null
+    @Volatile
+    var waitOnFaileur:Int = 2000
+    @Volatile
+    var waitOnSuccess:Int = 5000
+    @Volatile
+    var isRunning:Boolean = true
+    @Volatile
+    var useHighAccuracy = false
+    @Volatile
+    var isSuccess = false
+
     companion object
     {
         @Volatile
         var currentLocation: Location? = null
-        @Volatile
-        var waitOnFaileur:Int = 2000
-        @Volatile
-        var waitOnSuccess:Int = 5000
-        @Volatile
-        var isRunning:Boolean = true
 
         fun calculateDistance(dest: LatLng):Float?
 
         {   var distance:Float? = null
-            if(currentLocation!=null)
+            if(currentLocation !=null)
             {
                 var markerLocaton = Location("Provider")
                 markerLocaton.latitude = dest.latitude
@@ -59,55 +68,22 @@ class LocationService() : Service()
             return distance
         }
     }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {
         //Thread.sleep(1000)
         locationClient = LocationServices.getFusedLocationProviderClient(this)
 
-
         loadPreferences()
-        updateThread = thread(start=true, isDaemon = true)
-        {
-            while (isRunning)
-            {
-                if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
-                {
-                    if(PermissionHandler.hasPermission[PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE] == true)
-                    {
-                        Log.i("PERMISSION", "LocationService RUNNING")
-                            updateCurrentLocation(useHighAccuracy)
-                        if(waitOnSuccess==0)
-                            stopService(Intent())
-                        else
-                            Thread.sleep(waitOnSuccess.toLong())
-
-                    } else
-                    {
-                        Log.i("PERMISSION","Background Location Access Denied")
-                        if(waitOnFaileur==0)
-                            stopService(Intent())
-                        else
-                            Thread.sleep(waitOnFaileur.toLong())
-                    }
-                } else
-                {
-                    Log.i("PERMISSION","Location Access Denied")
-                    if(waitOnFaileur==0)
-                        stopService(Intent())
-                    else
-                        Thread.sleep(waitOnFaileur.toLong())
-                }
-            }
-        }
-
-
+        updateThread = LocationThread(this)
+        updateThread!!.start()
         return super.onStartCommand(intent, flags, startId)
     }
 
 
 
     @SuppressLint("MissingPermission")
-    private fun updateCurrentLocation(highAccuracyRequired:Boolean)
+    fun updateCurrentLocation(highAccuracyRequired:Boolean)
     {
         var priority = Priority.PRIORITY_HIGH_ACCURACY
         if(!highAccuracyRequired)
@@ -183,6 +159,21 @@ class LocationService() : Service()
                     waitOnSuccess = t
                 }
                 Log.i("PREFERENCES","locationUpdateInterval: $waitOnSuccess")
+            }
+
+            if(s.contains("locationAccuracy"))
+            {
+                var t = sharedPreferences.getString("locationAccuracy","")
+                var names = resources.getStringArray(R.array.location_accuray)
+                var values = resources.getIntArray(R.array.location_accuray_values)
+                for(i:Int in names.indices)
+                {
+                    if(names[i].equals(t))
+                    {
+                        useHighAccuracy = (values[i]==1)
+                    }
+                }
+                Log.i("PREFERENCES","useHighAccuracy: $useHighAccuracy")
             }
             /*if(updateThread!=null&&updateThread!!.state.equals(Thread.State.WAITING))
             {
