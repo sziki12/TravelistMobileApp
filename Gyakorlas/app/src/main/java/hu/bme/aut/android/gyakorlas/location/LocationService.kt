@@ -27,10 +27,11 @@ class LocationService() : Service()
 
     private var callbacks: ArrayList<()->Unit> = ArrayList()
 
-    private lateinit var preferences:SharedPreferences
-    private var locationUpdateIntervalMap:HashMap<String,Int> = HashMap()
-    private var locationUpdateIntervalOnFaleurMap:HashMap<String,Int> = HashMap()
+    lateinit var preferences:SharedPreferences
+    var locationUpdateIntervalMap:HashMap<String,Int> = HashMap()
+    var locationUpdateIntervalOnFaleurMap:HashMap<String,Int> = HashMap()
     private var updateThread :LocationThread? = null
+    //private var changeListener: LocationService.changeListener
     @Volatile
     var waitOnFaileur:Int = 2000
     @Volatile
@@ -67,53 +68,6 @@ class LocationService() : Service()
             }
             return distance
         }
-    }
-
-    class changeListener(private var locationService: LocationService):SharedPreferences.OnSharedPreferenceChangeListener
-    {
-        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, s: String?) {
-            Log.i("PREFERENCES","SharedPreferences Changed")
-            Log.i("PREFERENCES","SharedPreferences: $s")
-
-            if(sharedPreferences==null||s==null)
-                return
-
-            if(s.contains("locationUpdateIntervalOnFailure"))
-            {
-                var t = locationService.locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateIntervalOnFailure","")]
-                if(t!=null)
-                {
-                    locationService.waitOnFaileur = t
-                }
-                Log.i("PREFERENCES","locationUpdateIntervalOnFailure: ${locationService.waitOnFaileur}")
-            }
-
-            if(s.contains("locationUpdateInterval"))
-            {
-                var t = locationService.locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateInterval","")]
-                if(t!=null)
-                {
-                    locationService.waitOnSuccess = t
-                }
-                Log.i("PREFERENCES","locationUpdateInterval: ${locationService.waitOnSuccess}")
-            }
-
-            if(s.contains("locationAccuracy"))
-            {
-                var t = sharedPreferences.getString("locationAccuracy","")
-                var names = locationService.resources.getStringArray(R.array.location_accuray)
-                var values = locationService.resources.getIntArray(R.array.location_accuray_values)
-                for(i:Int in names.indices)
-                {
-                    if(names[i].equals(t))
-                    {
-                        locationService.useHighAccuracy = (values[i]==1)
-                    }
-                }
-                Log.i("PREFERENCES","useHighAccuracy: ${locationService.useHighAccuracy}")
-            }
-        }
-
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
@@ -160,11 +114,16 @@ class LocationService() : Service()
         return null
     }
 
-    fun setUpListener()
+    fun setUpHashMaps()
     {
-        Log.i("PREFERENCES","Subscribe Location")
-        setUpHashMaps()
-        Log.i("LOCATION","SharedPreferences Callback Setup")
+        var names = resources.getStringArray(R.array.update_location_interval)
+        var values = resources.getIntArray(R.array.update_location_interval_values)
+
+        for(i:Int in names.indices)
+        {
+            locationUpdateIntervalMap[names[i]]=values[i]
+            locationUpdateIntervalOnFaleurMap[names[i]]=values[i]
+        }
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this)/*.all
         preferences.forEach {
@@ -183,26 +142,6 @@ class LocationService() : Service()
         {
             waitOnFaileur = temp
             Log.i("PREFERENCES","locationUpdateIntervalOnFailure: $waitOnFaileur")
-        }
-
-        preferences.registerOnSharedPreferenceChangeListener(changeListener(this))
-    }
-
-    fun removeListener()
-    {
-        Log.i("PREFERENCES","Remove Location")
-        preferences.unregisterOnSharedPreferenceChangeListener(changeListener(this))
-    }
-
-    private fun setUpHashMaps()
-    {
-        var names = resources.getStringArray(R.array.update_location_interval)
-        var values = resources.getIntArray(R.array.update_location_interval_values)
-
-        for(i:Int in names.indices)
-        {
-            locationUpdateIntervalMap[names[i]]=values[i]
-            locationUpdateIntervalOnFaleurMap[names[i]]=values[i]
         }
     }
 }

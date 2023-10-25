@@ -1,15 +1,59 @@
 package hu.bme.aut.android.gyakorlas.location
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import hu.bme.aut.android.gyakorlas.PermissionHandler
+import hu.bme.aut.android.gyakorlas.R
 import java.util.Timer
 import java.util.TimerTask
 
-class LocationThread(private var locationService: LocationService) : Thread(){
+class LocationThread(private var locationService: LocationService) : Thread(), SharedPreferences.OnSharedPreferenceChangeListener{
 
     init {
         isDaemon = true
+    }
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, s: String?) {
+        Log.i("PREFERENCES","SharedPreferences Changed")
+        Log.i("PREFERENCES","SharedPreferences: $s")
+
+        if(sharedPreferences==null||s==null)
+            return
+
+        if(s.contains("locationUpdateIntervalOnFailure"))
+        {
+            var t = locationService.locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateIntervalOnFailure","")]
+            if(t!=null)
+            {
+                locationService.waitOnFaileur = t
+            }
+            Log.i("PREFERENCES","locationUpdateIntervalOnFailure: ${locationService.waitOnFaileur}")
+        }
+
+        if(s.contains("locationUpdateInterval"))
+        {
+            var t = locationService.locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateInterval","")]
+            if(t!=null)
+            {
+                locationService.waitOnSuccess = t
+            }
+            Log.i("PREFERENCES","locationUpdateInterval: ${locationService.waitOnSuccess}")
+        }
+
+        if(s.contains("locationAccuracy"))
+        {
+            var t = sharedPreferences.getString("locationAccuracy","")
+            var names = locationService.resources.getStringArray(R.array.location_accuray)
+            var values = locationService.resources.getIntArray(R.array.location_accuray_values)
+            for(i:Int in names.indices)
+            {
+                if(names[i].equals(t))
+                {
+                    locationService.useHighAccuracy = (values[i]==1)
+                }
+            }
+            Log.i("PREFERENCES","useHighAccuracy: ${locationService.useHighAccuracy}")
+        }
     }
     class UpdateTask(private var locationService: LocationService) : TimerTask()
     {
@@ -39,7 +83,8 @@ class LocationThread(private var locationService: LocationService) : Thread(){
 
         while(locationService.isRunning)
         {
-            locationService.setUpListener()
+            locationService.setUpHashMaps()
+            locationService.preferences.registerOnSharedPreferenceChangeListener(this)
             if(locationService.isSuccess)
             {
                 if(locationService.waitOnSuccess==0)
@@ -60,7 +105,7 @@ class LocationThread(private var locationService: LocationService) : Thread(){
                     sleep(locationService.waitOnFaileur.toLong())
                 }
             }
-            locationService.removeListener()
+            locationService.preferences.unregisterOnSharedPreferenceChangeListener(this)
         }
     }
 }
