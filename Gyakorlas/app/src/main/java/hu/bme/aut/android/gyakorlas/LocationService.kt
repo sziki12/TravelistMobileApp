@@ -1,13 +1,13 @@
 package hu.bme.aut.android.gyakorlas
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Service
 import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Location
 import android.os.IBinder
 import android.util.Log
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -20,17 +20,23 @@ class LocationService() : Service()
 {
 
     private lateinit var locationClient: FusedLocationProviderClient
-    @Volatile
-    private var isRunning:Boolean = true
+
     private var callbacks: ArrayList<()->Unit> = ArrayList()
     private var useHighAccuracy = false
-    private var waitOfFaileur:Long = 2000
-    private var waitOnSuccess:Long = 5000
-    private var stringIndex = 0
+    private lateinit var preferences:SharedPreferences
+    private var locationUpdateIntervalMap:HashMap<String,Int> = HashMap()
+    private var locationUpdateIntervalOnFaleurMap:HashMap<String,Int> = HashMap()
+    private var updateThread :Thread? = null
     companion object
     {
         @Volatile
         var currentLocation: Location? = null
+        @Volatile
+        var waitOnFaileur:Int = 2000
+        @Volatile
+        var waitOnSuccess:Int = 5000
+        @Volatile
+        var isRunning:Boolean = true
 
         fun calculateDistance(dest: LatLng):Float?
 
@@ -57,49 +63,43 @@ class LocationService() : Service()
     {
         //Thread.sleep(1000)
         locationClient = LocationServices.getFusedLocationProviderClient(this)
-        thread(start=true, isDaemon = true)
+
+
+        loadPreferences()
+        updateThread = thread(start=true, isDaemon = true)
         {
             while (isRunning)
             {
-                //waitOfFaileur = 0
-                //waitOnSuccess = 1
                 if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
                 {
                     if(PermissionHandler.hasPermission[PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE] == true)
                     {
                         Log.i("PERMISSION", "LocationService RUNNING")
-
                             updateCurrentLocation(useHighAccuracy)
-                            Thread.sleep(waitOnSuccess)
+                        if(waitOnSuccess==0)
+                            stopService(Intent())
+                        else
+                            Thread.sleep(waitOnSuccess.toLong())
 
                     } else
                     {
                         Log.i("PERMISSION","Background Location Access Denied")
-                        Thread.sleep(waitOfFaileur)
+                        if(waitOnFaileur==0)
+                            stopService(Intent())
+                        else
+                            Thread.sleep(waitOnFaileur.toLong())
                     }
                 } else
                 {
                     Log.i("PERMISSION","Location Access Denied")
-                    Thread.sleep(waitOfFaileur)
+                    if(waitOnFaileur==0)
+                        stopService(Intent())
+                    else
+                        Thread.sleep(waitOnFaileur.toLong())
                 }
             }
         }
 
-        //TODO Nem működik, SharedPreferences
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, s ->
-            Log.i("LOCATION","SharedPreferences: $s")
-            if(s.contains("locationUpdateIntervalOnFailure"))
-            {
-                waitOnSuccess = sharedPreferences.getLong("locationUpdateIntervalOnFailure",waitOnSuccess)
-                Log.i("LOCATION","locationUpdateIntervalOnFailure: $waitOnSuccess")
-            }
-
-            if(s.contains("locationUpdateInterval"))
-            {
-                waitOfFaileur = sharedPreferences.getLong("locationUpdateIntervalOnFailure",waitOfFaileur)
-                Log.i("LOCATION","locationUpdateIntervalOnFailure: $waitOfFaileur")
-            }
-        }
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -128,9 +128,78 @@ class LocationService() : Service()
 
     override fun stopService(name: Intent?): Boolean {
         isRunning = false
+        Log.i("LOCATION","Location Service Stopped")
         return super.stopService(name)
     }
     override fun onBind(intent: Intent): IBinder? {
         return null
+    }
+
+    private fun loadPreferences()
+    {
+        setUpHashMaps()
+        Log.i("LOCATION","SharedPreferences Callback Setup")
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this)/*.all
+        preferences.forEach {
+            Log.i("Preferences", "${it.key} -> ${it.value}")
+        }*/
+
+        var temp = locationUpdateIntervalMap[preferences.getString("locationUpdateInterval","")]
+        if(temp!=null)
+        {
+            waitOnSuccess = temp
+            Log.i("PREFERENCES","locationUpdateInterval: $waitOnSuccess")
+        }
+
+        temp = locationUpdateIntervalMap[preferences.getString("locationUpdateIntervalOnFailure","")]
+        if(temp!=null)
+        {
+            waitOnFaileur = temp
+            Log.i("PREFERENCES","locationUpdateIntervalOnFailure: $waitOnFaileur")
+        }
+
+
+        preferences.registerOnSharedPreferenceChangeListener()
+        { sharedPreferences, s ->
+            Log.i("PREFERENCES","SharedPreferences Changed")
+            Log.i("PREFERENCES","SharedPreferences: $s")
+
+            if(s.contains("locationUpdateIntervalOnFailure"))
+            {
+                var t = locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateIntervalOnFailure","")]
+                if(t!=null)
+                {
+                    waitOnFaileur = t
+                }
+                Log.i("PREFERENCES","locationUpdateIntervalOnFailure: $waitOnFaileur")
+            }
+
+            if(s.contains("locationUpdateInterval"))
+            {
+                var t = locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateInterval","")]
+                if(t!=null)
+                {
+                    waitOnSuccess = t
+                }
+                Log.i("PREFERENCES","locationUpdateInterval: $waitOnSuccess")
+            }
+            /*if(updateThread!=null&&updateThread!!.state.equals(Thread.State.WAITING))
+            {
+                updateThread!!.interrupt()
+            }*/
+        }
+    }
+
+    private fun setUpHashMaps()
+    {
+        var names = resources.getStringArray(R.array.update_location_interval)
+        var values = resources.getIntArray(R.array.update_location_interval_values)
+
+        for(i:Int in names.indices)
+        {
+            locationUpdateIntervalMap[names[i]]=values[i]
+            locationUpdateIntervalOnFaleurMap[names[i]]=values[i]
+        }
     }
 }
