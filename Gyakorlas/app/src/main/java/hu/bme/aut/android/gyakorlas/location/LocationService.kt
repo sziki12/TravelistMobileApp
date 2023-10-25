@@ -77,6 +77,7 @@ class LocationService() : Service()
         loadPreferences()
         updateThread = LocationThread(this)
         updateThread!!.start()
+
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -111,7 +112,7 @@ class LocationService() : Service()
         return null
     }
 
-    private fun loadPreferences()
+    fun loadPreferences()
     {
         setUpHashMaps()
         Log.i("LOCATION","SharedPreferences Callback Setup")

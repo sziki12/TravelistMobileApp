@@ -36,8 +36,10 @@ class LocationThread(private var locationService: LocationService) : Thread(){
     override fun run() {
         super.run()
         var timer = Timer()
+
         while(locationService.isRunning)
         {
+            locationService.loadPreferences()
             if(locationService.isSuccess)
             {
                 if(locationService.waitOnSuccess==0)
