@@ -39,7 +39,7 @@ class LocationThread(private var locationService: LocationService) : Thread(){
 
         while(locationService.isRunning)
         {
-            locationService.loadPreferences()
+            locationService.setUpListener()
             if(locationService.isSuccess)
             {
                 if(locationService.waitOnSuccess==0)
@@ -60,6 +60,7 @@ class LocationThread(private var locationService: LocationService) : Thread(){
                     sleep(locationService.waitOnFaileur.toLong())
                 }
             }
+            locationService.removeListener()
         }
     }
 }

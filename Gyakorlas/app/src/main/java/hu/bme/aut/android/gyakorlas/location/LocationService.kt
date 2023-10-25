@@ -69,14 +69,62 @@ class LocationService() : Service()
         }
     }
 
+    class changeListener(private var locationService: LocationService):SharedPreferences.OnSharedPreferenceChangeListener
+    {
+        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, s: String?) {
+            Log.i("PREFERENCES","SharedPreferences Changed")
+            Log.i("PREFERENCES","SharedPreferences: $s")
+
+            if(sharedPreferences==null||s==null)
+                return
+
+            if(s.contains("locationUpdateIntervalOnFailure"))
+            {
+                var t = locationService.locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateIntervalOnFailure","")]
+                if(t!=null)
+                {
+                    locationService.waitOnFaileur = t
+                }
+                Log.i("PREFERENCES","locationUpdateIntervalOnFailure: ${locationService.waitOnFaileur}")
+            }
+
+            if(s.contains("locationUpdateInterval"))
+            {
+                var t = locationService.locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateInterval","")]
+                if(t!=null)
+                {
+                    locationService.waitOnSuccess = t
+                }
+                Log.i("PREFERENCES","locationUpdateInterval: ${locationService.waitOnSuccess}")
+            }
+
+            if(s.contains("locationAccuracy"))
+            {
+                var t = sharedPreferences.getString("locationAccuracy","")
+                var names = locationService.resources.getStringArray(R.array.location_accuray)
+                var values = locationService.resources.getIntArray(R.array.location_accuray_values)
+                for(i:Int in names.indices)
+                {
+                    if(names[i].equals(t))
+                    {
+                        locationService.useHighAccuracy = (values[i]==1)
+                    }
+                }
+                Log.i("PREFERENCES","useHighAccuracy: ${locationService.useHighAccuracy}")
+            }
+        }
+
+    }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {
         //Thread.sleep(1000)
         locationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        loadPreferences()
+        //setUpListener()
         updateThread = LocationThread(this)
         updateThread!!.start()
+        //removeListener()
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -112,8 +160,9 @@ class LocationService() : Service()
         return null
     }
 
-    fun loadPreferences()
+    fun setUpListener()
     {
+        Log.i("PREFERENCES","Subscribe Location")
         setUpHashMaps()
         Log.i("LOCATION","SharedPreferences Callback Setup")
 
@@ -136,51 +185,13 @@ class LocationService() : Service()
             Log.i("PREFERENCES","locationUpdateIntervalOnFailure: $waitOnFaileur")
         }
 
+        preferences.registerOnSharedPreferenceChangeListener(changeListener(this))
+    }
 
-        preferences.registerOnSharedPreferenceChangeListener()
-        { sharedPreferences, s ->
-            Log.i("PREFERENCES","SharedPreferences Changed")
-            Log.i("PREFERENCES","SharedPreferences: $s")
-
-            if(s.contains("locationUpdateIntervalOnFailure"))
-            {
-                var t = locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateIntervalOnFailure","")]
-                if(t!=null)
-                {
-                    waitOnFaileur = t
-                }
-                Log.i("PREFERENCES","locationUpdateIntervalOnFailure: $waitOnFaileur")
-            }
-
-            if(s.contains("locationUpdateInterval"))
-            {
-                var t = locationUpdateIntervalMap[sharedPreferences.getString("locationUpdateInterval","")]
-                if(t!=null)
-                {
-                    waitOnSuccess = t
-                }
-                Log.i("PREFERENCES","locationUpdateInterval: $waitOnSuccess")
-            }
-
-            if(s.contains("locationAccuracy"))
-            {
-                var t = sharedPreferences.getString("locationAccuracy","")
-                var names = resources.getStringArray(R.array.location_accuray)
-                var values = resources.getIntArray(R.array.location_accuray_values)
-                for(i:Int in names.indices)
-                {
-                    if(names[i].equals(t))
-                    {
-                        useHighAccuracy = (values[i]==1)
-                    }
-                }
-                Log.i("PREFERENCES","useHighAccuracy: $useHighAccuracy")
-            }
-            /*if(updateThread!=null&&updateThread!!.state.equals(Thread.State.WAITING))
-            {
-                updateThread!!.interrupt()
-            }*/
-        }
+    fun removeListener()
+    {
+        Log.i("PREFERENCES","Remove Location")
+        preferences.unregisterOnSharedPreferenceChangeListener(changeListener(this))
     }
 
     private fun setUpHashMaps()
