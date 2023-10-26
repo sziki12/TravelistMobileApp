@@ -39,6 +39,10 @@ class MenuFragment : Fragment() {
         binding.btnUploadNewPlace.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_uploadNewPlaceFragment)
         }
+
+        binding.btnSettings.setOnClickListener() {
+            findNavController().navigate(R.id.action_menuFragment_to_settingsFragment)
+        }
     }
 
 

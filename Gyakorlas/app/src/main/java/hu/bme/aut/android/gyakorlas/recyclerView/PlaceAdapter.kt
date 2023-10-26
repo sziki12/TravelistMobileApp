@@ -1,17 +1,12 @@
 package hu.bme.aut.android.gyakorlas.recyclerView
 
-import android.app.Activity
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.*
-import hu.bme.aut.android.gyakorlas.LocationService
-import hu.bme.aut.android.gyakorlas.MapsFragmentDirections
+import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.RecommendedFragmentDirections
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider

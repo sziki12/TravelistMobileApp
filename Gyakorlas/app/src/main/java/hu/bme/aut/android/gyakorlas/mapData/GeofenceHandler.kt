@@ -36,6 +36,7 @@ class GeofenceHandler : BroadcastReceiver() {
                 PermissionHandler.requestPermission(activity,PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,{
                     PermissionHandler.requestPermission(activity,PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,{
                         this.activity=activity
+                        initSuccess = true
                         geofencingClient = LocationServices.getGeofencingClient(activity)
                         setUpGeofences(MapDataProvider.markers)
                         Log.i("PERMISSION","Geofence Set Up Successfull")
