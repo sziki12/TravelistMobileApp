@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas.fragments
+package hu.bme.aut.android.gyakorlas
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import hu.bme.aut.android.gyakorlas.R
+import hu.bme.aut.android.gyakorlas.databinding.FragmentProfileBinding
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRequestHelpBinding
 
 class RequestHelpFragment : Fragment() {

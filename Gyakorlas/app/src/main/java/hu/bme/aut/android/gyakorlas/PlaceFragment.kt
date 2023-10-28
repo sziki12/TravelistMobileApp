@@ -1,5 +1,6 @@
-package hu.bme.aut.android.gyakorlas.fragments
+package hu.bme.aut.android.gyakorlas
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,7 +20,7 @@ class PlaceFragment : Fragment() {
     private lateinit var binding : FragmentPlaceBinding
 
     // get the arguments from the MapsFragment
-    private val args : hu.bme.aut.android.gyakorlas.fragments.PlaceFragmentArgs by navArgs()
+    private val args : PlaceFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,11 +80,7 @@ class PlaceFragment : Fragment() {
 //                intent.putExtra("INDEX",index)
 //                startActivity(intent)
 
-                val action =
-                    hu.bme.aut.android.gyakorlas.fragments.PlaceFragmentDirections.actionPlaceFragmentToImageViewFragment(
-                        markerID,
-                        index
-                    )//
+                val action = PlaceFragmentDirections.actionPlaceFragmentToImageViewFragment(markerID, index)//
                 findNavController().navigate(action)
             }
         }

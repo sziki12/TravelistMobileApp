@@ -1,5 +1,6 @@
-package hu.bme.aut.android.gyakorlas.fragments
+package hu.bme.aut.android.gyakorlas
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,7 +19,7 @@ class ImageViewFragment : Fragment() {
     private val smallImageSize = 300
     private val bigImageSize = 1000
 
-    private val args : hu.bme.aut.android.gyakorlas.fragments.ImageViewFragmentArgs by navArgs()
+    private val args : ImageViewFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

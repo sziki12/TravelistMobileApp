@@ -13,9 +13,12 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
-import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
+import hu.bme.aut.android.gyakorlas.PermissionHandler
 import hu.bme.aut.android.gyakorlas.R
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.concurrent.Volatile
+import kotlin.concurrent.thread
 
 class LocationService() : Service()
 {

@@ -9,7 +9,6 @@ import hu.bme.aut.android.gyakorlas.databinding.ActivityMainBinding
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
-import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var binding : ActivityMainBinding
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         MapDataProvider.initMarkers(this)
 
         //Initialize Location Service
-        PermissionHandler.requestPermission(this, PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,
+        PermissionHandler.requestPermission(this,PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,
             {
                 PermissionHandler.requestPermission(this, PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,
                     {
