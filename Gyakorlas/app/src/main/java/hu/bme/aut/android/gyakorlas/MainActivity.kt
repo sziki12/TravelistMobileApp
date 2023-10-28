@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.fragment.app.Fragment
-import com.google.android.gms.maps.MapFragment
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import hu.bme.aut.android.gyakorlas.databinding.ActivityMainBinding
+import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 

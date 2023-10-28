@@ -1,17 +1,22 @@
-package hu.bme.aut.android.gyakorlas
+package hu.bme.aut.android.gyakorlas.location
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Service
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.IBinder
 import android.util.Log
+import androidx.preference.PreferenceManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
+import hu.bme.aut.android.gyakorlas.PermissionHandler
+import hu.bme.aut.android.gyakorlas.R
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.concurrent.Volatile
 import kotlin.concurrent.thread
 
@@ -19,12 +24,25 @@ class LocationService() : Service()
 {
 
     private lateinit var locationClient: FusedLocationProviderClient
-    @Volatile
-    private var isRunning:Boolean = true
+
     private var callbacks: ArrayList<()->Unit> = ArrayList()
-    private var useHighAccuracy = false
-    private val waitOfFaileur:Long = 2000
-    private val waitOnSuccess:Long = 5000
+
+    lateinit var preferences:SharedPreferences
+    var locationUpdateIntervalMap:HashMap<String,Int> = HashMap()
+    var locationUpdateIntervalOnFaleurMap:HashMap<String,Int> = HashMap()
+    private var updateThread :LocationThread? = null
+    //private var changeListener: LocationService.changeListener
+    @Volatile
+    var waitOnFaileur:Int = 2000
+    @Volatile
+    var waitOnSuccess:Int = 5000
+    @Volatile
+    var isRunning:Boolean = true
+    @Volatile
+    var useHighAccuracy = false
+    @Volatile
+    var isSuccess = false
+
     companion object
     {
         @Volatile
@@ -33,7 +51,7 @@ class LocationService() : Service()
         fun calculateDistance(dest: LatLng):Float?
 
         {   var distance:Float? = null
-            if(currentLocation!=null)
+            if(currentLocation !=null)
             {
                 var markerLocaton = Location("Provider")
                 markerLocaton.latitude = dest.latitude
@@ -51,42 +69,24 @@ class LocationService() : Service()
             return distance
         }
     }
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {
         //Thread.sleep(1000)
         locationClient = LocationServices.getFusedLocationProviderClient(this)
-        thread(start=true, isDaemon = true)
-        {
-            while (isRunning)
-            {
-                if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
-                {
-                    if(PermissionHandler.hasPermission[PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE] == true)
-                    {
-                        Log.i("PERMISSION", "LocationService RUNNING")
 
-                            updateCurrentLocation(useHighAccuracy)
-                            Thread.sleep(waitOnSuccess)
+        //setUpListener()
+        updateThread = LocationThread(this)
+        updateThread!!.start()
+        //removeListener()
 
-                    } else
-                    {
-                        Log.i("PERMISSION","Background Location Access Denied")
-                        Thread.sleep(waitOfFaileur)
-                    }
-                } else
-                {
-                    Log.i("PERMISSION","Location Access Denied")
-                    Thread.sleep(waitOfFaileur)
-                }
-            }
-        }
         return super.onStartCommand(intent, flags, startId)
     }
 
 
 
     @SuppressLint("MissingPermission")
-    private fun updateCurrentLocation(highAccuracyRequired:Boolean)
+    fun updateCurrentLocation(highAccuracyRequired:Boolean)
     {
         var priority = Priority.PRIORITY_HIGH_ACCURACY
         if(!highAccuracyRequired)
@@ -107,9 +107,41 @@ class LocationService() : Service()
 
     override fun stopService(name: Intent?): Boolean {
         isRunning = false
+        Log.i("LOCATION","Location Service Stopped")
         return super.stopService(name)
     }
     override fun onBind(intent: Intent): IBinder? {
         return null
+    }
+
+    fun setUpHashMaps()
+    {
+        var names = resources.getStringArray(R.array.update_location_interval)
+        var values = resources.getIntArray(R.array.update_location_interval_values)
+
+        for(i:Int in names.indices)
+        {
+            locationUpdateIntervalMap[names[i]]=values[i]
+            locationUpdateIntervalOnFaleurMap[names[i]]=values[i]
+        }
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this)/*.all
+        preferences.forEach {
+            Log.i("Preferences", "${it.key} -> ${it.value}")
+        }*/
+
+        var temp = locationUpdateIntervalMap[preferences.getString("locationUpdateInterval","")]
+        if(temp!=null)
+        {
+            waitOnSuccess = temp
+            Log.i("PREFERENCES","locationUpdateInterval: $waitOnSuccess")
+        }
+
+        temp = locationUpdateIntervalMap[preferences.getString("locationUpdateIntervalOnFailure","")]
+        if(temp!=null)
+        {
+            waitOnFaileur = temp
+            Log.i("PREFERENCES","locationUpdateIntervalOnFailure: $waitOnFaileur")
+        }
     }
 }

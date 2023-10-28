@@ -1,8 +1,6 @@
 package hu.bme.aut.android.gyakorlas
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Intent
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -13,10 +11,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -24,6 +20,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.bme.aut.android.gyakorlas.databinding.FragmentMapsBinding
+import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 
