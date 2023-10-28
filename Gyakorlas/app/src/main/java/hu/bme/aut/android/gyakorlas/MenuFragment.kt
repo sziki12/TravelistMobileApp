@@ -42,7 +42,7 @@ class MenuFragment : Fragment() {
 
         binding.btnRequestHelp.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_requestHelpFragment)
-
+        }
 
         binding.btnSettings.setOnClickListener() {
             findNavController().navigate(R.id.action_menuFragment_to_settingsFragment)
