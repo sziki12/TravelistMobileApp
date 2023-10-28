@@ -1,10 +1,8 @@
-package hu.bme.aut.android.gyakorlas
+package hu.bme.aut.android.gyakorlas.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.preference.PreferenceFragmentCompat
+import hu.bme.aut.android.gyakorlas.R
 
 class SettingsFragment : PreferenceFragmentCompat() {
 

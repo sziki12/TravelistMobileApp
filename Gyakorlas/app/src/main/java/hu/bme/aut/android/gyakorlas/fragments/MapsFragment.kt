@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas
+package hu.bme.aut.android.gyakorlas.fragments
 
 import android.annotation.SuppressLint
 import android.location.Location
@@ -19,10 +19,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentMapsBinding
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
+import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 
 class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -142,7 +144,11 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                     Log.i("PLACE","Place ID:$markerID")
                     // create an action and pass the required object to it
                     val action =
-                        markerID?.let { MapsFragmentDirections.actionMapsFragmentToPlaceFragment(it) }//
+                        markerID?.let {
+                            hu.bme.aut.android.gyakorlas.fragments.MapsFragmentDirections.actionMapsFragmentToPlaceFragment(
+                                it
+                            )
+                        }//
 
                     //this will navigate the MapsFragment to the PlaceFragment
                     if (action != null) {

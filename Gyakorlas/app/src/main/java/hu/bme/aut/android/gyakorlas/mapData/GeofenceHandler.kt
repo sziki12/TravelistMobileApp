@@ -14,7 +14,7 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
-import hu.bme.aut.android.gyakorlas.PermissionHandler
+import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import kotlin.concurrent.thread
 
 class GeofenceHandler : BroadcastReceiver() {
@@ -33,8 +33,10 @@ class GeofenceHandler : BroadcastReceiver() {
         {
             while(!initSuccess)
             {
-                PermissionHandler.requestPermission(activity,PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,{
-                    PermissionHandler.requestPermission(activity,PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,{
+                PermissionHandler.requestPermission(activity,
+                    PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,{
+                    PermissionHandler.requestPermission(activity,
+                        PermissionHandler.BACKGROUND_LOCATION_REQUEST_CODE,{
                         this.activity=activity
                         initSuccess = true
                         geofencingClient = LocationServices.getGeofencingClient(activity)

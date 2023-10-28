@@ -3,7 +3,7 @@ package hu.bme.aut.android.gyakorlas.location
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
-import hu.bme.aut.android.gyakorlas.PermissionHandler
+import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.R
 import java.util.Timer
 import java.util.TimerTask
