@@ -14,8 +14,14 @@ import androidx.core.content.ContextCompat
  */
 class PermissionHandler(/*private var activity: Activity*/){
     companion object {
+        private const val requestCodeBegin=1
+
         const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        const val BACKGROUND_LOCATION_REQUEST_CODE = 2
+        const val FINE_LOCATION_REQUEST_CODE = 2
+        const val COARSE_LOCATION_REQUEST_CODE = 3
+        const val BACKGROUND_LOCATION_REQUEST_CODE = 4
+
+        private const val requestCodeEnd=4
         var hasPermission: HashMap<Int, Boolean?> = HashMap()
             get()
             {
@@ -196,14 +202,12 @@ class PermissionHandler(/*private var activity: Activity*/){
         {
             synchronized(hasPermission)
             {
-                hasPermission[LOCATION_PERMISSION_REQUEST_CODE] = null
-                hasPermission[BACKGROUND_LOCATION_REQUEST_CODE] = null
-
-                successCallbacks[LOCATION_PERMISSION_REQUEST_CODE] = ArrayList()
-                successCallbacks[BACKGROUND_LOCATION_REQUEST_CODE] = ArrayList()
-
-                falieurCallbacks[LOCATION_PERMISSION_REQUEST_CODE] = ArrayList()
-                falieurCallbacks[BACKGROUND_LOCATION_REQUEST_CODE] = ArrayList()
+                for(i:Int in requestCodeBegin .. requestCodeEnd)
+                {
+                    hasPermission[i] = null
+                    successCallbacks[i] = ArrayList()
+                    falieurCallbacks[i] = ArrayList()
+                }
             }
         }
     }
