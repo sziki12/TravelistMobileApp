@@ -36,6 +36,9 @@
             android:id="@+id/action_menuFragment_to_uploadNewPlaceFragment"
             app:destination="@id/uploadNewPlaceFragment" />
         <action
+            android:id="@+id/action_menuFragment_to_requestHelpFragment"
+            app:destination="@id/requestHelpFragment" />
+      <action
             android:id="@+id/action_menuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
     </fragment>
@@ -112,6 +115,15 @@
         tools:layout="@layout/fragment_upload_new_place" >
         <action
             android:id="@+id/action_uploadNewPlaceFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestHelpFragment"
+        android:name="hu.bme.aut.android.gyakorlas.RequestHelpFragment"
+        android:label="fragment_request_help"
+        tools:layout="@layout/fragment_request_help" >
+        <action
+            android:id="@+id/action_requestHelpFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
     </fragment>
     <fragment
