@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas
+package hu.bme.aut.android.gyakorlas.permission
 
 import android.Manifest
 import android.app.Activity
