@@ -13,12 +13,9 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationTokenSource
-import hu.bme.aut.android.gyakorlas.PermissionHandler
+import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.R
-import java.util.Timer
-import java.util.TimerTask
 import kotlin.concurrent.Volatile
-import kotlin.concurrent.thread
 
 class LocationService() : Service()
 {
@@ -37,14 +34,14 @@ class LocationService() : Service()
     @Volatile
     var waitOnSuccess:Int = 5000
     @Volatile
-    var isRunning:Boolean = true
-    @Volatile
     var useHighAccuracy = false
     @Volatile
     var isSuccess = false
 
     companion object
     {
+        @Volatile
+        var isRunning:Boolean = true
         @Volatile
         var currentLocation: Location? = null
 
@@ -72,13 +69,11 @@ class LocationService() : Service()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {
-        //Thread.sleep(1000)
+        isRunning=true
         locationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        //setUpListener()
         updateThread = LocationThread(this)
         updateThread!!.start()
-        //removeListener()
 
         return super.onStartCommand(intent, flags, startId)
     }
@@ -103,6 +98,13 @@ class LocationService() : Service()
                     Log.i("LOCATION","GettingLocationFailed: $exception")
                 }
         }
+    }
+
+    fun stopLocationService()
+    {
+        isRunning = false
+        Log.i("LOCATION","Location Service Stopped")
+        stopSelf()
     }
 
     override fun stopService(name: Intent?): Boolean {

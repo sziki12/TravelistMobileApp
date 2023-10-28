@@ -8,7 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView.*
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.R
-import hu.bme.aut.android.gyakorlas.RecommendedFragmentDirections
+import hu.bme.aut.android.gyakorlas.fragments.RecommendedFragmentDirections
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import java.lang.Integer.min

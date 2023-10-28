@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas
+package hu.bme.aut.android.gyakorlas.fragments
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 
 

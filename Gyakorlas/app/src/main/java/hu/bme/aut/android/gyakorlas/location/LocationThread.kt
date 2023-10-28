@@ -3,8 +3,9 @@ package hu.bme.aut.android.gyakorlas.location
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
-import hu.bme.aut.android.gyakorlas.PermissionHandler
+import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.R
+import hu.bme.aut.android.gyakorlas.fragments.SettingsFragment
 import java.util.Timer
 import java.util.TimerTask
 
@@ -81,14 +82,15 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
         super.run()
         var timer = Timer()
 
-        while(locationService.isRunning)
+        while(LocationService.isRunning)
         {
             locationService.setUpHashMaps()
-            locationService.preferences.registerOnSharedPreferenceChangeListener(this)
+            SettingsFragment.registerListener(this)
+            //locationService.preferences.registerOnSharedPreferenceChangeListener(this)
             if(locationService.isSuccess)
             {
                 if(locationService.waitOnSuccess==0)
-                    locationService.stopService(Intent())
+                    locationService.stopLocationService()
                 else
                 {
                     timer.schedule(UpdateTask(locationService),locationService.waitOnSuccess.toLong())
@@ -98,14 +100,15 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
             else
             {
                 if(locationService.waitOnFaileur==0)
-                    locationService.stopService(Intent())
+                    locationService.stopLocationService()
                 else
                 {
                     timer.schedule(UpdateTask(locationService),locationService.waitOnFaileur.toLong())
                     sleep(locationService.waitOnFaileur.toLong())
                 }
             }
-            locationService.preferences.unregisterOnSharedPreferenceChangeListener(this)
+            SettingsFragment.unregisterListener(this)
+            //locationService.preferences.unregisterOnSharedPreferenceChangeListener(this)
         }
     }
 }
