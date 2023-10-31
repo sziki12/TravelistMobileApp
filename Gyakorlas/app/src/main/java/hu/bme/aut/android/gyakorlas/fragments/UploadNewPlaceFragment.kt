@@ -9,10 +9,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.MotionEvent
+import android.content.pm.PackageManager
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -120,42 +117,31 @@ class UploadNewPlaceFragment : Fragment() {
             popupWindow?.dismiss()
         }
 
-
+        takePhoto.setOnClickListener(){
+            this.activity?.let{
+                PermissionHandler.requestPermission(
+                    it,
+                    PermissionHandler.CAMERA_ACCESS_REQUEST_CODE,
+                    {
+                        startTakePictureIntent()
+                        Log.i("PERMISSION", "Access to camera enabled")
+                    })
+                {
+                    Log.i("PERMISSION", "Access to camera disabled")
+                }
+            }
+            popupWindow?.dismiss()
+        }
     }
-
-
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        Log.i("MENU", "bejon ide")
-//        inflater.inflate(R.menu.photo_camera_menu, menu)
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem) : Boolean {
-//        Log.i("MENU", "bejon ide is")
-//        when (item.itemId) {
-//            R.id.uploadImage -> {
-//
-//                return true
-//            }
-//            R.id.takePhoto -> {
-//
-//                return true
-//            }
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//    }
-//
-//    private fun showMenuAtBottom() {
-//        val menuView = layoutInflater.inflate(R.layout.fragment_menu, null)
-//
-//        popupWindow = PopupWindow(menuView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true)
-//        popupWindow?.showAtLocation(view, Gravity.BOTTOM, 0, 0)
-//    }
 
     private fun startSelectPicture(){
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
         startActivityForResult(gallery, SELECT_PICTURE)
+    }
+
+    private fun startTakePictureIntent(){
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

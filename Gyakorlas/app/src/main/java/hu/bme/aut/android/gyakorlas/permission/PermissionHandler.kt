@@ -57,6 +57,11 @@ class PermissionHandler(/*private var activity: Activity*/){
                     isOnePermissionEnaught[READ_EXTERNAL_STORAGE_REQUEST_CODE] = true
                     permissionString.add(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
+
+                CAMERA_ACCESS_REQUEST_CODE -> {
+                    isOnePermissionEnaught[CAMERA_ACCESS_REQUEST_CODE] = true
+                    permissionString.add(Manifest.permission.CAMERA)
+                }
             }
             return permissionString
         }
