@@ -6,8 +6,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Location
 import android.os.IBinder
+import android.preference.PreferenceManager
 import android.util.Log
-import androidx.preference.PreferenceManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority

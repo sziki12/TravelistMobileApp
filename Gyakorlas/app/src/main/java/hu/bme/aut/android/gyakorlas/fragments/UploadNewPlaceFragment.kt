@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
+import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 
 
 class UploadNewPlaceFragment : Fragment() {
@@ -43,8 +45,18 @@ class UploadNewPlaceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.fabAdd.setOnClickListener(){
-            val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(gallery, SELECT_PICTURE)
+            this.activity?.let {
+                PermissionHandler.requestPermission(
+                    it,
+                    PermissionHandler.READ_EXTERNAL_STORAGE_REQUEST_CODE,
+                    {
+                        startSelectPicture()
+                        Log.i("PERMISSION", "Access to photos enabled")
+                    })
+                {
+                    Log.i("PERMISSION", "Access to photos disabled")
+                }
+            }
         }
 
         binding.btnSave.setOnClickListener(){
@@ -57,6 +69,11 @@ class UploadNewPlaceFragment : Fragment() {
             findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
         }
 
+    }
+
+    private fun startSelectPicture(){
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, SELECT_PICTURE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
