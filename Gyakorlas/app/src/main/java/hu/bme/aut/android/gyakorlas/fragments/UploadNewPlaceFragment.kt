@@ -147,14 +147,15 @@ class UploadNewPlaceFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
-            //imageUri = data?.data
-
             data?.data?.let { uri ->
                 val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, uri)
                 addImageView(Bitmap.createScaledBitmap(bitmap, 450, 450, true))
             }
+        }
 
-           // binding.ivPlace.setImageURI(imageUri)
+        if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_CAPTURE){
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            addImageView(Bitmap.createScaledBitmap(imageBitmap, 450, 450, true))
         }
     }
 
