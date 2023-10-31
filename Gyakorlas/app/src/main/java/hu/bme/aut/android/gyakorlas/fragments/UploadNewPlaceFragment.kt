@@ -7,21 +7,32 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
+import java.security.Permission
 
 
 class UploadNewPlaceFragment : Fragment() {
     private lateinit var binding : FragmentUploadNewPlaceBinding
+    private var popupWindow: PopupWindow? = null
     var SELECT_PICTURE = 200
+    var REQUEST_IMAGE_CAPTURE = 300
     private var imageUri: Uri? = null
 
     private lateinit var imageContainer: LinearLayout
@@ -29,6 +40,7 @@ class UploadNewPlaceFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -38,26 +50,32 @@ class UploadNewPlaceFragment : Fragment() {
     ): View {
         binding = FragmentUploadNewPlaceBinding.inflate(inflater, container, false)
         imageContainer = binding.llImageViews
+
+        binding.fabAdd.setOnClickListener(){
+            Log.i("BUTTON", "clicklistener")
+            showPopupWindow(binding.fabAdd)
+        }
         return binding.root;
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.fabAdd.setOnClickListener(){
-            this.activity?.let {
-                PermissionHandler.requestPermission(
-                    it,
-                    PermissionHandler.READ_EXTERNAL_STORAGE_REQUEST_CODE,
-                    {
-                        startSelectPicture()
-                        Log.i("PERMISSION", "Access to photos enabled")
-                    })
-                {
-                    Log.i("PERMISSION", "Access to photos disabled")
-                }
-            }
-        }
+//        binding.fabAdd.setOnClickListener(){
+//            this.activity?.let {
+//                PermissionHandler.requestPermission(
+//                    it,
+//                    PermissionHandler.READ_EXTERNAL_STORAGE_REQUEST_CODE,
+//                    {
+//                        startSelectPicture()
+//                        Log.i("PERMISSION", "Access to photos enabled")
+//                    })
+//                {
+//                    Log.i("PERMISSION", "Access to photos disabled")
+//                }
+//            }
+//        }
+
 
         binding.btnSave.setOnClickListener(){
             findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
@@ -70,6 +88,70 @@ class UploadNewPlaceFragment : Fragment() {
         }
 
     }
+
+    private fun showPopupWindow(anchorView: View) {
+        val inflater = LayoutInflater.from(context)
+        val popupView = inflater.inflate(R.layout.popup_window, null)
+
+        val width = LinearLayout.LayoutParams.MATCH_PARENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val focusable = true
+
+        popupWindow = PopupWindow(popupView, width, height, focusable)
+        popupWindow?.showAtLocation(anchorView, Gravity.BOTTOM, 0, 0)
+
+        val uploadPhoto = popupView.findViewById<TextView>(R.id.tvUploadPhoto)
+        val takePhoto = popupView.findViewById<TextView>(R.id.tvTakePhoto)
+
+
+        uploadPhoto.setOnClickListener() {
+            this.activity?.let {
+                PermissionHandler.requestPermission(
+                    it,
+                    PermissionHandler.READ_EXTERNAL_STORAGE_REQUEST_CODE,
+                    {
+                        startSelectPicture()
+                        Log.i("PERMISSION", "Access to photos enabled")
+                    })
+                {
+                    Log.i("PERMISSION", "Access to photos disabled")
+                }
+            }
+            popupWindow?.dismiss()
+        }
+
+
+    }
+
+
+
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        Log.i("MENU", "bejon ide")
+//        inflater.inflate(R.menu.photo_camera_menu, menu)
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem) : Boolean {
+//        Log.i("MENU", "bejon ide is")
+//        when (item.itemId) {
+//            R.id.uploadImage -> {
+//
+//                return true
+//            }
+//            R.id.takePhoto -> {
+//
+//                return true
+//            }
+//            else -> return super.onOptionsItemSelected(item)
+//        }
+//    }
+//
+//    private fun showMenuAtBottom() {
+//        val menuView = layoutInflater.inflate(R.layout.fragment_menu, null)
+//
+//        popupWindow = PopupWindow(menuView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT, true)
+//        popupWindow?.showAtLocation(view, Gravity.BOTTOM, 0, 0)
+//    }
 
     private fun startSelectPicture(){
         val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)

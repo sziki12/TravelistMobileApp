@@ -21,6 +21,7 @@ class PermissionHandler(/*private var activity: Activity*/){
         const val COARSE_LOCATION_REQUEST_CODE = 3
         const val BACKGROUND_LOCATION_REQUEST_CODE = 4
         const val READ_EXTERNAL_STORAGE_REQUEST_CODE = 5
+        const val CAMERA_ACCESS_REQUEST_CODE = 6
 
         private const val requestCodeEnd=4
         var hasPermission: HashMap<Int, Boolean?> = HashMap()
