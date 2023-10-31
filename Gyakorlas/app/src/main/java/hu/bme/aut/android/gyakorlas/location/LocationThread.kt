@@ -66,6 +66,9 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
                     Log.i("PERMISSION", "LocationService RUNNING")
                     locationService.updateCurrentLocation(locationService.useHighAccuracy)
                     locationService.isSuccess = true
+
+                    updateLocationListeners()
+
                 } else
                 {
                     Log.i("PERMISSION","Background Location Access Denied")
@@ -75,6 +78,13 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
             {
                 Log.i("PERMISSION","Location Access Denied")
                 locationService.isSuccess = false
+            }
+        }
+        private fun updateLocationListeners()
+        {
+            for(listener in LocationService.getListeners())
+            {
+                listener.notifyOnLocationChange()
             }
         }
     }

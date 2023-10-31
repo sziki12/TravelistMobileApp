@@ -38,12 +38,36 @@ class LocationService() : Service()
     @Volatile
     var isSuccess = false
 
+    interface LocationChangeListener
+    {
+        fun notifyOnLocationChange()
+    }
+
     companion object
     {
         @Volatile
         var isRunning:Boolean = true
         @Volatile
         var currentLocation: Location? = null
+        @Volatile
+        private var listeners : ArrayList<LocationChangeListener> = ArrayList()
+
+        fun getListeners(): ArrayList<LocationChangeListener>
+        {
+            var listenersCopy = ArrayList<LocationChangeListener>()
+            listenersCopy.addAll(listeners)
+            return listenersCopy
+        }
+
+        fun registerListener(listener:LocationChangeListener)
+        {
+            listeners.add(listener)
+        }
+
+        fun unregisterListener(listener:LocationChangeListener)
+        {
+            listeners.remove(listener)
+        }
 
         fun calculateDistance(dest: LatLng):Float?
 

@@ -68,8 +68,5 @@ class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMar
                 NavHostFragment.findNavController(fragment).navigate(action)
             }
         }
-
     }
-
-
 }

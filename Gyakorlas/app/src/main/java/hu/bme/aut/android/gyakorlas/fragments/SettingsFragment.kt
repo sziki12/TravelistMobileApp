@@ -50,17 +50,12 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         Log.i("SETTINGS","Changed")
         if(s.contains("locationUpdateInterval"))
         {
-            if(!preference.getString("update_location_interval","").equals("Never")&&!LocationService.isRunning)
+            if((!preference.getString("locationUpdateIntervalOnFailure","").equals("Never")||!preference.getString("locationUpdateInterval","").equals("Never"))&&!LocationService.isRunning)
             {
                 Log.i("LOCATION","Restarting LocationService")
                 requireActivity().startService(Intent(activity, LocationService::class.java))
             }
-            else
-            {
-                Log.i("LOCATION","Else")
-            }
         }
-
 
         notifyListeners(preference,s)
     }
