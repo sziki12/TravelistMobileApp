@@ -12,8 +12,10 @@ import androidx.core.content.ContextCompat
 /**
  * Utility class for access to runtime permissions.
  */
-class PermissionHandler(/*private var activity: Activity*/){
+class PermissionHandler(){
     companion object {
+        //request Code values must increment by one
+        //The min request code value
         private const val requestCodeBegin=1
 
         const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -23,7 +25,8 @@ class PermissionHandler(/*private var activity: Activity*/){
         const val READ_EXTERNAL_STORAGE_REQUEST_CODE = 5
         const val CAMERA_ACCESS_REQUEST_CODE = 6
 
-        private const val requestCodeEnd=4
+        //The max request code value
+        private const val requestCodeEnd = 6
         var hasPermission: HashMap<Int, Boolean?> = HashMap()
             get()
             {
