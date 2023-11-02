@@ -20,6 +20,8 @@ class PermissionHandler(/*private var activity: Activity*/){
         const val FINE_LOCATION_REQUEST_CODE = 2
         const val COARSE_LOCATION_REQUEST_CODE = 3
         const val BACKGROUND_LOCATION_REQUEST_CODE = 4
+        const val READ_EXTERNAL_STORAGE_REQUEST_CODE = 5
+        const val CAMERA_ACCESS_REQUEST_CODE = 6
 
         private const val requestCodeEnd=4
         var hasPermission: HashMap<Int, Boolean?> = HashMap()
@@ -49,6 +51,16 @@ class PermissionHandler(/*private var activity: Activity*/){
                 BACKGROUND_LOCATION_REQUEST_CODE -> {
                     isOnePermissionEnaught[BACKGROUND_LOCATION_REQUEST_CODE] = true
                     permissionString.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                }
+
+                READ_EXTERNAL_STORAGE_REQUEST_CODE -> {
+                    isOnePermissionEnaught[READ_EXTERNAL_STORAGE_REQUEST_CODE] = true
+                    permissionString.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+                }
+
+                CAMERA_ACCESS_REQUEST_CODE -> {
+                    isOnePermissionEnaught[CAMERA_ACCESS_REQUEST_CODE] = true
+                    permissionString.add(Manifest.permission.CAMERA)
                 }
             }
             return permissionString
@@ -109,8 +121,11 @@ class PermissionHandler(/*private var activity: Activity*/){
         ) {
             synchronized(hasPermission)
             {
+                //successCallbacks[permissionCode]?.add(successCallback)
+                successCallbacks[permissionCode] = ArrayList()
                 successCallbacks[permissionCode]?.add(successCallback)
                 falieurCallbacks[permissionCode]?.add(falieurCallback)
+
                 when {
                     checkPermissions(activity, permissionCode) -> {
                         Log.i("PERMISSION", "Success")
