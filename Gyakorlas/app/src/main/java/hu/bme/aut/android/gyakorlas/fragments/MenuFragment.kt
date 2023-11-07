@@ -32,7 +32,7 @@ class MenuFragment : Fragment() {
             findNavController().navigate(R.id.action_menuFragment_to_mapsFragment)
         }
         binding.btnTrackOthers.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_mapsFragment)
+            findNavController().navigate(R.id.action_menuFragment_to_trackOthersFragment)
         }
         binding.btnMenuRecommended.setOnClickListener {
             findNavController().navigate(R.id.action_menuFragment_to_recommendedFragment)
