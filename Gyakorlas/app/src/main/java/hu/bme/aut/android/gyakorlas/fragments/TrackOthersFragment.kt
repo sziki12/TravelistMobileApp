@@ -108,17 +108,16 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             }
         }
 
-        //Show Markers
-//        for (mapMarker in markers) {
-//            mMap.addMarker(mapMarker.marker)
-//        }
-
         val userLocations = LocationData.userLocations
         for (user in userLocations){
             val userLatLng = LatLng(user.latitude, user.longitude)
             val markerOptions = MarkerOptions().position(userLatLng).title("User")
             mMap.addMarker(markerOptions)
         }
+        //Adding own location marker:
+        val selfLatLng = LatLng(LocationService.currentLocation!!.latitude, LocationService.currentLocation!!.longitude)
+        val markerOptions = MarkerOptions().position(selfLatLng).title("You are standing here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+        mMap.addMarker(markerOptions)
 
         //Set Map Center
         centerCamera()
