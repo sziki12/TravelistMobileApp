@@ -33,7 +33,6 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentTrackOthersBinding
-    //var markers: ArrayList<MapMarker> = ArrayList()
     private var isInitialized = false
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,20 +57,12 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
         }
     }
 
-
-
     /**
-     * Contains the initiations of the markers ArrayList, and gets the current location
+     * Contains the initiations of the userLocations ArrayList
      */
 
     private fun setUpMapData(selectedLocation: String) {
-        //markers.clear()
-
-        //Somehow the markers get deleted from MapDataProvider
         this.activity?.let { LocationData.initUsers() }
-
-//        markers = MapDataProvider.getSelectedMarkers(selectedLocation)
-//        Log.i("PLACE","setUpMapData markers.size: ${markers.size}")
     }
 
     private fun enableGestures() {
@@ -112,7 +103,8 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
         val userLocations = LocationData.userLocations
         for (user in userLocations){
             val userLatLng = LatLng(user.latitude, user.longitude)
-            //Distance between current location and userLatLng in meters
+
+            //Distance between current location and userLatLng in meters:
             val distance = LocationService.calculateDistance(userLatLng)
 
             if (distance != null) {
@@ -124,9 +116,16 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             }
         }
         //Adding own location marker:
-        val selfLatLng = LatLng(LocationService.currentLocation!!.latitude, LocationService.currentLocation!!.longitude)
-        val markerOptions = MarkerOptions().position(selfLatLng).title("You are standing here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-        mMap.addMarker(markerOptions)
+        val selfLatLng = LocationService.currentLocation?.latitude?.let { LocationService.currentLocation?.longitude?.let { it1 ->
+            LatLng(it,
+                it1
+            )
+        } }
+        val markerOptions =
+            selfLatLng?.let { MarkerOptions().position(it).title("You are standing here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)) }
+        if (markerOptions != null) {
+            mMap.addMarker(markerOptions)
+        }
 
         //Set Map Center
         centerCamera()
@@ -146,60 +145,6 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             }
             true
         }
-//        mMap.setOnInfoWindowClickListener { marker ->
-//
-//            //Finds the appropriate MapMarker by its position
-//            for (mapMarker in markers) {
-//                if (mapMarker.isOwnMarker(marker) && mapMarker.place != null) {
-////                    var intent = Intent(this, PlaceActivity::class.java)
-////                    //intent.putParcelableArrayListExtra("IMAGES", mapMarker.place.images)
-////                    intent.putExtra("PLACE", MapDataProvider.getIDByMarker(mapMarker))
-////                    Log.i("PLACE","Place ID:${MapDataProvider.getIDByMarker(mapMarker)}")
-////                    startActivity(intent)
-//
-//                    val markerID = MapDataProvider.getIDByMarker(mapMarker)
-//                    Log.i("PLACE","Place ID:$markerID")
-//                    // create an action and pass the required object to it
-//                    val action =
-//                        markerID?.let {
-//                            hu.bme.aut.android.gyakorlas.fragments.MapsFragmentDirections.actionMapsFragmentToPlaceFragment(
-//                                it
-//                            )
-//                        }//
-//
-//                    //this will navigate the MapsFragment to the PlaceFragment
-//                    if (action != null) {
-//                        findNavController(this as Fragment).navigate(action)
-//                    }
-//                }
-//            }
-//        }
-//        mMap.setOnMapLongClickListener { latLang ->
-//
-//            var isMarkerClicked = false
-//            for (marker in markers) {
-//                if (marker.getLatLng() == (latLang)) {
-//                    isMarkerClicked = true
-//                }
-//            }
-//
-//            if (!isMarkerClicked) {
-//                var newMarker = MarkerOptions()
-//                    .position(latLang)
-//                    .title("New Marker By Click At: $latLang")
-//                    .icon(BitmapDescriptorFactory.defaultMarker())
-//                mMap.addMarker(newMarker)
-//            }
-//        }
-
-        /*override fun onResumeFragments() {
-        super.onResumeFragments()
-        if (permissionHandler.permissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError()
-            permissionHandler.permissionDenied = false
-        }
-    }*/
     }
 
     /**

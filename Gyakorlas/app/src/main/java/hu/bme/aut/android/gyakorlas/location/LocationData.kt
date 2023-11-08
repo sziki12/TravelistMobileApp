@@ -10,20 +10,20 @@ class LocationData {
 
         fun initUsers() {
             val location1 = Location("Provider1")
-            location1.latitude = 47.12345
-            location1.longitude = 19.67890
+            location1.latitude = 47.4742
+            location1.longitude = 19.0592
 
             val location2 = Location("Provider2")
-            location2.latitude = 48.54321
-            location2.longitude = 18.98765
+            location2.latitude = 47.4727
+            location2.longitude = 19.0577
 
             val location3 = Location("Provider3")
-            location3.latitude = 47.13345
-            location3.longitude = 19.66890
+            location3.latitude = 47.4744
+            location3.longitude = 19.0635
 
             val location4 = Location("Provider4")
-            location3.latitude = 48.8566
-            location3.longitude = 2.3522
+            location3.latitude = 47.4774
+            location3.longitude = 19.0460
 
             val location5 = Location("Provider5")
             location5.latitude = 37.4226

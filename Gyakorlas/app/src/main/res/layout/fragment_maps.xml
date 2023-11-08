@@ -50,5 +50,6 @@
         android:layout_marginBottom="5dp"
         android:padding="8dp"
         android:text="Place New Marker"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:backgroundTint="@color/darkblue"/>
 </RelativeLayout>

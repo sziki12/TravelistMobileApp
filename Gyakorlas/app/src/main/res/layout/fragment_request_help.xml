@@ -35,7 +35,7 @@
         android:layout_width="360dp"
         android:layout_height="360dp"
         android:layout_gravity="center"
-        android:background="@drawable/roundbutton"
+        android:background="@drawable/pulse_circle"
         android:backgroundTint="#bbbbbb"
         android:src="@drawable/requesthelp"
         app:layout_constraintBottom_toTopOf="@+id/guideline10"
@@ -97,4 +97,3 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
