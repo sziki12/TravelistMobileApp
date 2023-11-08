@@ -26,6 +26,7 @@ import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
+import java.lang.StringBuilder
 
 class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -111,8 +112,16 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
         val userLocations = LocationData.userLocations
         for (user in userLocations){
             val userLatLng = LatLng(user.latitude, user.longitude)
-            val markerOptions = MarkerOptions().position(userLatLng).title("User")
-            mMap.addMarker(markerOptions)
+            //Distance between current location and userLatLng in meters
+            val distance = LocationService.calculateDistance(userLatLng)
+
+            if (distance != null) {
+                //if user is within 5 km, it is shown on the map
+                if (distance <= 5000) {
+                    val markerOptions = MarkerOptions().position(userLatLng).title("User")
+                    mMap.addMarker(markerOptions)
+                }
+            }
         }
         //Adding own location marker:
         val selfLatLng = LatLng(LocationService.currentLocation!!.latitude, LocationService.currentLocation!!.longitude)
