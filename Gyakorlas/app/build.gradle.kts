@@ -40,6 +40,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 
 
 }
@@ -49,6 +52,7 @@ dependencies {
     val retrofit_version = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
+
     val moshi_version = "1.9.2"
     implementation("com.squareup.moshi:moshi:$moshi_version")
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
@@ -56,8 +60,8 @@ dependencies {
     implementation("androidx.preference:preference:1.2.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.gridlayout:gridlayout:1.0.0")
-    val nav_version = "2.5.3"
 
+    val nav_version = "2.5.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 

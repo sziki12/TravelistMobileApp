@@ -49,8 +49,7 @@ class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMar
         }
 
         if(markers[position].place?.images?.isNotEmpty() == true)
-
-        viewHolder.ratingView.rating = markers[position].place?.rating!!
+            viewHolder.ratingView.rating = markers[position].place?.rating!!
 
         var distance:Float? = LocationService.calculateDistance(markers[position].getLatLng())
         if(distance!=null)
