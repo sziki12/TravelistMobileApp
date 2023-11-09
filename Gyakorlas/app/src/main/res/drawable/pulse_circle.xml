@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners  android:radius="500dp"/>
+    <solid android:color="#80C0C0C0" /> <!-- Halvány szürke -->
+    <size android:width="100dp" android:height="100dp" /> <!-- Kezdeti méret -->
+    <scale
+        android:scaleGravity="center"
+        android:scaleWidth="150%"
+        android:scaleHeight="150%" /> <!-- Pulzálás mérete -->
+</shape>

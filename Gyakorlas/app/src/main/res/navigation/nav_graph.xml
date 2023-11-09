@@ -41,6 +41,9 @@
       <action
             android:id="@+id/action_menuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_trackOthersFragment"
+            app:destination="@id/trackOthersFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -130,4 +133,12 @@
         android:id="@+id/settingsFragment"
         android:name="hu.bme.aut.android.gyakorlas.fragments.SettingsFragment"
         android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/trackOthersFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.TrackOthersFragment"
+        android:label="TrackOthersFragment" >
+        <action
+            android:id="@+id/action_trackOthersFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
 </navigation>

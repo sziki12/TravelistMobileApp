@@ -32,24 +32,9 @@
     </androidx.appcompat.widget.Toolbar>
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/trackOthersMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar" />
-
-    <Button
-        android:id="@+id/btnPlaceNewMarker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="690dp"
-        android:layout_marginEnd="128dp"
-        android:layout_marginBottom="5dp"
-        android:padding="8dp"
-        android:text="Place New Marker"
-        android:textColor="#ffffff"
-        android:backgroundTint="@color/darkblue"/>
 </RelativeLayout>
