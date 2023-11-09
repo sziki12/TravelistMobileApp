@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentLoginBinding
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
+import hu.bme.aut.android.gyakorlas.retrofit.UserData
 
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
@@ -36,9 +37,10 @@ class LoginFragment : Fragment() {
                 binding.etPassword.requestFocus()
                 binding.etPassword.error = "Please enter your password"
             }
-
             else {
-                DataAccess.registerLoginListener(binding.btnLogin,::onSuccess,::onFailure, ::onUserExists)
+                val username = binding.etUsername.text.toString()
+                val password = binding.etPassword.text.toString()
+                DataAccess.registerLoginListener(UserData(username,password),::onSuccess,::onFailure, ::onUserExists)
             }
         }
 
@@ -61,6 +63,6 @@ class LoginFragment : Fragment() {
     private fun onUserExists()
     {
         binding.etUsername.error = "There are no registered users with this email and password"
-        Log.i("Retrofit","OnUserExists")
+        Log.i("Retrofit","OnUserNotExists")
     }
 }

@@ -53,9 +53,12 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
 
-    val moshi_version = "1.9.2"
-    implementation("com.squareup.moshi:moshi:$moshi_version")
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+    //val moshi_version = "1.9.2"
+    //implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
+    //ksp("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
+
+    val gson_version ="2.5.0"
+    implementation("com.squareup.retrofit2:converter-gson:$gson_version")
 
     implementation("androidx.preference:preference:1.2.0")
     implementation("androidx.preference:preference-ktx:1.2.1")
