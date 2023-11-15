@@ -4,6 +4,8 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("androidx.navigation.safeargs")
     id("com.google.devtools.ksp").version("1.6.10-1.0.4")
+    //id("kotlin-multiplatform").version("1.3.20")
+    id("org.jetbrains.kotlin.plugin.serialization").version("1.9.20")
 }
 
 android {
@@ -58,6 +60,8 @@ dependencies {
     val gson_version ="2.5.0"
     implementation("com.squareup.retrofit2:converter-gson:$gson_version")
     implementation("com.google.code.gson:gson: $gson_version")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation ("com.squareup.okhttp3:okhttp:4.10.0")
 

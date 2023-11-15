@@ -1,30 +1,29 @@
 package hu.bme.aut.android.gyakorlas.retrofit
 
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+
 import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.Buffer
-import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import java.io.IOException
-
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonBuilder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonObjectBuilder
 
 class DataAccess {
     companion object
@@ -48,11 +47,11 @@ class DataAccess {
                 .build()
 
             // Create JSON using JSONObject
-            val jsonObject = JSONObject()
-            jsonObject.put("email", user.email)
-            jsonObject.put("password", user.password)
-            // Convert JSONObject to String
-            val jsonObjectString = jsonObject.toString()
+            //val jsonObject = JsonObject()
+            //jsonObject.put("email", user.email)
+            //jsonObject.put("password", user.password)
+
+            val jsonObjectString = Json.encodeToString(user)//encodeToString(jsonObject)
 
             val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
 
@@ -87,10 +86,12 @@ class DataAccess {
     }
 }
 
+@Serializable
 data class UserData(
     val email: String,
     val password: String
 )
+
 
 interface UserAccessAPI {
     //@Headers("Content-Type: application/json")
