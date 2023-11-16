@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRecommendedBinding
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
@@ -31,6 +33,10 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.imgbtnMenu.setOnClickListener {
+            findNavController().navigate(R.id.action_recommendedFragment_to_menuFragment)
+        }
 
         //Somehow the markers get deleted from MapDataProvider
         this.activity?.let { MapDataProvider.initMarkers(it) }
