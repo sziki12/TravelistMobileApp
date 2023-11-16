@@ -19,14 +19,18 @@ import kotlin.concurrent.thread
 
 class GeofenceHandler : BroadcastReceiver() {
     var activity: Activity? = null
-    val geofenceRadius = 7500f
+
     companion object {
         private var activeGeofences: ArrayList<Geofence> = ArrayList()
         private var geofenceList: ArrayList<Geofence> = ArrayList()
         private var markers: ArrayList<MapMarker> = ArrayList()
         private var geofencingClient:GeofencingClient? = null
-
+        var geofenceRadius = 7500f
     }
+
+//    fun setGeofenceRadius(radius: Float) {
+//        geofenceRadius = radius
+//    }
     fun setUpGeofencingClient(activity: Activity) {
         var initSuccess = false
         thread(start=true, isDaemon = true)
@@ -60,6 +64,7 @@ class GeofenceHandler : BroadcastReceiver() {
     {
         for(marker in allMarkers)
         {
+            Log.i("GEOFENCERADIUS", geofenceRadius.toString())
             addGeofence(marker,geofenceRadius)
             //Log.i("GEOFENCE","Added ${marker.name}")
         }

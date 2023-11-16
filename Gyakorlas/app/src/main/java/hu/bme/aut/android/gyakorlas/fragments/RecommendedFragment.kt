@@ -32,10 +32,18 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.i("recommGeofenceRad", GeofenceHandler.geofenceRadius.toString())
         super.onViewCreated(view, savedInstanceState)
 
         binding.imgbtnMenu.setOnClickListener {
             findNavController().navigate(R.id.action_recommendedFragment_to_menuFragment)
+        }
+
+        binding.btnModifyGeofenceRadius.setOnClickListener(){
+            GeofenceRadiusDialogFragment().show(
+                childFragmentManager,
+                GeofenceRadiusDialogFragment.TAG
+            )
         }
 
         //Somehow the markers get deleted from MapDataProvider
