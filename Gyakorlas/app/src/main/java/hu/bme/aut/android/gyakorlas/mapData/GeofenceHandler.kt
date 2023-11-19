@@ -14,6 +14,8 @@ import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
+import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import kotlin.concurrent.thread
 
@@ -28,9 +30,6 @@ class GeofenceHandler : BroadcastReceiver() {
         var geofenceRadius = 7500f
     }
 
-//    fun setGeofenceRadius(radius: Float) {
-//        geofenceRadius = radius
-//    }
     fun setUpGeofencingClient(activity: Activity) {
         var initSuccess = false
         thread(start=true, isDaemon = true)
@@ -64,7 +63,6 @@ class GeofenceHandler : BroadcastReceiver() {
     {
         for(marker in allMarkers)
         {
-            Log.i("GEOFENCERADIUS", geofenceRadius.toString())
             addGeofence(marker,geofenceRadius)
             //Log.i("GEOFENCE","Added ${marker.name}")
         }
@@ -97,10 +95,12 @@ class GeofenceHandler : BroadcastReceiver() {
            // Log.i("GEOFENCE","Markers.size: ${markers.size}")
             for(marker in markers)
             {
-                if(marker.lat==geofence.latitude&&marker.lng==geofence.longitude)
-                {
-                    nearbyMarkers.add(marker)
-                    Log.i("GEOFENCE","Adding Marker: ${marker.name}")
+                var distance = LocationService.calculateDistance(LatLng(marker.lat, marker.lng))
+                if (distance != null) {
+                    if(marker.lat==geofence.latitude && marker.lng==geofence.longitude &&  distance <= geofenceRadius) {
+                        nearbyMarkers.add(marker)
+                        Log.i("GEOFENCE","Adding Marker: ${marker.name}")
+                    }
                 }
             }
         }

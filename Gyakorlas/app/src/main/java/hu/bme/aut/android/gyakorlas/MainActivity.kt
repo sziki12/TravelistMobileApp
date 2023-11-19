@@ -5,11 +5,17 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.gyakorlas.databinding.ActivityMainBinding
+import hu.bme.aut.android.gyakorlas.databinding.FragmentRecommendedBinding
+import hu.bme.aut.android.gyakorlas.fragments.GeofenceRadiusDialogFragment
+import hu.bme.aut.android.gyakorlas.fragments.RecommendedFragment
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
+import hu.bme.aut.android.gyakorlas.recyclerView.PlaceAdapter
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var binding : ActivityMainBinding

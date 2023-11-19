@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import hu.bme.aut.android.gyakorlas.GeofenceRadiusListener
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRecommendedBinding
 import hu.bme.aut.android.gyakorlas.location.LocationService
@@ -17,10 +18,12 @@ import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.recyclerView.PlaceAdapter
 
-class RecommendedFragment : Fragment(),LocationService.LocationChangeListener {
-    private var markers: ArrayList<MapMarker> = ArrayList()
+class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, GeofenceRadiusListener {
     private var geofenceHandler = GeofenceHandler()
     private lateinit var binding: FragmentRecommendedBinding
+    companion object {
+        var markers: ArrayList<MapMarker> = ArrayList()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +35,6 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.i("recommGeofenceRad", GeofenceHandler.geofenceRadius.toString())
         super.onViewCreated(view, savedInstanceState)
 
         binding.imgbtnMenu.setOnClickListener {
@@ -40,7 +42,9 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener {
         }
 
         binding.btnModifyGeofenceRadius.setOnClickListener(){
-            GeofenceRadiusDialogFragment().show(
+            val dialogFragment = GeofenceRadiusDialogFragment()
+            dialogFragment.listener = this
+            dialogFragment.show(
                 childFragmentManager,
                 GeofenceRadiusDialogFragment.TAG
             )
@@ -73,5 +77,22 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener {
             recyclerView.adapter = customAdapter
         }
 
+    }
+
+
+
+    override fun onGeofenceRadiusChanged() {
+        activity?.runOnUiThread {
+            markers = geofenceHandler.calculateNearbyMarkers()
+
+            for (m in markers){
+                Log.i("MARKERS", m.name)
+            }
+
+            val customAdapter = PlaceAdapter(this, markers)
+            val recyclerView: RecyclerView = binding.recyclerView
+            recyclerView.layoutManager = LinearLayoutManager(this.activity)
+            recyclerView.adapter = customAdapter
+        }
     }
 }
