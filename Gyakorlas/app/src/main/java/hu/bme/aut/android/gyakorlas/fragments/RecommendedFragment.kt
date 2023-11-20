@@ -38,6 +38,7 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, G
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.tvRadius.text = "Search Distance: ${GeofenceHandler.geofenceRadius}"
         binding.imgbtnMenu.setOnClickListener {
             findNavController().navigate(R.id.action_recommendedFragment_to_menuFragment)
         }
@@ -86,7 +87,7 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, G
         //Gyorsabb kivéve ha a Geofence Handler lassabb mint a LocationService
         locationService?.updateCurrentLocation(locationService.useHighAccuracy)
         notifyOnLocationChange()
-
+        binding.tvRadius.text = "Search Distance: ${GeofenceHandler.geofenceRadius}"
         for (m in markers){
             Log.i("MARKERS", m.name)
         }
