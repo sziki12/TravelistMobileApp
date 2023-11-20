@@ -19,16 +19,43 @@ import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import kotlin.concurrent.thread
 
-class GeofenceHandler : BroadcastReceiver() {
+class GeofenceHandler: BroadcastReceiver() {
     var activity: Activity? = null
-
     companion object {
         private var activeGeofences: ArrayList<Geofence> = ArrayList()
         private var geofenceList: ArrayList<Geofence> = ArrayList()
         private var markers: ArrayList<MapMarker> = ArrayList()
         private var geofencingClient:GeofencingClient? = null
+        private val mapDataProvider = MapDataProvider.instance
+
+        private var listeners : ArrayList<GeofenceChangeListener> = ArrayList()
+
+        fun registerListener(listener: GeofenceHandler.GeofenceChangeListener)
+        {
+            GeofenceHandler.listeners.add(listener)
+        }
+
+        fun unregisterListener(listener: GeofenceHandler.GeofenceChangeListener)
+        {
+            GeofenceHandler.listeners.remove(listener)
+        }
+
         var geofenceRadius = 7500f
+            set(value)
+            {
+                field = value
+                instance.setUpGeofences(mapDataProvider.markers)
+            }
+        val instance : GeofenceHandler by lazy {
+           GeofenceHandler()
+        }
     }
+    interface GeofenceChangeListener
+    {
+        fun onGeofenceChange()
+    }
+
+
 
     fun setUpGeofencingClient(activity: Activity) {
         var initSuccess = false
@@ -43,7 +70,7 @@ class GeofenceHandler : BroadcastReceiver() {
                         this.activity=activity
                         initSuccess = true
                         geofencingClient = LocationServices.getGeofencingClient(activity)
-                        setUpGeofences(MapDataProvider.markers)
+                        setUpGeofences(mapDataProvider.markers)
                         Log.i("PERMISSION","Geofence Set Up Successfull")
                     })
                     {
@@ -61,12 +88,13 @@ class GeofenceHandler : BroadcastReceiver() {
     @SuppressLint("MissingPermission")
     private fun setUpGeofences(allMarkers:ArrayList<MapMarker>)
     {
+        removeGeofences()
         for(marker in allMarkers)
         {
             addGeofence(marker,geofenceRadius)
             //Log.i("GEOFENCE","Added ${marker.name}")
         }
-        markers = allMarkers
+        markers.addAll(allMarkers)
         //Log.i("GEOFENCE","setUpGeofences Markers.Size ${markers.size}")
         geofencingClient?.addGeofences(getGeofencingRequest(), geofencePendingIntent)?.run {
             addOnSuccessListener {
@@ -89,10 +117,10 @@ class GeofenceHandler : BroadcastReceiver() {
     fun calculateNearbyMarkers():ArrayList<MapMarker>
     {
         var nearbyMarkers:ArrayList<MapMarker> = ArrayList()
-       // Log.i("GEOFENCE","activeGeofences.size: ${activeGeofences.size}")
+        //Log.i("GEOFENCE","activeGeofences.size: ${activeGeofences.size}")
         for(geofence in activeGeofences)
         {
-           // Log.i("GEOFENCE","Markers.size: ${markers.size}")
+            //Log.i("GEOFENCE","Markers.size: ${markers.size}")
             for(marker in markers)
             {
                 var distance = LocationService.calculateDistance(LatLng(marker.lat, marker.lng))
@@ -107,8 +135,11 @@ class GeofenceHandler : BroadcastReceiver() {
         return nearbyMarkers
     }
 
-    fun removeGeofences()
+    private fun removeGeofences()
     {
+        activeGeofences.clear()
+        markers.clear()
+
         geofencingClient?.removeGeofences(geofencePendingIntent)?.run {
             addOnSuccessListener {
                 // Geofences removed
@@ -164,8 +195,13 @@ class GeofenceHandler : BroadcastReceiver() {
                 }
             }
         }
+        //Geofence Listener Notify
+        for(listener in listeners)
+        {
+            listener.onGeofenceChange()
+        }
     }
-    fun addGeofence(marker: MapMarker, radius:Float) {
+    private fun addGeofence(marker: MapMarker, radius:Float) {
         geofenceList.add(
             Geofence.Builder()
                 // Set the request ID of the geofence. This is a string to identify this

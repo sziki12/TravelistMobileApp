@@ -32,6 +32,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapsBinding
     var markers: ArrayList<MapMarker> = ArrayList()
+    private val mapDataProvider = MapDataProvider.instance
     private var isInitialized = false
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,10 +66,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private fun setUpMapData(selectedLocation: String) {
         markers.clear()
 
-        //Somehow the markers get deleted from MapDataProvider
-        this.activity?.let { MapDataProvider.initMarkers(it) }
-
-        markers = MapDataProvider.getSelectedMarkers(selectedLocation)
+        markers = mapDataProvider.getSelectedMarkers(selectedLocation)
         Log.i("PLACE","setUpMapData markers.size: ${markers.size}")
     }
 
@@ -140,7 +138,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 //                    Log.i("PLACE","Place ID:${MapDataProvider.getIDByMarker(mapMarker)}")
 //                    startActivity(intent)
 
-                    val markerID = MapDataProvider.getIDByMarker(mapMarker)
+                    val markerID = mapDataProvider.getIDByMarker(mapMarker)
                     Log.i("PLACE","Place ID:$markerID")
                     // create an action and pass the required object to it
                     val action =

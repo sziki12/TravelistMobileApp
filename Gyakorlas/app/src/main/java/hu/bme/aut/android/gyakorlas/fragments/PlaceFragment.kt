@@ -16,6 +16,7 @@ import hu.bme.aut.android.gyakorlas.mapData.PlaceData
 class PlaceFragment : Fragment() {
     var markerID: Int = 0
     var place: PlaceData? = null
+    private val mapDataProvider = MapDataProvider.instance
     private lateinit var binding : FragmentPlaceBinding
 
     // get the arguments from the MapsFragment
@@ -28,12 +29,9 @@ class PlaceFragment : Fragment() {
     ): View {
         binding = FragmentPlaceBinding.inflate(inflater, container, false)
 
-        //Somehow the markers get deleted from MapDataProvider
-        this.activity?.let { MapDataProvider.initMarkers(it) }
-
         //receive the arguments in a variable
         markerID = args.markerID
-        place = MapDataProvider.getMarkerByID(markerID).place
+        place = mapDataProvider.getMarkerByID(markerID).place
 
         binding.tvName.text = place?.name ?: ""
         binding.tvDescription.text = place?.description ?: ""

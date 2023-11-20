@@ -19,7 +19,8 @@ import hu.bme.aut.android.gyakorlas.recyclerView.PlaceAdapter
 
 class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
     private lateinit var binding : ActivityMainBinding
-    private var geofenceHandler = GeofenceHandler()
+    private var geofenceHandler = GeofenceHandler.instance
+    private var mapDataProvider = MapDataProvider.instance
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         PermissionHandler.initialize()
 
         //Initialize Map Data, load MapMarkers
-        MapDataProvider.initMarkers(this)
+        mapDataProvider.initMarkers(this)
 
         //Initialize Location Service
         PermissionHandler.requestPermission(this, PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,

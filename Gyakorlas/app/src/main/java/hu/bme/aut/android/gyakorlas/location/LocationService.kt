@@ -16,13 +16,12 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.R
 import kotlin.concurrent.Volatile
+import kotlin.concurrent.thread
 
 class LocationService() : Service()
 {
 
     private lateinit var locationClient: FusedLocationProviderClient
-
-    private var callbacks: ArrayList<()->Unit> = ArrayList()
 
     lateinit var preferences:SharedPreferences
     var locationUpdateIntervalMap:HashMap<String,Int> = HashMap()
@@ -52,12 +51,8 @@ class LocationService() : Service()
         @Volatile
         private var listeners : ArrayList<LocationChangeListener> = ArrayList()
 
-        fun getListeners(): ArrayList<LocationChangeListener>
-        {
-            var listenersCopy = ArrayList<LocationChangeListener>()
-            listenersCopy.addAll(listeners)
-            return listenersCopy
-        }
+        var instance:LocationService? = null
+
 
         fun registerListener(listener:LocationChangeListener)
         {
@@ -67,6 +62,14 @@ class LocationService() : Service()
         fun unregisterListener(listener:LocationChangeListener)
         {
             listeners.remove(listener)
+        }
+
+        private fun updateLocationListeners()
+        {
+            for(listener in listeners)
+            {
+                listener.notifyOnLocationChange()
+            }
         }
 
         fun calculateDistance(dest: LatLng):Float?
@@ -91,9 +94,9 @@ class LocationService() : Service()
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
-    {
-        isRunning=true
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        instance = this
+        isRunning = true
         locationClient = LocationServices.getFusedLocationProviderClient(this)
 
         updateThread = LocationThread(this)
@@ -101,8 +104,6 @@ class LocationService() : Service()
 
         return super.onStartCommand(intent, flags, startId)
     }
-
-
 
     @SuppressLint("MissingPermission")
     fun updateCurrentLocation(highAccuracyRequired:Boolean)
@@ -117,6 +118,11 @@ class LocationService() : Service()
                 .addOnSuccessListener { location ->
                    currentLocation = location
                     Log.i("LOCATION","GettingLocationSuccessful: $currentLocation")
+                    thread {
+                        updateLocationListeners()
+                    }
+
+
                 }
                 .addOnFailureListener { exception ->
                     Log.i("LOCATION","GettingLocationFailed: $exception")

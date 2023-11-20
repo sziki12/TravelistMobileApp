@@ -17,9 +17,10 @@ import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.recyclerView.PlaceAdapter
+import kotlin.concurrent.thread
 
-class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, GeofenceRadiusListener {
-    private var geofenceHandler = GeofenceHandler()
+class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, GeofenceRadiusListener,GeofenceHandler.GeofenceChangeListener {
+    private var geofenceHandler = GeofenceHandler.instance
     private lateinit var binding: FragmentRecommendedBinding
     companion object {
         var markers: ArrayList<MapMarker> = ArrayList()
@@ -50,9 +51,6 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, G
             )
         }
 
-        //Somehow the markers get deleted from MapDataProvider
-        this.activity?.let { MapDataProvider.initMarkers(it) }
-
         markers = geofenceHandler.calculateNearbyMarkers()
 
         val customAdapter = PlaceAdapter(this,markers)
@@ -61,38 +59,40 @@ class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, G
         recyclerView.adapter = customAdapter
         Log.i("GEOFENCE", "Shown")
         LocationService.registerListener(this)
+        GeofenceHandler.registerListener(this)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         LocationService.unregisterListener(this)
+        GeofenceHandler.unregisterListener(this)
     }
 
     override fun notifyOnLocationChange() {
-
-        activity?.runOnUiThread {
-            val customAdapter = PlaceAdapter(this,markers)
-            val recyclerView: RecyclerView = binding.recyclerView
-            recyclerView.layoutManager = LinearLayoutManager(this.activity)
-            recyclerView.adapter = customAdapter
+        thread{
+            markers = geofenceHandler.calculateNearbyMarkers()
+            activity?.runOnUiThread {
+                val recyclerView: RecyclerView = binding.recyclerView
+                val adapter = recyclerView.adapter as? PlaceAdapter
+                adapter?.update(markers)
+            }
         }
-
     }
 
 
 
     override fun onGeofenceRadiusChanged() {
-        activity?.runOnUiThread {
-            markers = geofenceHandler.calculateNearbyMarkers()
+        val locationService = LocationService.instance
+        //Gyorsabb kivéve ha a Geofence Handler lassabb mint a LocationService
+        locationService?.updateCurrentLocation(locationService.useHighAccuracy)
+        notifyOnLocationChange()
 
-            for (m in markers){
-                Log.i("MARKERS", m.name)
-            }
-
-            val customAdapter = PlaceAdapter(this, markers)
-            val recyclerView: RecyclerView = binding.recyclerView
-            recyclerView.layoutManager = LinearLayoutManager(this.activity)
-            recyclerView.adapter = customAdapter
+        for (m in markers){
+            Log.i("MARKERS", m.name)
         }
+    }
+
+    override fun onGeofenceChange() {
+        notifyOnLocationChange()
     }
 }

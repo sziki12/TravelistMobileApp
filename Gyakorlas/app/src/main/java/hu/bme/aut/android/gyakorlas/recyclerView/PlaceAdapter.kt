@@ -9,11 +9,13 @@ import androidx.recyclerview.widget.RecyclerView.*
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.fragments.RecommendedFragmentDirections
+import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import java.lang.Integer.min
 
 class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMarker>) : Adapter<PlaceViewHolder>() {
+    private var mapDataProvider = MapDataProvider.instance
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.text_row_item, parent, false)
@@ -31,7 +33,7 @@ class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMar
         images.add( viewHolder.imageButton2)
         images.add( viewHolder.imageButton3)
 
-        var id = MapDataProvider.getIDByMarker(markers[position])
+        var id = mapDataProvider.getIDByMarker(markers[position])
 
         viewHolder.titleView.text = markers[position].place?.name
         for(i in 0 until min(3,markers[position].place?.images?.size!!))
@@ -62,7 +64,7 @@ class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMar
         {
             // create an action and pass the required object to it
             val action =
-                MapDataProvider.getIDByMarker(markers[position])?.let { RecommendedFragmentDirections.actionRecommendedFragmentToPlaceFragment(it) }//
+                mapDataProvider.getIDByMarker(markers[position])?.let { RecommendedFragmentDirections.actionRecommendedFragmentToPlaceFragment(it) }//
             //this will navigate the MapsFragment to the PlaceFragment
             if (action != null) {
                 NavHostFragment.findNavController(fragment).navigate(action)
@@ -70,5 +72,8 @@ class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMar
         }
     }
 
-   //fun update()
+    fun update(markers: ArrayList<MapMarker>) {
+        this.markers=markers
+        notifyDataSetChanged()
+    }
 }

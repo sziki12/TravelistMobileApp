@@ -17,7 +17,7 @@ class ImageViewFragment : Fragment() {
     private var place: PlaceData? = null
     private val smallImageSize = 300
     private val bigImageSize = 1000
-
+    private val mapDataProvider = MapDataProvider.instance
     private val args : hu.bme.aut.android.gyakorlas.fragments.ImageViewFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,10 +32,7 @@ class ImageViewFragment : Fragment() {
     ): View {
         binding = FragmentImageViewBinding.inflate(inflater, container, false)
 
-        //Somehow the markers get deleted from MapDataProvider
-        this.activity?.let { MapDataProvider.initMarkers(it) }
-
-        place = MapDataProvider.getMarkerByID(args.markerID).place
+        place = mapDataProvider.getMarkerByID(args.markerID).place
         var index = args.index
 
         Log.i("IMAGES","selected Index: $index")
