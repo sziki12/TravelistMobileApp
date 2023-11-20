@@ -27,7 +27,7 @@ class GeofenceRadiusDialogFragment : DialogFragment(){
 
                 if (distanceText.isNotEmpty() && distanceText.toFloat() >= 0){
                     GeofenceHandler.geofenceRadius = distanceText.toFloat()
-                    listener?.onGeofenceRadiusChanged()                                                                                                                                                                      
+                    listener?.onGeofenceRadiusChanged()
                 }
                 dialog.dismiss()
             }

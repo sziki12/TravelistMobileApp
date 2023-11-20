@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
@@ -18,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentMapsBinding
@@ -27,13 +30,17 @@ import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 
 class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
-    GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+    GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback,
+    AdapterView.OnItemSelectedListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapsBinding
     var markers: ArrayList<MapMarker> = ArrayList()
     private val mapDataProvider = MapDataProvider.instance
     private var isInitialized = false
+    var locations = mapDataProvider.getLocations()
+    var selectedLocation = locations[0]
+    var shownMarkers = ArrayList<Marker?>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,6 +62,14 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         binding.imgbtnMenu.setOnClickListener {
             findNavController(this as Fragment).navigate(R.id.action_mapsFragment_to_menuFragment)
         }
+
+        binding.categorySpinner.onItemSelectedListener = this
+        val spinnerAdapter: ArrayAdapter<String> = ArrayAdapter(
+            this.requireContext(),
+            android.R.layout.simple_spinner_item,
+            locations
+        )
+        binding.categorySpinner.adapter = spinnerAdapter
     }
 
 
@@ -66,7 +81,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     private fun setUpMapData(selectedLocation: String) {
         markers.clear()
 
-        markers = mapDataProvider.getSelectedMarkers(selectedLocation)
+        markers.addAll(mapDataProvider.getSelectedMarkers(selectedLocation))
         Log.i("PLACE","setUpMapData markers.size: ${markers.size}")
     }
 
@@ -106,9 +121,7 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         }
 
         //Show Markers
-        for (mapMarker in markers) {
-            mMap.addMarker(mapMarker.marker)
-        }
+        showMarkers()
         //Set Map Center
         centerCamera()
 
@@ -192,6 +205,17 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     }*/
     }
 
+    private fun showMarkers()
+    {
+        for(marker in shownMarkers) {
+            marker?.remove()
+        }
+        shownMarkers.clear()
+
+        for(mapMarker in markers) {
+            shownMarkers.add(mMap.addMarker(mapMarker.marker))
+        }
+    }
         /**
          * If we click on the GPS sign, which centers the camera around the device.
          */
@@ -241,4 +265,14 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                 .build()
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(mapLocation))
         }
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+        selectedLocation = locations[position]
+        setUpMapData(selectedLocation)
+        showMarkers()
     }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {
+        selectedLocation = locations[0]
+    }
+}

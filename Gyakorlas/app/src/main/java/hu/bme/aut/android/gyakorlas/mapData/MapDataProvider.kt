@@ -93,6 +93,21 @@ class MapDataProvider private constructor() {
             markers.add(MapMarker(theMagic, 47.5041399741706, 19.057411806181104))
         }
     }
+
+    fun getLocations():ArrayList<String>
+    {
+        val locations = ArrayList<String>()
+        locations.add("All")
+        locations.add("None")
+        for(marker in markers)
+        {
+            if(!locations.contains(marker.place?.location))
+            {
+                marker.place?.location?.let { locations.add(it) }
+            }
+        }
+        return locations
+    }
     /**
      * Get and load the Markers from a dedicated location
      */
@@ -101,7 +116,11 @@ class MapDataProvider private constructor() {
 
         if (selectedLocation == "All") {
             selectedMarkers = markers
-        } else {
+        } else if(selectedLocation == "None")
+        {
+            return selectedMarkers
+        }
+        else {
             for (marker in markers) {
                 if (marker.place?.location == selectedLocation) {
                     selectedMarkers.add(marker)
