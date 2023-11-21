@@ -24,6 +24,8 @@ import kotlinx.serialization.json.JsonBuilder
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonObjectBuilder
+import com.google.gson.JsonParser
+import retrofit2.converter.gson.GsonConverterFactory
 
 class DataAccess {
     companion object
@@ -39,25 +41,35 @@ class DataAccess {
                 //.baseUrl(BuildConfig.NEWS_BASE_URL)
                 .client(client)
                 //.addConverterFactory(ScalarsConverterFactory.create())
-                //.addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 //.addConverterFactory(Json.asConverterFactory("application/json".toMediaType()) )
                 /*.addConverterFactory(
                         Json{ ignoreUnknownKeys = true }.asConverterFactory(
                             "application/json".toMediaType()) )*/
                 .build()
 
-            // Create JSON using JSONObject
+            //Create JSON using JSONObject
             //val jsonObject = JsonObject()
             //jsonObject.put("email", user.email)
             //jsonObject.put("password", user.password)
 
-            val jsonObjectString = Json.encodeToString(user)//encodeToString(jsonObject)
-
+            // Create JSON using JSONObject
+            val jsonObject = JSONObject()
+            jsonObject.put("email", user.email)
+            jsonObject.put("password", user.password)
+            // Convert JSONObject to String
+            val jsonObjectString = jsonObject.toString()
             val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())
+
+
+            //var bodyAsJsonObject = JsonParser.parseString(jsonObject).asJsonObject
+            /*val jsonObjectString = Json.encodeToString(user)//encodeToString(jsonObject)
+
+            val requestBody = jsonObjectString.toRequestBody("application/json".toMediaTypeOrNull())*/
 
             val userAPI = retrofit.create(UserAccessAPI::class.java)
 
-                val userCall = userAPI.loginUser(requestBody)
+                val userCall = userAPI.loginUser(user)
                 userCall.enqueue(object: Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         //Faliure
@@ -95,8 +107,8 @@ data class UserData(
 
 interface UserAccessAPI {
     //@Headers("Content-Type: application/json")
-    @POST("login")
-    fun loginUser(@Body  requestBody: RequestBody): Call<Void>
+    @POST("/api/login")
+    fun loginUser(@Body  user: UserData): Call<Void>
 }
 
 class LoggingInterceptor : Interceptor {
@@ -116,8 +128,8 @@ class LoggingInterceptor : Interceptor {
         val t2 = System.nanoTime()
         Log.d(
             "TAG_HTTP", java.lang.String.format(
-                "Received response for %s in %.1fms%n%s",
-                response.request.url, (t2 - t1) / 1e6, response.headers
+                "Received response for %s in %.1fms%n%s%s",
+                response.request.url, (t2 - t1) / 1e6, response.headers,response.body
             )
         )
         return response
