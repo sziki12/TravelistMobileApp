@@ -53,7 +53,6 @@ android {
 }
 
 dependencies {
-
     val retrofit_version = "2.9.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
 
