@@ -41,17 +41,12 @@ class DataAccess {
                 //.baseUrl(BuildConfig.NEWS_BASE_URL)
                 .client(client)
                 //.addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
+                //.addConverterFactory(GsonConverterFactory.create())
                 //.addConverterFactory(Json.asConverterFactory("application/json".toMediaType()) )
                 /*.addConverterFactory(
                         Json{ ignoreUnknownKeys = true }.asConverterFactory(
                             "application/json".toMediaType()) )*/
                 .build()
-
-            //Create JSON using JSONObject
-            //val jsonObject = JsonObject()
-            //jsonObject.put("email", user.email)
-            //jsonObject.put("password", user.password)
 
             // Create JSON using JSONObject
             val jsonObject = JSONObject()
@@ -69,7 +64,7 @@ class DataAccess {
 
             val userAPI = retrofit.create(UserAccessAPI::class.java)
 
-                val userCall = userAPI.loginUser(user)
+                val userCall = userAPI.loginUser(requestBody)
                 userCall.enqueue(object: Callback<Void> {
                     override fun onFailure(call: Call<Void>, t: Throwable) {
                         //Faliure
@@ -108,7 +103,7 @@ data class UserData(
 interface UserAccessAPI {
     //@Headers("Content-Type: application/json")
     @POST("/api/login")
-    fun loginUser(@Body  user: UserData): Call<Void>
+    fun loginUser(@Body  requestBody: RequestBody): Call<Void>
 }
 
 class LoggingInterceptor : Interceptor {
@@ -129,7 +124,7 @@ class LoggingInterceptor : Interceptor {
         Log.d(
             "TAG_HTTP", java.lang.String.format(
                 "Received response for %s in %.1fms%n%s%s",
-                response.request.url, (t2 - t1) / 1e6, response.headers,response.body
+                response.request.url, (t2 - t1) / 1e6, response.headers,response.message
             )
         )
         return response
