@@ -39,7 +39,7 @@ class LoginFragment : Fragment() {
             else {
                 val username = binding.etUsername.text.toString()
                 val password = binding.etPassword.text.toString()
-                DataAccess.registerLoginListener(DataAccess.Companion.UserData(username, password),::onSuccess,::onFailure, ::onUserExists)
+                DataAccess.startLoginListener(DataAccess.UserData(username, password),::onSuccess,::onFailure, ::onUserNotExists)
             }
         }
 
@@ -59,7 +59,7 @@ class LoginFragment : Fragment() {
         Log.i("Retrofit","OnSuccess")
     }
 
-    private fun onUserExists()
+    private fun onUserNotExists()
     {
         binding.etUsername.error = "There are no registered users with this email and password"
         Log.i("Retrofit","OnUserNotExists")

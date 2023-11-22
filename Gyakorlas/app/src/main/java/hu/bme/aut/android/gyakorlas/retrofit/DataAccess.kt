@@ -19,41 +19,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.serialization.Serializable
 
 
-class DataAccess {
-    companion object {
-        fun registerLoginListener(
+object DataAccess {
+        fun startLoginListener(
             user: UserData,
             onSuccess: () -> Unit,
             onFailure: (message: String) -> Unit,
-            onWrongUser: () -> Unit
+            onUserNotExists: () -> Unit
         ) {
-
-            val client = OkHttpClient.Builder()
-                .addInterceptor(LoggingInterceptor())
-                .build()
-
-            val retrofit = Retrofit.Builder()
-                .baseUrl("https://travelist-red.vercel.app/")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create()) // Use Gson for JSON conversion
-                .build()
-
-            val userAPI = retrofit.create(UserAccessAPI::class.java)
-
+            val connection = Connection()
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val response = userAPI.loginUser(user)
+                    val response = connection.userAPI.loginUser(user)
 
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful) {
                             onSuccess.invoke() // Invoke success callback
                             val responseBody = response.body() // Access the response body here
                             // Process responseBody as needed
-                            //Log.i("Retrofit",JsonParser().parse(responseBody.toString()).toString())
-
                         }else if(response.code()==400)
                         {
-                            onWrongUser()
+                            onUserNotExists()
                         } else {
                             onFailure.invoke("Request failed with code: ${response.code()}")
                             Log.i("Retrofit","Request failed with code: ${response.code()}")
@@ -66,6 +51,50 @@ class DataAccess {
             }
         }
 
+    fun startRegistrationListener( user: UserData,
+                                   onSuccess: () -> Unit,
+                                   onFailure: (message: String) -> Unit,
+                                   onUserExists: () -> Unit)
+    {
+        val connection = Connection()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = connection.userAPI.registerUser(user)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        onSuccess.invoke() // Invoke success callback
+                        val responseBody = response.body() // Access the response body here
+                        // Process responseBody as needed
+                    }else if(response.code()==400)
+                    {
+                        onUserExists()
+                    } else {
+                        onFailure.invoke("Request failed with code: ${response.code()}")
+                        Log.i("Retrofit","Request failed with code: ${response.code()}")
+                    }
+                }
+            } catch (e: Exception) {
+                onFailure.invoke("Request failed: ${e.message}")
+                Log.i("Retrofit","Request failed: ${e.message}")
+            }
+        }
+    }
+        class Connection
+        {
+            val client = OkHttpClient.Builder()
+                .addInterceptor(LoggingInterceptor())
+                .build()
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl("https://travelist-red.vercel.app/")
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create()) // Use Gson for JSON conversion
+                .build()
+
+            val userAPI = retrofit.create(UserAccessAPI::class.java)
+        }
+
         @Serializable
         data class UserData(
             val email: String,
@@ -76,6 +105,8 @@ class DataAccess {
             //@Headers("Content-Type: application/json")
             @POST("/api/login")
             suspend fun loginUser(@Body requestBody: UserData): Response<ResponseBody>
+            @POST("/api/registration")
+            suspend fun registerUser(@Body requestBody: UserData): Response<ResponseBody>
         }
 
         class LoggingInterceptor : Interceptor {
@@ -114,4 +145,3 @@ class DataAccess {
             }
         }
     }
-}
