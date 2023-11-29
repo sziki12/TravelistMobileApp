@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas.recyclerView
+package hu.bme.aut.android.gyakorlas.placeRecyclerView
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView.*
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.fragments.RecommendedFragmentDirections
-import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import java.lang.Integer.min

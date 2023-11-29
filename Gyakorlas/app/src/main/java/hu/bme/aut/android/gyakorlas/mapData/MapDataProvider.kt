@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
+import hu.bme.aut.android.gyakorlas.comment.Comment
 
 
 class MapDataProvider private constructor() {
@@ -51,7 +52,7 @@ class MapDataProvider private constructor() {
     }
     fun initMarkers(activity: Activity) {
         if (markers.isEmpty()) {
-            val barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest","",4.5f,200)
+            val barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest","",4.5f,1)
             barCraftNyugati.description =
                 "Service options: Dine-in · No takeaway · No delivery\n" +
                         "Address: Budapest, Bajcsy-Zsilinszky út 59, 1065\n" +
@@ -91,6 +92,18 @@ class MapDataProvider private constructor() {
 
             val theMagic = PlaceData("The MAGIC Budapest", "Budapest")
             markers.add(MapMarker(theMagic, 47.5041399741706, 19.057411806181104))
+
+
+
+            val comment1 = Comment("User 1","Description",5f)
+            barCraftNyugati.addComment(comment1)
+
+            val comment2 = Comment("User 2","Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                    "Phasellus mi mauris, volutpat id laoreet ac, ornare eget sem. Ut eros turpis, blandit vitae felis ac, " +
+                    "tempor imperdiet quam. Duis sed orci vitae est mollis imperdiet. Proin in blandit quam, non cursus ligula." +
+                    " Vivamus bibendum condimentum nisl in tempus. Sed maximus pellentesque nisi, suscipit tempus nisl porttitor" +
+                    " posuere. Vivamus vitae nulla tempus, maximus dolor ac, placerat nunc",2f)
+            barCraftNyugati.addComment(comment2)
         }
     }
 

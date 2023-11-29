@@ -1,0 +1,42 @@
+package hu.bme.aut.android.gyakorlas.comment
+
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import hu.bme.aut.android.gyakorlas.databinding.CommentRowBinding
+
+class CommentsAdapter(private var comments:ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
+
+    inner class CommentsViewHolder(val binding: CommentRowBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentsViewHolder {
+        return CommentsViewHolder(
+            CommentRowBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun getItemCount(): Int {
+        return comments.size
+    }
+
+    override fun onBindViewHolder(holder: CommentsViewHolder, position: Int) {
+        val binding = holder.binding
+        val selectedComment = comments[position]
+        binding.commentRating.rating = selectedComment.rating
+        binding.commentText.text = selectedComment.description
+        binding.commentTitle.text = selectedComment.title
+    }
+
+    fun update(comments:ArrayList<Comment>)
+    {
+        this.comments = comments
+        Log.i("Comments","Comments Size Adapter: ${comments.size}")
+        this.notifyDataSetChanged()
+    }
+}

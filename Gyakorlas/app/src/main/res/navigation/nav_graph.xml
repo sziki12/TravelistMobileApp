@@ -92,6 +92,9 @@
         <action
             android:id="@+id/action_placeFragment_to_imageViewFragment"
             app:destination="@id/imageViewFragment" />
+        <action
+            android:id="@+id/action_placeFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
     </fragment>
     <fragment
         android:id="@+id/imageViewFragment"
@@ -143,5 +146,17 @@
         <action
             android:id="@+id/action_trackOthersFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.CommentsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comments" >
+        <action
+            android:id="@+id/action_commentsFragment_to_placeFragment"
+            app:destination="@id/placeFragment" />
+        <argument
+            android:name="markerID"
+            app:argType="integer" />
     </fragment>
 </navigation>

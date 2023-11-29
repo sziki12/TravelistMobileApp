@@ -14,9 +14,8 @@ import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRecommendedBinding
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.GeofenceHandler
-import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
-import hu.bme.aut.android.gyakorlas.recyclerView.PlaceAdapter
+import hu.bme.aut.android.gyakorlas.placeRecyclerView.PlaceAdapter
 import kotlin.concurrent.thread
 
 class RecommendedFragment : Fragment(),LocationService.LocationChangeListener, GeofenceRadiusListener,GeofenceHandler.GeofenceChangeListener {

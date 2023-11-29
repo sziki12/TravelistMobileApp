@@ -33,10 +33,24 @@ class PlaceFragment : Fragment() {
         markerID = args.markerID
         place = mapDataProvider.getMarkerByID(markerID).place
 
+        binding.placeCommentsButton.setOnClickListener()
+        {
+            val action =
+                PlaceFragmentDirections.actionPlaceFragmentToCommentsFragment(
+                    markerID
+                )
+            findNavController().navigate(action)
+        }
         binding.tvName.text = place?.name ?: ""
         binding.tvDescription.text = place?.description ?: ""
 
-        var images:ArrayList<ImageButton> = ArrayList()
+        binding.placeRating.setIsIndicator(true)
+        binding.placeRating.stepSize = 0.5f
+        binding.placeRating.rating = place!!.rating
+        Log.i("Place","Rating: ${place?.rating}")
+        Log.i("Place","Rating: ${binding.placeRating.rating}")
+
+        val images:ArrayList<ImageButton> = ArrayList()
         images.add(binding.pictureButton1)
         images.add(binding.pictureButton2)
         images.add(binding.pictureButton3)
@@ -45,7 +59,7 @@ class PlaceFragment : Fragment() {
         {
             //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft02.jpg"), null))
             //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft03.jpg"), null))
-            var size = Math.min(3, place!!.images.size)
+            val size = Math.min(3, place!!.images.size)
             Log.i("IMAGES",size.toString())
 
             for(i in 0 until size)
