@@ -1,4 +1,4 @@
-package hu.bme.aut.android.gyakorlas.recyclerView
+package hu.bme.aut.android.gyakorlas.placeRecyclerView
 
 import android.view.View
 import android.widget.Button

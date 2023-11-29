@@ -25,15 +25,15 @@
             android:id="@+id/tvDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="276dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="92dp"
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:textAlignment="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pictureButton2" />
+            app:layout_constraintTop_toBottomOf="@+id/placeCommentsButton" />
 
         <ImageButton
             android:id="@+id/pictureButton1"
@@ -65,6 +65,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pictureButton1"
             app:srcCompat="@drawable/travelistlogo" />
+
+        <RatingBar
+            android:id="@+id/placeRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/pictureButton3"
+            tools:layout_editor_absoluteX="8dp" />
+
+        <Button
+            android:id="@+id/placeDetailesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detailes"
+            app:layout_constraintStart_toStartOf="@+id/tvDescription"
+            app:layout_constraintTop_toBottomOf="@+id/placeRating" />
+
+        <Button
+            android:id="@+id/placeCommentsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comments"
+            app:layout_constraintStart_toEndOf="@+id/placeDetailesButton"
+            app:layout_constraintTop_toBottomOf="@+id/placeRating" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

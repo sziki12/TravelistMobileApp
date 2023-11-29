@@ -33,6 +33,14 @@ class PlaceFragment : Fragment() {
         markerID = args.markerID
         place = mapDataProvider.getMarkerByID(markerID).place
 
+        binding.placeCommentsButton.setOnClickListener()
+        {
+            val action =
+                PlaceFragmentDirections.actionPlaceFragmentToCommentsFragment(
+                    markerID
+                )
+            findNavController().navigate(action)
+        }
         binding.tvName.text = place?.name ?: ""
         binding.tvDescription.text = place?.description ?: ""
 
