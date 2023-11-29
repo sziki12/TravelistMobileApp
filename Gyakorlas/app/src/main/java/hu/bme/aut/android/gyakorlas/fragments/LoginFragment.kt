@@ -45,10 +45,11 @@ class LoginFragment : Fragment() {
                 binding.etPassword.error = "Please enter your password"
             }
             else {
-                if (saveUser) {
+                //mindenkeppen elmented
+                //if (saveUser) {
                     val email = binding.etUsername.text.toString()
                     saveLastEmail(email)
-                }
+                //}
 
                 findNavController().navigate(R.id.action_loginFragment_to_menuFragment)
             }

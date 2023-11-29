@@ -78,8 +78,9 @@ class SignUpFragment : Fragment() {
             requireActivity().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
 
         sharedPreferences.edit {
-            putString(emailKey, email)
-            putString(usernameKey, username)
+//            putString(emailKey, email)
+//            putString(usernameKey, username)
+            putString(email, username)
             apply()
         }
 
