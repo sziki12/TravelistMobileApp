@@ -131,6 +131,7 @@ object DataAccess {
         @Serializable
         data class PlaceData(
             val name: String,
+            val location: String,
             val latitude: String,
             val longitude: String,
             val description: String,

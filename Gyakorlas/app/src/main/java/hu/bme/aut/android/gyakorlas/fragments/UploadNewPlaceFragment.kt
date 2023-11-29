@@ -80,6 +80,10 @@ class UploadNewPlaceFragment : Fragment() {
                 binding.etPlaceName.requestFocus()
                 binding.etPlaceName.error = "Please enter the name of the place"
             }
+            else if (binding.etCityName.text.toString().isEmpty()){
+                binding.etCityName.requestFocus()
+                binding.etCityName.error = "Please enter the name of the city"
+            }
             else if (binding.etLatitude.text.toString().isEmpty()){
                 binding.etLatitude.requestFocus()
                 binding.etLatitude.error = "Please enter the latitude coordinate"
@@ -98,11 +102,12 @@ class UploadNewPlaceFragment : Fragment() {
             }
             else {
                 val name = binding.etPlaceName.text.toString()
+                val location = binding.etCityName.text.toString()
                 val latitude = binding.etLatitude.text.toString()
                 val longitude = binding.etLongitude.text.toString()
                 val description = binding.etDescription.text.toString()
                 val rating = binding.simpleRatingBar.rating.toString()
-                val place = DataAccess.PlaceData(name, latitude, longitude, description, rating)
+                val place = DataAccess.PlaceData(name, location, latitude, longitude, description, rating)
 
                 DataAccess.startUploadNewPlaceListener(place, ::onSuccess, ::onFailure)
             }
