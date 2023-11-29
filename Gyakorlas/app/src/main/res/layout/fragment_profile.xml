@@ -42,8 +42,9 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <ImageView
+        android:id="@+id/ivProfilePicture"
         android:layout_width="164dp"
-        android:layout_height="157dp"
+        android:layout_height="164dp"
         android:src="@drawable/profilepicture"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
