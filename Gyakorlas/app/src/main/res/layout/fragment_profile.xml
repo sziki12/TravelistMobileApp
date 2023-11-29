@@ -63,10 +63,10 @@
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/etUsername"
         android:layout_width="317dp"
         android:layout_height="49dp"
-        android:text="@string/profile_name"
+        tools:text="@string/profile_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
         app:layout_constraintHorizontal_bias="0.49"
