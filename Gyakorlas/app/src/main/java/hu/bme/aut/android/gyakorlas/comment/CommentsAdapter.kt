@@ -1,11 +1,12 @@
 package hu.bme.aut.android.gyakorlas.comment
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.gyakorlas.databinding.CommentRowBinding
 
-class CommentsAdapter(var comments:ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
+class CommentsAdapter(private var comments:ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
     inner class CommentsViewHolder(val binding: CommentRowBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -30,5 +31,12 @@ class CommentsAdapter(var comments:ArrayList<Comment>): RecyclerView.Adapter<Com
         binding.commentRating.rating = selectedComment.rating
         binding.commentText.text = selectedComment.description
         binding.commentTitle.text = selectedComment.title
+    }
+
+    fun update(comments:ArrayList<Comment>)
+    {
+        this.comments = comments
+        Log.i("Comments","Comments Size Adapter: ${comments.size}")
+        this.notifyDataSetChanged()
     }
 }

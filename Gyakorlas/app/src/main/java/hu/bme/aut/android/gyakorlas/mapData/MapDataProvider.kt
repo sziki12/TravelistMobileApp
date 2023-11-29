@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
+import hu.bme.aut.android.gyakorlas.comment.Comment
 
 
 class MapDataProvider private constructor() {
@@ -91,6 +92,11 @@ class MapDataProvider private constructor() {
 
             val theMagic = PlaceData("The MAGIC Budapest", "Budapest")
             markers.add(MapMarker(theMagic, 47.5041399741706, 19.057411806181104))
+
+
+
+            val comment = Comment("Title","Description",5f)
+            barCraftNyugati.addComment(comment)
         }
     }
 

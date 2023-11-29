@@ -1,6 +1,7 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -50,9 +51,19 @@ class CommentsFragment : Fragment() {
         }
 
         binding.newCommentButton.setOnClickListener(){
-            NewCommentDialog(markerID).show(
+            NewCommentDialog(markerID,::refreshRecyclerView).show(
                 this.parentFragmentManager,
                 NewCommentDialog.TAG
             )}
         }
+
+    private fun refreshRecyclerView()
+    {
+        mapDataProvider.getMarkerByID(markerID).place?.comments?.let {
+            (binding.commentsRecyclerView.adapter as CommentsAdapter).update(
+                it
+            )
+            Log.i("Comments","refreshRecyclerView()")
+        }
+    }
     }
