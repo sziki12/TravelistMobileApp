@@ -45,7 +45,9 @@ class PlaceFragment : Fragment() {
         binding.tvDescription.text = place?.description ?: ""
 
         binding.placeRating.setIsIndicator(true)
+        binding.placeRating.stepSize = 0.5f
         binding.placeRating.rating = place!!.rating
+        Log.i("Place","Rating: ${place?.rating}")
         Log.i("Place","Rating: ${binding.placeRating.rating}")
 
         val images:ArrayList<ImageButton> = ArrayList()

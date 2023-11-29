@@ -18,7 +18,7 @@ import kotlin.concurrent.thread
 
 class NewCommentDialog(val markerID :Int,val successCallback:()->Unit) : DialogFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding:DialogNewCommentBinding
-    private var selectedIndex = 0;
+    private var selectedIndex = 0
     private val mapDataProvider = MapDataProvider.instance
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
     binding = DialogNewCommentBinding.inflate(LayoutInflater.from(context))
@@ -27,9 +27,11 @@ class NewCommentDialog(val markerID :Int,val successCallback:()->Unit) : DialogF
     .setTitle("New Comment")
     .setView(binding.root)
     .setPositiveButton("Ok") { dialogInterface, i ->
-        if(binding.editTextComment.text.isNotEmpty()&&binding.newCommentRating.rating.isFinite())
+        if(binding.newCommentRating.rating.isFinite())
         {
-            val comment = binding.editTextComment.text.toString()
+            var comment = ""
+            if(binding.editTextComment.text.isNotEmpty())
+                comment = binding.editTextComment.text.toString()
             val rating = binding.newCommentRating.rating
             thread {
                 val place = mapDataProvider.getMarkerByID(markerID).place
@@ -44,7 +46,7 @@ class NewCommentDialog(val markerID :Int,val successCallback:()->Unit) : DialogF
             }
         }
         else{
-            Toast.makeText(context,"Name is Empty, not registered", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"Rating is not valid", Toast.LENGTH_SHORT).show()
         }
     }
     .setNegativeButton("Cancel", null)

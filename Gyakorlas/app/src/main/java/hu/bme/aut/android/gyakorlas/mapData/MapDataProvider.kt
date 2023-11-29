@@ -52,7 +52,7 @@ class MapDataProvider private constructor() {
     }
     fun initMarkers(activity: Activity) {
         if (markers.isEmpty()) {
-            val barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest","",4.5f,200)
+            val barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest","",4.5f,1)
             barCraftNyugati.description =
                 "Service options: Dine-in · No takeaway · No delivery\n" +
                         "Address: Budapest, Bajcsy-Zsilinszky út 59, 1065\n" +

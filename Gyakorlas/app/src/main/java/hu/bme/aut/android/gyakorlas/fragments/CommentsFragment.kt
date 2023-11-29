@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.comment.CommentsAdapter
 import hu.bme.aut.android.gyakorlas.comment.NewCommentDialog
@@ -40,6 +41,7 @@ class CommentsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val marker = mapDataProvider.getMarkerByID(markerID)
         binding.commentsFragmentTitle.text = marker.name
+        binding.commentsRecyclerView.layoutManager = LinearLayoutManager(this.activity)
         binding.commentsRecyclerView.adapter = marker.place?.comments?.let { CommentsAdapter(it) }
         binding.commentDetailesButton.setOnClickListener()
         {
