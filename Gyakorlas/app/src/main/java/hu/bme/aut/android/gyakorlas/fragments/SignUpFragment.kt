@@ -1,16 +1,22 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.edit
 import androidx.navigation.fragment.findNavController
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentSignUpBinding
 
 class SignUpFragment : Fragment() {
     private lateinit var binding : FragmentSignUpBinding
+    private val sharedPreferencesName = "user_data"
+    private val emailKey = "email"
+    private val usernameKey = "username"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +60,7 @@ class SignUpFragment : Fragment() {
                 binding.etConfirmPassword.error = "Passwords not matching!"
             }
             else {
+                saveUserData()
                 findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
             }
         }
@@ -61,5 +68,21 @@ class SignUpFragment : Fragment() {
         {
             findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
         }
+    }
+
+    private fun saveUserData() {
+        val email = binding.etEmail.text.toString()
+        val username = binding.etUsername.text.toString()
+
+        val sharedPreferences =
+            requireActivity().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
+
+        sharedPreferences.edit {
+            putString(emailKey, email)
+            putString(usernameKey, username)
+            apply()
+        }
+
+        Toast.makeText(requireContext(), "Data saved", Toast.LENGTH_LONG).show()
     }
 }
