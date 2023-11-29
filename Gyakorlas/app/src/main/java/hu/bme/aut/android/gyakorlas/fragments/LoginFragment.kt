@@ -28,18 +28,18 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnLogin.setOnClickListener {
-            if (binding.etUsername.text.toString().isEmpty()){
-                binding.etUsername.requestFocus()
-                binding.etUsername.error = "Please enter your username"
+            if (binding.etEmail.text.toString().isEmpty()){
+                binding.etEmail.requestFocus()
+                binding.etEmail.error = "Please enter your email address"
             }
             else if (binding.etPassword.text.toString().isEmpty()) {
                 binding.etPassword.requestFocus()
                 binding.etPassword.error = "Please enter your password"
             }
             else {
-                val username = binding.etUsername.text.toString()
+                val email = binding.etEmail.text.toString()
                 val password = binding.etPassword.text.toString()
-                DataAccess.startLoginListener(DataAccess.UserData(username, password),::onSuccess,::onFailure, ::onUserNotExists)
+                DataAccess.startLoginListener(DataAccess.UserData(email, password),::onSuccess,::onFailure, ::onUserNotExists)
             }
         }
 
@@ -61,7 +61,7 @@ class LoginFragment : Fragment() {
 
     private fun onUserNotExists()
     {
-        binding.etUsername.error = "There are no registered users with this email and password"
+        binding.etEmail.error = "There are no registered users with this email and password"
         Log.i("Retrofit","OnUserNotExists")
     }
 }

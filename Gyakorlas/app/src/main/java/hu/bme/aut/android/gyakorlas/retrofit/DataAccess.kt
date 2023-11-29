@@ -80,6 +80,33 @@ object DataAccess {
             }
         }
     }
+
+    fun startUploadNewPlaceListener( place: PlaceData,
+                                     onSuccess: () -> Unit,
+                                     onFailure: (message: String) -> Unit)
+    {
+        val connection = Connection()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = connection.userAPI.uploadNewPlace(place)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        onSuccess.invoke() // Invoke success callback
+                        val responseBody = response.body() // Access the response body here
+                        // Process responseBody as needed
+                    } else {
+                        onFailure.invoke("Request failed with code: ${response.code()}")
+                        Log.i("Retrofit","Request failed with code: ${response.code()}")
+                    }
+                }
+            } catch (e: Exception) {
+                onFailure.invoke("Request failed: ${e.message}")
+                Log.i("Retrofit","Request failed: ${e.message}")
+            }
+        }
+    }
+
         class Connection
         {
             val client = OkHttpClient.Builder()
@@ -101,12 +128,23 @@ object DataAccess {
             val password: String
         )
 
+        @Serializable
+        data class PlaceData(
+            val name: String,
+            val latitude: String,
+            val longitude: String,
+            val description: String,
+            val rating: String
+        )
+
         interface UserAccessAPI {
             //@Headers("Content-Type: application/json")
             @POST("/api/login")
             suspend fun loginUser(@Body requestBody: UserData): Response<ResponseBody>
             @POST("/api/registration")
             suspend fun registerUser(@Body requestBody: UserData): Response<ResponseBody>
+            @POST("/api/uploadnewplace")
+            suspend fun uploadNewPlace(@Body requestBody: PlaceData): Response<ResponseBody>
         }
 
         class LoggingInterceptor : Interceptor {

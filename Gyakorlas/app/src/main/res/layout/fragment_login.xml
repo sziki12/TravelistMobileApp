@@ -18,14 +18,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/username"
+        android:text="@string/email_address"
         android:textSize="18dp"/>
 
     <EditText
-        android:id="@+id/etUsername"
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username"/>
+        android:inputType="textEmailAddress"
+        android:hint="@string/email_address"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -38,6 +39,7 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textPassword"
         android:hint="@string/password"/>
 
 
