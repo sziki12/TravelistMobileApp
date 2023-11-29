@@ -15,8 +15,6 @@ import hu.bme.aut.android.gyakorlas.databinding.FragmentSignUpBinding
 class SignUpFragment : Fragment() {
     private lateinit var binding : FragmentSignUpBinding
     private val sharedPreferencesName = "user_data"
-    private val emailKey = "email"
-    private val usernameKey = "username"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,12 +76,8 @@ class SignUpFragment : Fragment() {
             requireActivity().getSharedPreferences(sharedPreferencesName, Context.MODE_PRIVATE)
 
         sharedPreferences.edit {
-//            putString(emailKey, email)
-//            putString(usernameKey, username)
             putString(email, username)
             apply()
         }
-
-        Toast.makeText(requireContext(), "Data saved", Toast.LENGTH_LONG).show()
     }
 }

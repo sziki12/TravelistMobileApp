@@ -33,7 +33,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val sharedPreferences = requireActivity().getSharedPreferences("user_data", Context.MODE_PRIVATE)
         val lastSavedEmailSP = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val lastSavedEmail = lastSavedEmailSP.getString("lastSavedEmail", "")
         Log.i("LASTSAVEDEMAIL", lastSavedEmail.toString())
