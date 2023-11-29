@@ -95,8 +95,15 @@ class MapDataProvider private constructor() {
 
 
 
-            val comment = Comment("Title","Description",5f)
-            barCraftNyugati.addComment(comment)
+            val comment1 = Comment("User 1","Description",5f)
+            barCraftNyugati.addComment(comment1)
+
+            val comment2 = Comment("User 2","Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                    "Phasellus mi mauris, volutpat id laoreet ac, ornare eget sem. Ut eros turpis, blandit vitae felis ac, " +
+                    "tempor imperdiet quam. Duis sed orci vitae est mollis imperdiet. Proin in blandit quam, non cursus ligula." +
+                    " Vivamus bibendum condimentum nisl in tempus. Sed maximus pellentesque nisi, suscipit tempus nisl porttitor" +
+                    " posuere. Vivamus vitae nulla tempus, maximus dolor ac, placerat nunc",2f)
+            barCraftNyugati.addComment(comment2)
         }
     }
 
