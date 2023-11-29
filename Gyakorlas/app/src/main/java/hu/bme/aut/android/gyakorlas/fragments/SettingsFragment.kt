@@ -57,7 +57,19 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
             }
         }
 
+        if (s == "saveUser") {
+            val saveUser = preference.getBoolean("saveUser", false)
+            saveUserPreference(saveUser)
+        }
+
         notifyListeners(preference,s)
+    }
+
+    private fun saveUserPreference(saveUser: Boolean) {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("saveUser", saveUser)
+        editor.apply()
     }
 
     private fun notifyListeners(preference: SharedPreferences?, s: String?)
