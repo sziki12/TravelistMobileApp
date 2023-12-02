@@ -13,18 +13,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9bf591d-c619-4982-a342-41e1efba38e5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/HelpMessage.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/HelpMessagesAdapter.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/RequestHelpDialogFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/RequestHelpListener.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/border_help_message.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/dialog_request_help.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/help_message.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/navEditor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/navEditor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/RequestHelpFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/RequestHelpFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_request_help.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_request_help.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/border_help_message.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/border_help_message.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/drawable/requesthelp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/requesthelp.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
