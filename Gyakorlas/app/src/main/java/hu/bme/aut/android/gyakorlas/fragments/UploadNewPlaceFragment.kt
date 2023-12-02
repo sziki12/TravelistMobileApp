@@ -20,7 +20,9 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
@@ -35,6 +37,7 @@ class UploadNewPlaceFragment : Fragment() {
     var SELECT_PICTURE = 200
     var REQUEST_IMAGE_CAPTURE = 300
     private var imageUri: Uri? = null
+    private val args : UploadNewPlaceFragmentArgs by navArgs()
 
     private lateinit var imageContainer: LinearLayout
     private val imageViews = mutableListOf<ImageView>()
@@ -61,6 +64,12 @@ class UploadNewPlaceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val location = args.location
+        if(location!=null)
+        {
+            binding.etLatitude.setText(location.latitude.toString())
+            binding.etLongitude.setText(location.longitude.toString())
+        }
 //        binding.fabAdd.setOnClickListener(){
 //            this.activity?.let {
 //                PermissionHandler.requestPermission(
@@ -120,6 +129,12 @@ class UploadNewPlaceFragment : Fragment() {
 
         binding.imgbtnMenu.setOnClickListener(){
             findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
+        }
+
+        binding.btnSelectLocation.setOnClickListener()
+        {
+            val action = UploadNewPlaceFragmentDirections.actionUploadNewPlaceFragmentToSelectLocationMapFragment()
+            NavHostFragment.findNavController(this as Fragment).navigate(action)
         }
 
     }

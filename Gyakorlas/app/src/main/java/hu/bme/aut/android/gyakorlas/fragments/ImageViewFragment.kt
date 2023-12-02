@@ -33,7 +33,7 @@ class ImageViewFragment : Fragment() {
         binding = FragmentImageViewBinding.inflate(inflater, container, false)
 
         place = mapDataProvider.getMarkerByID(args.markerID).place
-        var index = args.index
+        val index = args.index
 
         Log.i("IMAGES","selected Index: $index")
 

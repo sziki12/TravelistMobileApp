@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentMenuBinding
@@ -38,7 +39,8 @@ class MenuFragment : Fragment() {
             findNavController().navigate(R.id.action_menuFragment_to_recommendedFragment)
         }
         binding.btnUploadNewPlace.setOnClickListener {
-            findNavController().navigate(R.id.action_menuFragment_to_uploadNewPlaceFragment)
+            val action = MenuFragmentDirections.actionMenuFragmentToUploadNewPlaceFragment(null)
+            NavHostFragment.findNavController(this as Fragment).navigate(action)
         }
 
         binding.btnRequestHelp.setOnClickListener {

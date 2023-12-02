@@ -125,6 +125,13 @@
         <action
             android:id="@+id/action_uploadNewPlaceFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_uploadNewPlaceFragment_to_selectLocationMapFragment"
+            app:destination="@id/selectLocationMapFragment" />
+        <argument
+            android:name="Location"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/requestHelpFragment"
@@ -158,5 +165,13 @@
         <argument
             android:name="markerID"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectLocationMapFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.SelectLocationMapFragment"
+        android:label="SelectLocationMapFragment" >
+        <action
+            android:id="@+id/action_selectLocationMapFragment_to_uploadNewPlaceFragment"
+            app:destination="@id/uploadNewPlaceFragment" />
     </fragment>
 </navigation>
