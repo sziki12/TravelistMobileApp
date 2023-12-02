@@ -17,11 +17,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
+import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 import java.security.Permission
 
 
@@ -49,7 +51,6 @@ class UploadNewPlaceFragment : Fragment() {
         imageContainer = binding.llImageViews
 
         binding.fabAdd.setOnClickListener(){
-            Log.i("BUTTON", "clicklistener")
             showPopupWindow(binding.fabAdd)
         }
         return binding.root;
@@ -74,12 +75,48 @@ class UploadNewPlaceFragment : Fragment() {
 //        }
 
 
-        binding.btnSave.setOnClickListener(){
-            findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
+        binding.btnSave.setOnClickListener {
+            if (binding.etPlaceName.text.toString().isEmpty()){
+                binding.etPlaceName.requestFocus()
+                binding.etPlaceName.error = "Please enter the name of the place"
+            }
+            else if (binding.etCityName.text.toString().isEmpty()){
+                binding.etCityName.requestFocus()
+                binding.etCityName.error = "Please enter the name of the city"
+            }
+            else if (binding.etLatitude.text.toString().isEmpty()){
+                binding.etLatitude.requestFocus()
+                binding.etLatitude.error = "Please enter the latitude coordinate"
+            }
+            else if (binding.etLongitude.text.toString().isEmpty()){
+                binding.etLongitude.requestFocus()
+                binding.etLongitude.error = "Please enter the longitude coordinate"
+            }
+            else if (binding.etLatitude.text.toString().toDouble() > 90 || binding.etLatitude.text.toString().toDouble() < -90){
+                binding.etLatitude.requestFocus()
+                binding.etLatitude.error = "Latitude coordinate must be between -90° and 90°"
+            }
+            else if (binding.etLongitude.text.toString().toDouble() > 180 || binding.etLongitude.text.toString().toDouble() < -180){
+                binding.etLongitude.requestFocus()
+                binding.etLongitude.error = "Longitude coordinate must be between -180° and 180°"
+            }
+            else {
+                val name = binding.etPlaceName.text.toString()
+                val location = binding.etCityName.text.toString()
+                val latitude = binding.etLatitude.text.toString()
+                val longitude = binding.etLongitude.text.toString()
+                val description = binding.etDescription.text.toString()
+                val rating = binding.simpleRatingBar.rating.toString()
+                val place = DataAccess.PlaceData(name, location, latitude, longitude, description, rating)
+
+                DataAccess.startUploadNewPlaceListener(place, ::onSuccess, ::onFailure)
+            }
         }
+
         binding.btnCancel.setOnClickListener(){
             findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
         }
+
         binding.imgbtnMenu.setOnClickListener(){
             findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
         }
@@ -166,4 +203,14 @@ class UploadNewPlaceFragment : Fragment() {
         imageViews.add(newImageView)
     }
 
+    private fun onFailure(message:String)
+    {
+        Toast.makeText(requireContext(),message, Toast.LENGTH_LONG).show()
+        Log.i("Retrofit","OnFailure")
+    }
+    private fun onSuccess()
+    {
+        findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
+        Log.i("Retrofit","OnSuccess")
+    }
 }

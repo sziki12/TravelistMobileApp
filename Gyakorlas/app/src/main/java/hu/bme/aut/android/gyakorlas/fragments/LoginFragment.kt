@@ -2,14 +2,17 @@ package hu.bme.aut.android.gyakorlas.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentLoginBinding
+import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
@@ -36,9 +39,9 @@ class LoginFragment : Fragment() {
         }
 
         binding.btnLogin.setOnClickListener {
-            if (binding.etUsername.text.toString().isEmpty()){
-                binding.etUsername.requestFocus()
-                binding.etUsername.error = "Please enter your username"
+            if (binding.etEmail.text.toString().isEmpty()){
+                binding.etEmail.requestFocus()
+                binding.etEmail.error = "Please enter your email address"
             }
             else if (binding.etPassword.text.toString().isEmpty()) {
                 binding.etPassword.requestFocus()
@@ -47,8 +50,9 @@ class LoginFragment : Fragment() {
             else {
                 val email = binding.etUsername.text.toString()
                 saveLastEmail(email)
-
-                findNavController().navigate(R.id.action_loginFragment_to_menuFragment)
+                val email = binding.etEmail.text.toString()
+                val password = binding.etPassword.text.toString()
+                DataAccess.startLoginListener(DataAccess.UserData(email, password),::onSuccess,::onFailure, ::onUserNotExists)
             }
         }
 
@@ -61,5 +65,21 @@ class LoginFragment : Fragment() {
         val editor = sharedPreferences.edit()
         editor.putString("lastSavedEmail", email)
         editor.apply()
+    }
+    private fun onFailure(message:String)
+    {
+        Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
+        Log.i("Retrofit","OnFailure")
+    }
+    private fun onSuccess()
+    {
+        findNavController().navigate(R.id.action_loginFragment_to_menuFragment)
+        Log.i("Retrofit","OnSuccess")
+    }
+
+    private fun onUserNotExists()
+    {
+        binding.etEmail.error = "There are no registered users with this email and password"
+        Log.i("Retrofit","OnUserNotExists")
     }
 }

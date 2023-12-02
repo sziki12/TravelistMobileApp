@@ -2,6 +2,7 @@ package hu.bme.aut.android.gyakorlas.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.core.content.edit
 import androidx.navigation.fragment.findNavController
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentSignUpBinding
+import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 class SignUpFragment : Fragment() {
     private lateinit var binding : FragmentSignUpBinding
@@ -59,7 +61,10 @@ class SignUpFragment : Fragment() {
             }
             else {
                 saveUserData()
-                findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+                val email = binding.etEmail.text.toString()
+                val password = binding.etPassword.text.toString()
+                val user = DataAccess.UserData(email,password)
+                DataAccess.startRegistrationListener(user,::onSuccess,::onFailure,::onUserExists)
             }
         }
         binding.imgbtnArrowBack.setOnClickListener()
@@ -79,5 +84,21 @@ class SignUpFragment : Fragment() {
             putString(email, username)
             apply()
         }
+    }
+    private fun onFailure(message:String)
+    {
+        Toast.makeText(requireContext(),message, Toast.LENGTH_LONG).show()
+        Log.i("Retrofit","OnFailure")
+    }
+    private fun onSuccess()
+    {
+        findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
+        Log.i("Retrofit","OnSuccess")
+    }
+
+    private fun onUserExists()
+    {
+        binding.etUsername.error = "There is already a registered user with this email and password"
+        Log.i("Retrofit","OnUserNotExists")
     }
 }

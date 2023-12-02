@@ -42,12 +42,33 @@
         android:textSize="14sp" />
 
     <EditText
-        android:id="@+id/etLocation"
+        android:id="@+id/etCityName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginVertical="15dp"
-        android:hint="  LOCATION"
+        android:hint="  NAME OF THE CITY"
+        android:inputType="text"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/etLatitude"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="15dp"
+        android:inputType="numberDecimal"
+        android:hint="  LATITUDE"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/etLongitude"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="15dp"
+        android:inputType="numberDecimal"
+        android:hint="  LONGITUDE"
         android:textSize="14sp" />
 
     <EditText
