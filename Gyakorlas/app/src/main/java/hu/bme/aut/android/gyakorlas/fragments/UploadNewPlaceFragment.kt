@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.content.pm.PackageManager
+import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -24,6 +25,7 @@ import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
+import java.io.ByteArrayOutputStream
 import java.security.Permission
 
 
@@ -73,7 +75,6 @@ class UploadNewPlaceFragment : Fragment() {
 //                }
 //            }
 //        }
-
 
         binding.btnSave.setOnClickListener {
             if (binding.etPlaceName.text.toString().isEmpty()){

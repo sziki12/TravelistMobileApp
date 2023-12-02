@@ -35,7 +35,7 @@ class LoginFragment : Fragment() {
 
         if (saveUser) {
             val lastSavedEmail = sharedPreferences.getString("lastSavedEmail", "")
-            binding.etUsername.setText(lastSavedEmail)
+            binding.etEmail.setText(lastSavedEmail)
         }
 
         binding.btnLogin.setOnClickListener {
@@ -48,9 +48,8 @@ class LoginFragment : Fragment() {
                 binding.etPassword.error = "Please enter your password"
             }
             else {
-                val email = binding.etUsername.text.toString()
-                saveLastEmail(email)
                 val email = binding.etEmail.text.toString()
+                saveLastEmail(email)
                 val password = binding.etPassword.text.toString()
                 DataAccess.startLoginListener(DataAccess.UserData(email, password),::onSuccess,::onFailure, ::onUserNotExists)
             }
