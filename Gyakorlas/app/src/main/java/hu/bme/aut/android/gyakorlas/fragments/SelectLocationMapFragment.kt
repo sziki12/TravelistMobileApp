@@ -31,7 +31,7 @@ class SelectLocationMapFragment : Fragment() {
     private lateinit var binding: FragmentSelectLocationMapBinding
     private var isInitialized = false
     private var selectedPosition:LatLng? = null
-    private lateinit var marker:MarkerOptions
+    private var marker:MarkerOptions? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,15 +80,18 @@ class SelectLocationMapFragment : Fragment() {
                 .title("Selected Location")
                 .icon(BitmapDescriptorFactory.defaultMarker())
                 .draggable(true)
-            mMap.addMarker(marker)
+            mMap.addMarker(marker!!)
             binding.btnPlaceMarker.isEnabled=false
         }
 
         binding.btnSaveMarker.setOnClickListener()
         {
-            selectedPosition = marker.position
-            val action = SelectLocationMapFragmentDirections.actionSelectLocationMapFragmentToUploadNewPlaceFragment(selectedPosition)
-            NavHostFragment.findNavController(this as Fragment).navigate(action)
+            if(marker!=null)
+            {
+                selectedPosition = marker!!.position
+                val action = SelectLocationMapFragmentDirections.actionSelectLocationMapFragmentToUploadNewPlaceFragment(selectedPosition)
+                NavHostFragment.findNavController(this as Fragment).navigate(action)
+            }
         }
 
         binding.btnDeleteMarker.setOnClickListener()
