@@ -70,20 +70,6 @@ class UploadNewPlaceFragment : Fragment() {
             binding.etLatitude.setText(location.latitude.toString())
             binding.etLongitude.setText(location.longitude.toString())
         }
-//        binding.fabAdd.setOnClickListener(){
-//            this.activity?.let {
-//                PermissionHandler.requestPermission(
-//                    it,
-//                    PermissionHandler.READ_EXTERNAL_STORAGE_REQUEST_CODE,
-//                    {
-//                        startSelectPicture()
-//                        Log.i("PERMISSION", "Access to photos enabled")
-//                    })
-//                {
-//                    Log.i("PERMISSION", "Access to photos disabled")
-//                }
-//            }
-//        }
 
         binding.btnSave.setOnClickListener {
             if (binding.etPlaceName.text.toString().isEmpty()){

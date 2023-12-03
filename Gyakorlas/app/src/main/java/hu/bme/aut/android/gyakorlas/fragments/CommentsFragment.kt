@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,6 +48,10 @@ class CommentsFragment : Fragment() {
         binding.commentsRecyclerView.adapter = marker.place?.comments?.let { CommentsAdapter(it) }
 
         refreshCommentButtons()
+
+        binding.imgbtnMenu.setOnClickListener {
+            NavHostFragment.findNavController(this as Fragment).navigate(R.id.action_commentsFragment_to_menuFragment)
+        }
 
         binding.deleteCommentButton.setOnClickListener()
         {

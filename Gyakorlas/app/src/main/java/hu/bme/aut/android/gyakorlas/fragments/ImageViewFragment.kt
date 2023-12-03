@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.navArgs
+import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentImageViewBinding
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.PlaceData
@@ -31,6 +33,10 @@ class ImageViewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentImageViewBinding.inflate(inflater, container, false)
+
+        binding.imgbtnMenu.setOnClickListener {
+            NavHostFragment.findNavController(this as Fragment).navigate(R.id.action_imageViewFragment_to_menuFragment)
+        }
 
         place = mapDataProvider.getMarkerByID(args.markerID).place
         val index = args.index

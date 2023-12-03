@@ -99,6 +99,9 @@ class SelectLocationMapFragment : Fragment() {
             val action = SelectLocationMapFragmentDirections.actionSelectLocationMapFragmentToUploadNewPlaceFragment(null)
             NavHostFragment.findNavController(this as Fragment).navigate(action)
         }
+        binding.imgbtnMenu.setOnClickListener(){
+            findNavController().navigate(R.id.action_selectLocationMapFragment_to_menuFragment)
+        }
     }
 
     private fun enableGestures() {

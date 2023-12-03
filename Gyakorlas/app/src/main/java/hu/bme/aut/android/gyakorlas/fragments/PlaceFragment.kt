@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentPlaceBinding
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.PlaceData
@@ -29,6 +31,9 @@ class PlaceFragment : Fragment() {
     ): View {
         binding = FragmentPlaceBinding.inflate(inflater, container, false)
 
+        binding.imgbtnMenu.setOnClickListener {
+            NavHostFragment.findNavController(this as Fragment).navigate(R.id.action_placeFragment_to_menuFragment)
+        }
         //receive the arguments in a variable
         markerID = args.markerID
         place = mapDataProvider.getMarkerByID(markerID).place

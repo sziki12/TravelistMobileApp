@@ -95,6 +95,9 @@
         <action
             android:id="@+id/action_placeFragment_to_commentsFragment"
             app:destination="@id/commentsFragment" />
+        <action
+            android:id="@+id/action_placeFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
     <fragment
         android:id="@+id/imageViewFragment"
@@ -107,6 +110,9 @@
         <argument
             android:name="index"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_imageViewFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -165,6 +171,9 @@
         <argument
             android:name="markerID"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_commentsFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectLocationMapFragment"
@@ -173,5 +182,8 @@
         <action
             android:id="@+id/action_selectLocationMapFragment_to_uploadNewPlaceFragment"
             app:destination="@id/uploadNewPlaceFragment" />
+        <action
+            android:id="@+id/action_selectLocationMapFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
 </navigation>
