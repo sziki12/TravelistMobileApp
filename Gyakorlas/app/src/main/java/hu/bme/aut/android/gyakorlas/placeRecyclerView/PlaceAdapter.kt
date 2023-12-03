@@ -1,5 +1,6 @@
 package hu.bme.aut.android.gyakorlas.placeRecyclerView
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -72,18 +73,19 @@ class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMar
 
     fun update(newMarkers: ArrayList<MapMarker>) {
         //Remove and Notify
-        val removedItems = ArrayList<Int>()
-        for((index, marker) in markers.withIndex())
+        val removedItems = ArrayList<MapMarker>()
+        for(marker in markers)
         {
             if(!newMarkers.contains(marker))
             {
-                removedItems.add(index)
+                removedItems.add(marker)
             }
         }
-        for(index in removedItems)
+        for(marker in removedItems)
         {
-            markers.removeAt(index)
-            notifyItemRemoved(index)
+            val removeIndex = markers.indexOf(marker)
+            markers.remove(marker)
+            notifyItemRemoved(removeIndex)
         }
 
         //Insert and Notify
