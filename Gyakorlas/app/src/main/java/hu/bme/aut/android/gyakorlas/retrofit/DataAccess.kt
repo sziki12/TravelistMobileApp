@@ -17,15 +17,32 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.serialization.Serializable
+import java.util.EnumMap
 
 
 object DataAccess {
+    private val isWorkInProgress:EnumMap<Process,Boolean> = EnumMap(Process::class.java)
+    init {
+        for(process in Process.entries)
+        {
+            isWorkInProgress[process] = false
+        }
+    }
+
+    enum class Process
+    {
+        Login, Registration, UploadNewPlace
+    }
         fun startLoginListener(
             user: UserData,
             onSuccess: () -> Unit,
             onFailure: (message: String) -> Unit,
             onUserNotExists: () -> Unit
         ) {
+            if(isWorkInProgress[Process.Login]!=false)
+                return
+
+            isWorkInProgress[Process.Login]=true
             val connection = Connection()
             CoroutineScope(Dispatchers.IO).launch {
                 try {
@@ -48,6 +65,7 @@ object DataAccess {
                     onFailure.invoke("Request failed: ${e.message}")
                     Log.i("Retrofit","Request failed: ${e.message}")
                 }
+                isWorkInProgress[Process.Login]=false
             }
         }
 
@@ -56,6 +74,11 @@ object DataAccess {
                                    onFailure: (message: String) -> Unit,
                                    onUserExists: () -> Unit)
     {
+        if(isWorkInProgress[Process.Registration]!=false)
+            return
+
+        isWorkInProgress[Process.Registration]=true
+
         val connection = Connection()
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -78,6 +101,7 @@ object DataAccess {
                 onFailure.invoke("Request failed: ${e.message}")
                 Log.i("Retrofit","Request failed: ${e.message}")
             }
+            isWorkInProgress[Process.Registration]=false
         }
     }
 
@@ -85,6 +109,11 @@ object DataAccess {
                                      onSuccess: () -> Unit,
                                      onFailure: (message: String) -> Unit)
     {
+        if(isWorkInProgress[Process.UploadNewPlace]!=false)
+            return
+
+        isWorkInProgress[Process.UploadNewPlace]=true
+
         val connection = Connection()
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -104,6 +133,7 @@ object DataAccess {
                 onFailure.invoke("Request failed: ${e.message}")
                 Log.i("Retrofit","Request failed: ${e.message}")
             }
+            isWorkInProgress[Process.UploadNewPlace]=false
         }
     }
 
