@@ -20,6 +20,10 @@
     <string name="password">Password</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="create_account">Create Account</string>
+
+    <string name="new_comment">New Comment</string>
+    <string name="edit_comment">Edit Comment</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pictures">Pictures</string>

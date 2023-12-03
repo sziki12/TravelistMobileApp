@@ -20,7 +20,7 @@ class PlaceFragment : Fragment() {
     private lateinit var binding : FragmentPlaceBinding
 
     // get the arguments from the MapsFragment
-    private val args : hu.bme.aut.android.gyakorlas.fragments.PlaceFragmentArgs by navArgs()
+    private val args : PlaceFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,

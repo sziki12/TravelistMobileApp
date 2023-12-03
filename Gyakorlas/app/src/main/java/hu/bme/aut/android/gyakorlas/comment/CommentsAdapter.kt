@@ -5,9 +5,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hu.bme.aut.android.gyakorlas.databinding.CommentRowBinding
+import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 
-class CommentsAdapter(private var comments:ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
+class CommentsAdapter(inComments:ArrayList<Comment>): RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
+    private var comments:ArrayList<Comment> = ArrayList()
+    init {
+        comments.addAll(inComments)
+    }
     inner class CommentsViewHolder(val binding: CommentRowBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -33,10 +38,38 @@ class CommentsAdapter(private var comments:ArrayList<Comment>): RecyclerView.Ada
         binding.commentTitle.text = selectedComment.title
     }
 
-    fun update(comments:ArrayList<Comment>)
+    fun update(newComments:ArrayList<Comment>)
     {
-        this.comments = comments
-        Log.i("Comments","Comments Size Adapter: ${comments.size}")
-        this.notifyDataSetChanged()
+        //Remove and Notify
+        val removedItems = ArrayList<Comment>()
+        for(comment in comments)
+        {
+            if(!newComments.contains(comment))
+            {
+                removedItems.add(comment)
+            }
+        }
+        for(comment in removedItems)
+        {
+            val removeIndex = comments.indexOf(comment)
+            comments.remove(comment)
+            notifyItemRemoved(removeIndex)
+        }
+
+        //Insert and Notify
+        val addedItems = ArrayList<Int>()
+        for((index, comment) in newComments.withIndex())
+        {
+            if(!comments.contains(comment))
+            {
+                addedItems.add(index)
+            }
+        }
+        for(index in addedItems)
+        {
+            comments.add(newComments[index])
+            notifyItemInserted(comments.size-1)
+
+        }
     }
 }

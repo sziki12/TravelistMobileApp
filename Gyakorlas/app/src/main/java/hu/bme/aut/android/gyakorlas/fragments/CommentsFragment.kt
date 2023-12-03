@@ -6,14 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.comment.CommentsAdapter
-import hu.bme.aut.android.gyakorlas.comment.NewCommentDialog
+import hu.bme.aut.android.gyakorlas.comment.EditOrNewCommentDialog
 import hu.bme.aut.android.gyakorlas.databinding.FragmentCommentsBinding
-import hu.bme.aut.android.gyakorlas.databinding.FragmentLoginBinding
+import hu.bme.aut.android.gyakorlas.getCurrentUser
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.PlaceData
 
@@ -40,9 +41,19 @@ class CommentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val marker = mapDataProvider.getMarkerByID(markerID)
+        place = marker.place
         binding.commentsFragmentTitle.text = marker.name
         binding.commentsRecyclerView.layoutManager = LinearLayoutManager(this.activity)
         binding.commentsRecyclerView.adapter = marker.place?.comments?.let { CommentsAdapter(it) }
+
+        refreshCommentButtons()
+
+        binding.deleteCommentButton.setOnClickListener()
+        {
+            val (email,user) = requireActivity().getCurrentUser()
+            place?.removeComment(email)
+            onCommentsChanged()
+        }
         binding.commentDetailesButton.setOnClickListener()
         {
             val action =
@@ -53,11 +64,19 @@ class CommentsFragment : Fragment() {
         }
 
         binding.newCommentButton.setOnClickListener(){
-            NewCommentDialog(markerID,::refreshRecyclerView).show(
+            EditOrNewCommentDialog(markerID,::onCommentsChanged).show(
                 this.parentFragmentManager,
-                NewCommentDialog.TAG
+                EditOrNewCommentDialog.TAG
             )}
         }
+
+
+
+    private fun onCommentsChanged()
+    {
+        refreshRecyclerView()
+        refreshCommentButtons()
+    }
 
     private fun refreshRecyclerView()
     {
@@ -68,4 +87,20 @@ class CommentsFragment : Fragment() {
             Log.i("Comments","refreshRecyclerView()")
         }
     }
+
+    private fun refreshCommentButtons()
+    {
+        val (email, user) = requireActivity().getCurrentUser()
+        if(place!!.userAlreadyCommented(email))
+        {
+            binding.newCommentButton.setText(R.string.edit_comment)
+            binding.deleteCommentButton.visibility = View.VISIBLE
+        }
+        else
+        {
+            binding.newCommentButton.setText(R.string.new_comment)
+            binding.deleteCommentButton.visibility = View.INVISIBLE
+        }
+
     }
+}
