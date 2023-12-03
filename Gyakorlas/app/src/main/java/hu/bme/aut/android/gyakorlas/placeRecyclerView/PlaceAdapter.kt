@@ -70,8 +70,36 @@ class PlaceAdapter(private var fragment: Fragment, var markers: ArrayList<MapMar
         }
     }
 
-    fun update(markers: ArrayList<MapMarker>) {
-        this.markers=markers
-        notifyDataSetChanged()
+    fun update(newMarkers: ArrayList<MapMarker>) {
+        //Remove and Notify
+        val removedItems = ArrayList<Int>()
+        for((index, marker) in markers.withIndex())
+        {
+            if(!newMarkers.contains(marker))
+            {
+                removedItems.add(index)
+            }
+        }
+        for(index in removedItems)
+        {
+            markers.removeAt(index)
+            notifyItemRemoved(index)
+        }
+
+        //Insert and Notify
+        val addedItems = ArrayList<Int>()
+        for((index, marker) in newMarkers.withIndex())
+        {
+            if(!markers.contains(marker))
+            {
+                addedItems.add(index)
+            }
+        }
+        for(index in addedItems)
+        {
+            markers.add(newMarkers[index])
+            notifyItemInserted(markers.size-1)
+        }
+        //notifyDataSetChanged()
     }
 }
