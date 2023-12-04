@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
                 val email = binding.etEmail.text.toString()
                 saveLastEmail(email)
                 val password = binding.etPassword.text.toString()
-                DataAccess.startLoginListener(DataAccess.UserData(email, password),::onSuccess,::onFailure, ::onUserNotExists)
+                DataAccess.startLoginListener(DataAccess.UserServerData(email, password),::onSuccess,::onFailure, ::onUserNotExists)
             }
         }
 

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
 import hu.bme.aut.android.gyakorlas.comment.Comment
+import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 
 class MapDataProvider private constructor() {
@@ -127,6 +128,7 @@ class MapDataProvider private constructor() {
     fun getSelectedMarkers(selectedLocation: String): ArrayList<MapMarker> {
         var selectedMarkers: ArrayList<MapMarker> = ArrayList()
 
+        DataAccess.getPlaces()
         if (selectedLocation == "All") {
             selectedMarkers = markers
         } else if(selectedLocation == "None")
