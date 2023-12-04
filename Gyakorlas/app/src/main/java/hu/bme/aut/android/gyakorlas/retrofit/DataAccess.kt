@@ -1,6 +1,9 @@
 package hu.bme.aut.android.gyakorlas.retrofit
 
 import android.util.Log
+import hu.bme.aut.android.gyakorlas.mapData.MapMarker
+import hu.bme.aut.android.gyakorlas.mapData.PlaceData
+
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -17,6 +20,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.serialization.Serializable
+import retrofit2.http.GET
 import java.util.EnumMap
 
 
@@ -31,10 +35,10 @@ object DataAccess {
 
     enum class Process
     {
-        Login, Registration, UploadNewPlace
+        Login, Registration, UploadNewPlace,GetPlaces
     }
         fun startLoginListener(
-            user: UserData,
+            user: UserServerData,
             onSuccess: () -> Unit,
             onFailure: (message: String) -> Unit,
             onUserNotExists: () -> Unit
@@ -69,7 +73,7 @@ object DataAccess {
             }
         }
 
-    fun startRegistrationListener( user: UserData,
+    fun startRegistrationListener( user: UserServerData,
                                    onSuccess: () -> Unit,
                                    onFailure: (message: String) -> Unit,
                                    onUserExists: () -> Unit)
@@ -105,7 +109,7 @@ object DataAccess {
         }
     }
 
-    fun startUploadNewPlaceListener( place: PlaceData,
+    fun startUploadNewPlaceListener( place: PlaceServerData,
                                      onSuccess: () -> Unit,
                                      onFailure: (message: String) -> Unit)
     {
@@ -137,6 +141,40 @@ object DataAccess {
         }
     }
 
+    fun getMapMarkers(onSuccess: (markers:ArrayList<MapMarker>?) -> Unit)
+    {
+        if(isWorkInProgress[Process.GetPlaces]!=false)
+            return
+
+        isWorkInProgress[Process.GetPlaces]=true
+
+        val connection = Connection()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = connection.userAPI.getPlaces()
+                if (response.isSuccessful) {
+                   val outMarkers = ArrayList<MapMarker>()
+                   for(place in response.body()!!.places!!)
+                   {
+                       //TODO Comments and Rating
+                       outMarkers.add(MapMarker(PlaceData(place.name,place.location,place.description),place.latitude,place.longitude))
+                       Log.i("Retrofit","Place: $place")
+                   }
+                    onSuccess(outMarkers)
+                } else {
+
+                    Log.i("Retrofit","Request failed with code: ${response.code()}")
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.i("Retrofit", "Request failed: ${e.message}")
+                }
+            }
+            isWorkInProgress[Process.GetPlaces]=false
+        }
+    }
+
         class Connection
         {
             val client = OkHttpClient.Builder()
@@ -153,29 +191,34 @@ object DataAccess {
         }
 
         @Serializable
-        data class UserData(
+        data class UserServerData(
             val email: String,
             val password: String
         )
 
         @Serializable
-        data class PlaceData(
+        data class PlaceServerData(
             val name: String,
             val location: String,
-            val latitude: String,
-            val longitude: String,
+            val latitude: Double,
+            val longitude: Double,
             val description: String,
-            val rating: String
+            val rating: Double
         )
+
+    @Serializable
+    data class PlaceServerArray(val places :List<PlaceServerData>?)
 
         interface UserAccessAPI {
             //@Headers("Content-Type: application/json")
             @POST("/api/login")
-            suspend fun loginUser(@Body requestBody: UserData): Response<ResponseBody>
+            suspend fun loginUser(@Body requestBody: UserServerData): Response<ResponseBody>
             @POST("/api/registration")
-            suspend fun registerUser(@Body requestBody: UserData): Response<ResponseBody>
-            @POST("/api/uploadnewplace")
-            suspend fun uploadNewPlace(@Body requestBody: PlaceData): Response<ResponseBody>
+            suspend fun registerUser(@Body requestBody: UserServerData): Response<ResponseBody>
+            @POST("/api/places")
+            suspend fun uploadNewPlace(@Body requestBody: PlaceServerData): Response<ResponseBody>
+            @GET("/api/places")
+            suspend fun getPlaces(): Response<PlaceServerArray>
         }
 
         class LoggingInterceptor : Interceptor {
@@ -198,10 +241,10 @@ object DataAccess {
                         "Received response for %s in %.1fms%n%s%s",
                         response.request.url, (t2 - t1) / 1e6, response.headers, response.message
                     )
+
                 )
                 return response
             }
-
             private fun parseRequest(request: Request): String {
                 val buffer = Buffer()
                 try {

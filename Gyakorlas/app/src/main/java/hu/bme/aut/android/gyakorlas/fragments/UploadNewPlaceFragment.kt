@@ -99,11 +99,11 @@ class UploadNewPlaceFragment : Fragment() {
             else {
                 val name = binding.etPlaceName.text.toString()
                 val location = binding.etCityName.text.toString()
-                val latitude = binding.etLatitude.text.toString()
-                val longitude = binding.etLongitude.text.toString()
+                val latitude = binding.etLatitude.text.toString().toDouble()
+                val longitude = binding.etLongitude.text.toString().toDouble()
                 val description = binding.etDescription.text.toString()
-                val rating = binding.simpleRatingBar.rating.toString()
-                val place = DataAccess.PlaceData(name, location, latitude, longitude, description, rating)
+                val rating = binding.simpleRatingBar.rating.toString().toDouble()
+                val place = DataAccess.PlaceServerData(name, location, latitude, longitude, description, rating)
 
                 DataAccess.startUploadNewPlaceListener(place, ::onSuccess, ::onFailure)
             }
