@@ -25,7 +25,9 @@ import hu.bme.aut.android.gyakorlas.location.LocationData
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
+import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
+import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 import java.lang.StringBuilder
 
 class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
@@ -34,6 +36,7 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentTrackOthersBinding
     private var isInitialized = false
+    var markers: ArrayList<UserMarker> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,7 +65,16 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
      */
 
     private fun setUpMapData(selectedLocation: String) {
-        this.activity?.let { LocationData.initUsers() }
+//        this.activity?.let { LocationData.initUsers() }
+        DataAccess.getUserMarkers()
+        {
+                outMarkers->
+            if(outMarkers!=null)
+            {
+                markers.clear()
+                markers.addAll(outMarkers)
+            }
+        }
     }
 
     private fun enableGestures() {
@@ -100,7 +112,7 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             }
         }
 
-        val userLocations = LocationData.userMarkers
+        /*val userLocations = LocationData.userMarkers
         for (user in userLocations){
             val userLatLng = LatLng(user.latitude, user.longitude)
 
@@ -116,6 +128,27 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
                     }
                     else {
                         val markerOptions = MarkerOptions().position(userLatLng).title(user.username)
+                        mMap.addMarker(markerOptions)
+                    }
+                }
+            }
+        }*/
+
+        for (m in markers){
+            val userLatLng = LatLng(m.latitude, m.longitude)
+
+            //Distance between current location and userLatLng in meters:
+            val distance = LocationService.calculateDistance(userLatLng)
+
+            if (distance != null) {
+                //if user is within 5 km, it is shown on the map
+                if (distance <= 5000) {
+                    if (m.message != ""){
+                        val markerOptions = MarkerOptions().position(userLatLng).title(m.username).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        mMap.addMarker(markerOptions)
+                    }
+                    else {
+                        val markerOptions = MarkerOptions().position(userLatLng).title(m.username)
                         mMap.addMarker(markerOptions)
                     }
                 }

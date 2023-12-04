@@ -3,11 +3,14 @@ package hu.bme.aut.android.gyakorlas.requestHelp
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.preference.PreferenceManager
 import hu.bme.aut.android.gyakorlas.databinding.DialogRequestHelpBinding
+import hu.bme.aut.android.gyakorlas.location.LocationService
+import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import kotlin.concurrent.thread
 
 class RequestHelpDialogFragment() : DialogFragment(){
@@ -33,7 +36,12 @@ class RequestHelpDialogFragment() : DialogFragment(){
                     }
 
                     if (binding.etMessage.text.toString().isNotEmpty()){
-                        listener?.onRequestHelp(HelpMessage(username, binding.etMessage.text.toString()))
+                        //listener?.onRequestHelp(HelpMessage(username, binding.etMessage.text.toString()))
+                        val lat = LocationService.currentLocation?.latitude
+                        val lng = LocationService.currentLocation?.longitude
+                        if (lat != null && lng != null) {
+                            listener?.onRequestHelp(UserMarker(username, lat, lng, binding.etMessage.text.toString()))
+                        }
                     }
 
                 dialog.dismiss()

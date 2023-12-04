@@ -13,28 +13,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9bf591d-c619-4982-a342-41e1efba38e5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/mapData/UserMarker.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/RequestHelpFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/RequestHelpFragment.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/TrackOthersFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/TrackOthersFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/location/LocationData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/location/LocationData.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/SelectLocationMapFragment.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_select_location_map.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/navEditor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/navEditor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/ImageViewFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/ImageViewFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/MenuFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/MenuFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/UploadNewPlaceFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/UploadNewPlaceFragment.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_upload_new_place.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_upload_new_place.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/navigation/nav_graph.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/HelpMessagesAdapter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/UserMarkerAdapter.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/RequestHelpDialogFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/RequestHelpDialogFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/RequestHelpListener.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/requestHelp/RequestHelpListener.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/retrofit/DataAccess.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/retrofit/DataAccess.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[kfs4ongunzfm4pd6]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Eszter\.android\avd\Labor_1_1.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -130,9 +123,6 @@
     </key>
     <key name="android.template.-2011157335">
       <recent name="hu.bme.aut.android.gyakorlas" />
-    </key>
-    <key name="android.template.1264685012">
-      <recent name="hu.bme.aut.android.gyakorlas.fragments" />
     </key>
     <key name="android.template.-2120946547">
       <recent name="hu.bme.aut.android.gyakorlas" />
