@@ -141,10 +141,10 @@ object DataAccess {
         }
     }
 
-    fun getPlaces():List<MapMarker>?
+    fun getMapMarkers(onSuccess: (markers:ArrayList<MapMarker>?) -> Unit)
     {
         if(isWorkInProgress[Process.GetPlaces]!=false)
-            return null
+            return
 
         isWorkInProgress[Process.GetPlaces]=true
 
@@ -153,10 +153,14 @@ object DataAccess {
             try {
                 val response = connection.userAPI.getPlaces()
                 if (response.isSuccessful) {
-                   for(place in response.body()!!)
+                   val outMarkers = ArrayList<MapMarker>()
+                   for(place in response.body()!!.places!!)
                    {
+                       //TODO Comments and Rating
+                       outMarkers.add(MapMarker(PlaceData(place.name,place.location,place.description),place.latitude,place.longitude))
                        Log.i("Retrofit","Place: $place")
                    }
+                    onSuccess(outMarkers)
                 } else {
 
                     Log.i("Retrofit","Request failed with code: ${response.code()}")
@@ -165,12 +169,10 @@ object DataAccess {
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Log.i("Retrofit", "Request failed: ${e.message}")
-                    return@withContext null
                 }
             }
             isWorkInProgress[Process.GetPlaces]=false
         }
-        return null
     }
 
         class Connection
@@ -204,6 +206,9 @@ object DataAccess {
             val rating: Double
         )
 
+    @Serializable
+    data class PlaceServerArray(val places :List<PlaceServerData>?)
+
         interface UserAccessAPI {
             //@Headers("Content-Type: application/json")
             @POST("/api/login")
@@ -213,7 +218,7 @@ object DataAccess {
             @POST("/api/places")
             suspend fun uploadNewPlace(@Body requestBody: PlaceServerData): Response<ResponseBody>
             @GET("/api/places")
-            suspend fun getPlaces(): Response<List<PlaceServerData>>
+            suspend fun getPlaces(): Response<PlaceServerArray>
         }
 
         class LoggingInterceptor : Interceptor {
