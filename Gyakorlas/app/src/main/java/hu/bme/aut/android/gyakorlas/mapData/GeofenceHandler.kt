@@ -95,28 +95,35 @@ class GeofenceHandler: BroadcastReceiver() {
             //Log.i("GEOFENCE","Added ${marker.name}")
         }
         markers.addAll(allMarkers)
-        //Log.i("GEOFENCE","setUpGeofences Markers.Size ${markers.size}")
-        geofencingClient?.addGeofences(getGeofencingRequest(), geofencePendingIntent)?.run {
-            addOnSuccessListener {
-                // Geofences added
-                // ...
-                Log.i("GEOFENCE","Added Successfully")
+        if(markers.isNotEmpty())
+        {
+            //Log.i("GEOFENCE","setUpGeofences Markers.Size ${markers.size}")
+            geofencingClient?.addGeofences(getGeofencingRequest(), geofencePendingIntent)?.run {
+                addOnSuccessListener {
+                    // Geofences added
+                    // ...
+                    Log.i("GEOFENCE","Added Successfully")
+                }
+                addOnFailureListener {
+                    // Failed to add geofences
+                    // ...
+                    Log.i("GEOFENCE","Adding Failed")
+                    /*if(activity as? MenuActivity != null)
+                    {
+                       //Enable/Disable Recommended For You button
+                    }*/
+                }
             }
-            addOnFailureListener {
-                // Failed to add geofences
-                // ...
-                Log.i("GEOFENCE","Adding Failed")
-                /*if(activity as? MenuActivity != null)
-                {
-                   //Enable/Disable Recommended For You button
-                }*/
-            }
+        }
+        else{
+            Thread.sleep(3000)
+            activity?.let { setUpGeofencingClient(it) }
         }
         //Log.i("GEOFENCE","Add Called")
     }
     fun calculateNearbyMarkers():ArrayList<MapMarker>
     {
-        var nearbyMarkers:ArrayList<MapMarker> = ArrayList()
+        val nearbyMarkers:ArrayList<MapMarker> = ArrayList()
         //Log.i("GEOFENCE","activeGeofences.size: ${activeGeofences.size}")
         for(geofence in activeGeofences)
         {

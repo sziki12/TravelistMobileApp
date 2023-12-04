@@ -255,6 +255,27 @@
                       </LayoutPositions>
                     </value>
                   </entry>
+                  <entry key="selectLocationMapFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="-244" />
+                            <option name="y" value="364" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="action_selectLocationMapFragment_to_uploadNewPlaceFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="settingsFragment">
                     <value>
                       <LayoutPositions>
@@ -314,13 +335,18 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="410" />
+                            <option name="x" value="13" />
+                            <option name="y" value="412" />
                           </Point>
                         </option>
                         <option name="myPositions">
                           <map>
                             <entry key="action_uploadNewPlaceFragment_to_menuFragment">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="action_uploadNewPlaceFragment_to_selectLocationMapFragment">
                               <value>
                                 <LayoutPositions />
                               </value>

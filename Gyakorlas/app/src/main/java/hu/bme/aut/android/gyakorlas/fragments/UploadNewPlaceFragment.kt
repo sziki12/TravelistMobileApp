@@ -20,7 +20,9 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
@@ -35,6 +37,7 @@ class UploadNewPlaceFragment : Fragment() {
     var SELECT_PICTURE = 200
     var REQUEST_IMAGE_CAPTURE = 300
     private var imageUri: Uri? = null
+    private val args : UploadNewPlaceFragmentArgs by navArgs()
 
     private lateinit var imageContainer: LinearLayout
     private val imageViews = mutableListOf<ImageView>()
@@ -61,20 +64,12 @@ class UploadNewPlaceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.fabAdd.setOnClickListener(){
-//            this.activity?.let {
-//                PermissionHandler.requestPermission(
-//                    it,
-//                    PermissionHandler.READ_EXTERNAL_STORAGE_REQUEST_CODE,
-//                    {
-//                        startSelectPicture()
-//                        Log.i("PERMISSION", "Access to photos enabled")
-//                    })
-//                {
-//                    Log.i("PERMISSION", "Access to photos disabled")
-//                }
-//            }
-//        }
+        val location = args.location
+        if(location!=null)
+        {
+            binding.etLatitude.setText(location.latitude.toString())
+            binding.etLongitude.setText(location.longitude.toString())
+        }
 
         binding.btnSave.setOnClickListener {
             if (binding.etPlaceName.text.toString().isEmpty()){
@@ -104,11 +99,11 @@ class UploadNewPlaceFragment : Fragment() {
             else {
                 val name = binding.etPlaceName.text.toString()
                 val location = binding.etCityName.text.toString()
-                val latitude = binding.etLatitude.text.toString()
-                val longitude = binding.etLongitude.text.toString()
+                val latitude = binding.etLatitude.text.toString().toDouble()
+                val longitude = binding.etLongitude.text.toString().toDouble()
                 val description = binding.etDescription.text.toString()
-                val rating = binding.simpleRatingBar.rating.toString()
-                val place = DataAccess.PlaceData(name, location, latitude, longitude, description, rating)
+                val rating = binding.simpleRatingBar.rating.toString().toDouble()
+                val place = DataAccess.PlaceServerData(name, location, latitude, longitude, description, rating)
 
                 DataAccess.startUploadNewPlaceListener(place, ::onSuccess, ::onFailure)
             }
@@ -120,6 +115,12 @@ class UploadNewPlaceFragment : Fragment() {
 
         binding.imgbtnMenu.setOnClickListener(){
             findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
+        }
+
+        binding.btnSelectLocation.setOnClickListener()
+        {
+            val action = UploadNewPlaceFragmentDirections.actionUploadNewPlaceFragmentToSelectLocationMapFragment()
+            NavHostFragment.findNavController(this as Fragment).navigate(action)
         }
 
     }

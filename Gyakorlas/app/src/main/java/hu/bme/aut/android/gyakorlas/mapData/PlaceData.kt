@@ -44,5 +44,35 @@ data class PlaceData(var name: String?,var location:String) {
         comments.add(comment)
     }
 
+    fun userAlreadyCommented(email:String):Boolean
+    {
+        for(comment in comments)
+        {
+            if(comment.senderEmail==email)
+            {
+                return true
+            }
+        }
+        return false
+    }
+    fun getUserComment(email:String):Comment?
+    {
+        for(comment in comments)
+            if(comment.senderEmail==email)
+                return comment
+        return null
+    }
 
+    fun removeComment(email:String)
+    {
+        for(comment in comments)
+        {
+            if(comment.senderEmail==email)
+            {
+                reviewNumber--
+                reviewRating-=comment.rating
+                comments.remove(comment)
+            }
+        }
+    }
 }

@@ -8,10 +8,12 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.graphics.drawable.toBitmap
 import hu.bme.aut.android.gyakorlas.comment.Comment
+import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 
 class MapDataProvider private constructor() {
     var markers: ArrayList<MapMarker> = ArrayList()
+        private set
     companion object {
         val instance by lazy {
             MapDataProvider()
@@ -51,7 +53,7 @@ class MapDataProvider private constructor() {
         }
     }
     fun initMarkers(activity: Activity) {
-        if (markers.isEmpty()) {
+        /*if (markers.isEmpty()) {
             val barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest","",4.5f,1)
             barCraftNyugati.description =
                 "Service options: Dine-in · No takeaway · No delivery\n" +
@@ -95,15 +97,24 @@ class MapDataProvider private constructor() {
 
 
 
-            val comment1 = Comment("User 1","Description",5f)
+            val comment1 = Comment("User 1","Description",5f,"teszt@teszt.teszt")
             barCraftNyugati.addComment(comment1)
 
             val comment2 = Comment("User 2","Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
                     "Phasellus mi mauris, volutpat id laoreet ac, ornare eget sem. Ut eros turpis, blandit vitae felis ac, " +
                     "tempor imperdiet quam. Duis sed orci vitae est mollis imperdiet. Proin in blandit quam, non cursus ligula." +
                     " Vivamus bibendum condimentum nisl in tempus. Sed maximus pellentesque nisi, suscipit tempus nisl porttitor" +
-                    " posuere. Vivamus vitae nulla tempus, maximus dolor ac, placerat nunc",2f)
+                    " posuere. Vivamus vitae nulla tempus, maximus dolor ac, placerat nunc",2f,"Lorem@ipsum.dolor")
             barCraftNyugati.addComment(comment2)
+        }*/
+        DataAccess.getMapMarkers()
+        {
+                outMakrers->
+            if(outMakrers!=null)
+            {
+                markers.clear()
+                markers.addAll(outMakrers)
+            }
         }
     }
 
@@ -127,33 +138,35 @@ class MapDataProvider private constructor() {
     fun getSelectedMarkers(selectedLocation: String): ArrayList<MapMarker> {
         var selectedMarkers: ArrayList<MapMarker> = ArrayList()
 
-        if (selectedLocation == "All") {
-            selectedMarkers = markers
-        } else if(selectedLocation == "None")
-        {
-            return selectedMarkers
-        }
-        else {
-            for (marker in markers) {
-                if (marker.place?.location == selectedLocation) {
-                    selectedMarkers.add(marker)
+        when (selectedLocation) {
+            "All" -> {
+                selectedMarkers = markers
+            }
+            "None" -> {
+                return selectedMarkers
+            }
+            else -> {
+                for (marker in markers) {
+                    if (marker.place?.location == selectedLocation) {
+                        selectedMarkers.add(marker)
+                    }
                 }
             }
         }
         return selectedMarkers
     }
 
-    fun getMarkerByID(ID: Int): MapMarker {
-        return markers[ID]
+    fun getMarkerByID(id: Int): MapMarker {
+        return markers[id]
     }
 
     fun getIDByMarker(targetMarker: MapMarker): Int? {
-        var ID: Int? = null
+        var id: Int? = null
         for (i in 0 until markers.size) {
             if (markers[i] == targetMarker) {
-                ID = i
+                id = i
             }
         }
-        return ID
+        return id
     }
 }

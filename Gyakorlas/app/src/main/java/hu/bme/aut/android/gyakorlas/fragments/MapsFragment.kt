@@ -168,41 +168,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
                 }
             }
         }
-        mMap.setOnMapLongClickListener { latLang ->
-
-            var isMarkerClicked = false
-            for (marker in markers) {
-                if (marker.getLatLng() == (latLang)) {
-                    isMarkerClicked = true
-                }
-            }
-
-            if (!isMarkerClicked) {
-                var newMarker = MarkerOptions()
-                    .position(latLang)
-                    .title("New Marker By Click At: $latLang")
-                    .icon(BitmapDescriptorFactory.defaultMarker())
-                mMap.addMarker(newMarker)
-            }
-        }
-
-        binding.btnPlaceNewMarker.setOnClickListener { view ->
-            val latLang = mMap.cameraPosition.target
-            var newMarker = MarkerOptions()
-                .position(latLang)
-                .title("New Marker By Button At: $latLang")
-                .icon(BitmapDescriptorFactory.defaultMarker())
-                .draggable(true)
-            mMap.addMarker(newMarker)
-        }
-        /*override fun onResumeFragments() {
-        super.onResumeFragments()
-        if (permissionHandler.permissionDenied) {
-            // Permission was not granted, display error dialog.
-            showMissingPermissionError()
-            permissionHandler.permissionDenied = false
-        }
-    }*/
     }
 
     private fun showMarkers()
