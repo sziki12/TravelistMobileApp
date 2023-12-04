@@ -3,42 +3,36 @@ package hu.bme.aut.android.gyakorlas.location
 import android.app.Activity
 import android.location.Location
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
+import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 
 class LocationData {
     companion object {
-        val userLocations = ArrayList<Location>()
+        val userMarkers = ArrayList<UserMarker>()
 
         fun initUsers() {
-            val location1 = Location("Provider1")
-            location1.latitude = 47.4742
-            location1.longitude = 19.0592
+            val usermarker1 = UserMarker("username1", 47.4742, 19.0592, "")
 
-            val location2 = Location("Provider2")
-            location2.latitude = 47.4727
-            location2.longitude = 19.0577
+            val usermarker2 = UserMarker("username2", 47.4727, 19.0577, "Help me")
 
-            val location3 = Location("Provider3")
-            location3.latitude = 47.4744
-            location3.longitude = 19.0635
+            val usermarker3 = UserMarker("username3", 47.4744, 19.0635, "I need help")
 
-            val location4 = Location("Provider4")
-            location3.latitude = 47.4774
-            location3.longitude = 19.0460
+            val usermarker4 = UserMarker("username4", 47.4774, 19.0460, "")
 
-            val location5 = Location("Provider5")
-            location5.latitude = 37.4226
-            location5.longitude = -122.0837
+            val usermarker5 = UserMarker("username5", 37.4226, -122.0837, "Find me!!!")
 
-            val location6 = Location("Provider5")
-            location6.latitude = 37.4220
-            location6.longitude = -122.0828
+            val usermarker6 = UserMarker("username6", 37.4220, -122.0828, "Find me!!!")
 
-            userLocations.add(location1)
-            userLocations.add(location2)
-            userLocations.add(location3)
-            userLocations.add(location4)
-            userLocations.add(location5)
-            userLocations.add(location6)
+            val usermarker7 = LocationService.currentLocation?.let { UserMarker("nagyerno", it.latitude, LocationService.currentLocation!!.longitude, "") }
+
+            userMarkers.add(usermarker1)
+            userMarkers.add(usermarker2)
+            userMarkers.add(usermarker3)
+            userMarkers.add(usermarker4)
+            userMarkers.add(usermarker5)
+            userMarkers.add(usermarker6)
+            if (usermarker7 != null) {
+                userMarkers.add(usermarker7)
+            }
         }
     }
 }

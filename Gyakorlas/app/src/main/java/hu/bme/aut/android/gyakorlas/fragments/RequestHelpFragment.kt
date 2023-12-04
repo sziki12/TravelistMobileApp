@@ -70,20 +70,20 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     override fun onRequestHelp(helpMessage: HelpMessage) {
         helpMessages.add(helpMessage)
 
-        val selfLatLng = LocationService.currentLocation?.latitude?.let { LocationService.currentLocation?.longitude?.let { it1 ->
-            LatLng(it,
-                it1
-            )
-        } }
-
-        if (selfLatLng != null) {
-            Log.i("SELFMARKER", selfLatLng.latitude.toString() + " " + selfLatLng.longitude.toString())
-            markers.add(MapMarker(helpMessage.username, selfLatLng.latitude, selfLatLng.longitude))
-        }
-
-
-        for (m in markers)
-            Log.i("RHMARKERS", m.name)
+//        val selfLatLng = LocationService.currentLocation?.latitude?.let { LocationService.currentLocation?.longitude?.let { it1 ->
+//            LatLng(it,
+//                it1
+//            )
+//        } }
+//
+//        if (selfLatLng != null) {
+//            Log.i("SELFMARKER", selfLatLng.latitude.toString() + " " + selfLatLng.longitude.toString())
+//            markers.add(MapMarker(helpMessage.username, selfLatLng.latitude, selfLatLng.longitude))
+//        }
+//
+//
+//        for (m in markers)
+//            Log.i("RHMARKERS", m.name)
 
         helpMessagesAdapter.update(helpMessages)
     }

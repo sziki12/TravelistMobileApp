@@ -100,7 +100,7 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             }
         }
 
-        val userLocations = LocationData.userLocations
+        val userLocations = LocationData.userMarkers
         for (user in userLocations){
             val userLatLng = LatLng(user.latitude, user.longitude)
 
@@ -110,22 +110,28 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             if (distance != null) {
                 //if user is within 5 km, it is shown on the map
                 if (distance <= 5000) {
-                    val markerOptions = MarkerOptions().position(userLatLng).title("User")
-                    mMap.addMarker(markerOptions)
+                    if (user.message != ""){
+                        val markerOptions = MarkerOptions().position(userLatLng).title(user.username).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        mMap.addMarker(markerOptions)
+                    }
+                    else {
+                        val markerOptions = MarkerOptions().position(userLatLng).title(user.username)
+                        mMap.addMarker(markerOptions)
+                    }
                 }
             }
         }
         //Adding own location marker:
-        val selfLatLng = LocationService.currentLocation?.latitude?.let { LocationService.currentLocation?.longitude?.let { it1 ->
-            LatLng(it,
-                it1
-            )
-        } }
-        val markerOptions =
-            selfLatLng?.let { MarkerOptions().position(it).title("You are standing here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)) }
-        if (markerOptions != null) {
-            mMap.addMarker(markerOptions)
-        }
+//        val selfLatLng = LocationService.currentLocation?.latitude?.let { LocationService.currentLocation?.longitude?.let { it1 ->
+//            LatLng(it,
+//                it1
+//            )
+//        } }
+//        val markerOptions =
+//            selfLatLng?.let { MarkerOptions().position(it).title("You are standing here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)) }
+//        if (markerOptions != null) {
+//            mMap.addMarker(markerOptions)
+//        }
 
         //Set Map Center
         centerCamera()
