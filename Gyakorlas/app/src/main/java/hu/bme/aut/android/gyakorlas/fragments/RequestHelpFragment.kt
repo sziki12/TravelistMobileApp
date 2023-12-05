@@ -26,8 +26,7 @@ import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 class RequestHelpFragment : Fragment(), RequestHelpListener {
     private lateinit var binding : FragmentRequestHelpBinding
     private lateinit var userMarkerAdapter: UserMarkerAdapter
-    /*private var helpMessages:ArrayList<HelpMessage> = ArrayList()*/
-    var userMarkers: ArrayList<UserMarker> = ArrayList()
+    private var userMarkers: ArrayList<UserMarker> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,8 +57,14 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
         }
 
         helpMessagesAdapter = UserMarkerAdapter(helpMessages)*/
+        var requestedHelpUsers : ArrayList<UserMarker> = ArrayList()
+        for (user in userMarkers){
+            if (user.message != ""){
+                requestedHelpUsers.add(user)
+            }
+        }
 
-        userMarkerAdapter = UserMarkerAdapter(userMarkers)
+        userMarkerAdapter = UserMarkerAdapter(requestedHelpUsers)
         binding.rvMessages.layoutManager = LinearLayoutManager(this.context)
         binding.rvMessages.adapter = userMarkerAdapter
 
@@ -86,7 +91,7 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
             var lat = LocationService.currentLocation?.latitude
             var lng = LocationService.currentLocation?.longitude
             if (lat != null && lng != null) {
-                var user = DataAccess.UserMarkerServerData(username, lat, lng, "")
+                var user = DataAccess.UserMarkerServerData(lat, lng, "")
                 DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
             }
 
@@ -103,7 +108,7 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     }
 
     override fun onRequestHelp(userMarker: UserMarker) {
-        var user = DataAccess.UserMarkerServerData(userMarker.username, userMarker.latitude, userMarker.longitude, userMarker.message)
+        var user = DataAccess.UserMarkerServerData(userMarker.latitude, userMarker.longitude, userMarker.message)
         DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
         //helpMessages.add(helpMessage)
 

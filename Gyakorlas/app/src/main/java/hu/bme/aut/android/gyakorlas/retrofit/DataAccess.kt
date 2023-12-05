@@ -52,7 +52,6 @@ object DataAccess {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val response = connection.userAPI.loginUser(user)
-
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful) {
                             onSuccess.invoke() // Invoke success callback
@@ -274,7 +273,6 @@ object DataAccess {
 
         @Serializable
         data class UserMarkerServerData(
-            val username: String,
             val latitude: Double,
             val longitude: Double,
             val message: String
@@ -284,7 +282,7 @@ object DataAccess {
     data class PlaceServerArray(val places :List<PlaceServerData>?)
 
     @Serializable
-    data class UserMarkerServerArray(val userMarkers :List<UserMarkerServerData>?)
+    data class UserMarkerServerArray(val userMarkers :List<UserMarker>?)
 
         interface UserAccessAPI {
             //@Headers("Content-Type: application/json")
