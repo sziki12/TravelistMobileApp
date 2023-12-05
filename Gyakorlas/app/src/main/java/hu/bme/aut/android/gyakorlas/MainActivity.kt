@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsRes
         PermissionHandler.initialize()
 
         //Initialize Map Data, load MapMarkers
-        mapDataProvider.initMarkers(this)
+        mapDataProvider.updateMarkers()
 
         //Initialize Location Service
         PermissionHandler.requestPermission(this, PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE,

@@ -52,61 +52,22 @@ class MapDataProvider private constructor() {
             return drawableOut
         }
     }
-    fun initMarkers(activity: Activity) {
-        /*if (markers.isEmpty()) {
-            val barCraftNyugati = PlaceData("BarCraft Nyugati", "Budapest","",4.5f,1)
-            barCraftNyugati.description =
-                "Service options: Dine-in · No takeaway · No delivery\n" +
-                        "Address: Budapest, Bajcsy-Zsilinszky út 59, 1065\n" +
-                        "\n" +
-                        "Hours: \n" +
-                        "\tSunday\t2 PM–12 AM\n" +
-                        "\tMonday\t4 PM–12 AM\n" +
-                        "\tTuesday\t4 PM–12 AM\n" +
-                        "\tWednesday\t4 PM–12 AM\n" +
-                        "\tThursday\t4 PM–12 AM\n" +
-                        "\tFriday\t4 PM–2 AM\n" +
-                        "\tSaturday\t2 PM–2 AM\n" +
-                        "\n" +
-                        "\nPhone: (06 1) 406 2201" +
-                        "\nA város szívében, egy ugrásnyira a Nyugati pályaudvartól, autentikus fantasy pincében vár Rád a Barcraft 2!\n" +
-                        "\n" +
-                        "Description:\n" +
-                        "Hamisítatlan fantasy taverna érzéssel, és hideg italokkal várja az arra tévedő kalandorokat! A konzolok szerelmesei otthonra lelnek kanapéinkon, miközben kontrollerrel a kezükben múlatják az időt, egy teremmel arréb pedig a társasjátékok rajongói élvezhetik a több mint 200 darabból álló társasjáték gyűjteményünk gyönyöreit. Az online bajnokokra pedig vár a Hősök Csarnoka, 10 high end gaming PCvel, NobleChair és Vertagear székekkel, így a győzelem garantált!"
 
-            barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft01.jpg")))
-            barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft02.jpg")))
-            barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
-            barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
-            barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
-            barCraftNyugati.images.add(BitmapFactory.decodeStream(activity.assets.open("images/nyugati_barcraft03.jpg")))
+    interface MapDataChangedListener
+    {
+        fun onMapDataChanged(markers:List<MapMarker>)
+    }
+    private val listeners = ArrayList<MapDataChangedListener>()
+    fun addListener(listener:MapDataChangedListener)
+    {
+        listeners.add(listener)
+    }
 
-            markers.add(MapMarker(barCraftNyugati, 47.50867271248256, 19.055384710139474))
-
-            val barCraftBuda = PlaceData("BarCraft Buda", "Budapest")
-            markers.add(MapMarker(barCraftBuda, 47.4816601353997, 19.0525543254818))
-
-            val wesselenyi4es6os = PlaceData("4es6os Wesselényi", "Budapest")
-            markers.add(MapMarker(wesselenyi4es6os, 47.500386932768905, 19.068751383155128))
-
-            val wasabi = PlaceData("Wasabi Running Sushi & Wok Restaurant", "Budapest")
-            markers.add(MapMarker(wasabi, 47.50828901836447, 19.057431346616017))
-
-            val theMagic = PlaceData("The MAGIC Budapest", "Budapest")
-            markers.add(MapMarker(theMagic, 47.5041399741706, 19.057411806181104))
-
-
-
-            val comment1 = Comment("User 1","Description",5f,"teszt@teszt.teszt")
-            barCraftNyugati.addComment(comment1)
-
-            val comment2 = Comment("User 2","Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                    "Phasellus mi mauris, volutpat id laoreet ac, ornare eget sem. Ut eros turpis, blandit vitae felis ac, " +
-                    "tempor imperdiet quam. Duis sed orci vitae est mollis imperdiet. Proin in blandit quam, non cursus ligula." +
-                    " Vivamus bibendum condimentum nisl in tempus. Sed maximus pellentesque nisi, suscipit tempus nisl porttitor" +
-                    " posuere. Vivamus vitae nulla tempus, maximus dolor ac, placerat nunc",2f,"Lorem@ipsum.dolor")
-            barCraftNyugati.addComment(comment2)
-        }*/
+    fun removeListener(listener:MapDataChangedListener)
+    {
+        listeners.remove(listener)
+    }
+    fun updateMarkers() {
         DataAccess.getMapMarkers()
         {
                 outMakrers->
@@ -114,6 +75,10 @@ class MapDataProvider private constructor() {
             {
                 markers.clear()
                 markers.addAll(outMakrers)
+            }
+            for(listener in listeners)
+            {
+                listener.onMapDataChanged(markers)
             }
         }
     }

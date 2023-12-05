@@ -31,7 +31,7 @@ import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 
 class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback,
-    AdapterView.OnItemSelectedListener {
+    AdapterView.OnItemSelectedListener, MapDataProvider.MapDataChangedListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentMapsBinding
@@ -54,6 +54,8 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        mapDataProvider.addListener(this)
+
         setUpMapData("All")
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
@@ -72,6 +74,10 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
         binding.categorySpinner.adapter = spinnerAdapter
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mapDataProvider.removeListener(this)
+    }
 
 
     /**
@@ -239,5 +245,11 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
         selectedLocation = locations[0]
+    }
+
+    override fun onMapDataChanged(markers: List<MapMarker>) {
+        this.markers.clear()
+        this.markers.addAll(markers)
+        showMarkers()
     }
 }
