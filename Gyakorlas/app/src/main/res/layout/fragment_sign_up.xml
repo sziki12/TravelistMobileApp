@@ -29,18 +29,6 @@
         tools:layout_editor_absoluteY="130dp" />
 
     <EditText
-        android:id="@+id/etFullName"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="15dp"
-        android:drawableLeft="@drawable/outline_account_box_24"
-        android:hint="  FULL NAME"
-        android:textSize="14sp"
-        tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="256dp" />
-
-    <EditText
         android:id="@+id/etEmail"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

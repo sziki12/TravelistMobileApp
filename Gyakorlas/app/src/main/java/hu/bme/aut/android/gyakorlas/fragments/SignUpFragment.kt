@@ -35,11 +35,7 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnSignUp.setOnClickListener {
-            if (binding.etFullName.text.toString().isEmpty()){
-                binding.etFullName.requestFocus()
-                binding.etFullName.error = "Please enter your full name"
-            }
-            else if (binding.etEmail.text.toString().isEmpty()) {
+            if (binding.etEmail.text.toString().isEmpty()) {
                 binding.etEmail.requestFocus()
                 binding.etEmail.error = "Please enter your email"
             }
