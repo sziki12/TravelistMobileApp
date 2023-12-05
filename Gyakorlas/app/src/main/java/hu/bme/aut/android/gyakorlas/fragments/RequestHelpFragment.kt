@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRequestHelpBinding
+import hu.bme.aut.android.gyakorlas.getCurrentUser
+import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import hu.bme.aut.android.gyakorlas.requestHelp.HelpMessage
 import hu.bme.aut.android.gyakorlas.requestHelp.UserMarkerAdapter
@@ -74,6 +77,29 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
         binding.imgbtnMenu.setOnClickListener {
             findNavController().navigate(R.id.action_requestHelpFragment_to_menuFragment)
         }
+
+        binding.btnGotHelp.setOnClickListener {
+            val (email,username) = requireActivity().getCurrentUser()
+            Log.i("EMAIL", email)
+            Log.i("USERNAME", username)
+
+            var lat = LocationService.currentLocation?.latitude
+            var lng = LocationService.currentLocation?.longitude
+            if (lat != null && lng != null) {
+                var user = DataAccess.UserMarkerServerData(username, lat, lng, "")
+                DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
+            }
+
+            //TODO EZ KELL?
+            for (u in userMarkers){
+                if (u.username == username){
+                    u.message = ""
+                }
+            }
+
+            userMarkerAdapter.update(userMarkers)
+            binding.btnGotHelp.isVisible = false
+        }
     }
 
     override fun onRequestHelp(userMarker: UserMarker) {
@@ -97,13 +123,18 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
 //            Log.i("RHMARKERS", m.name)
 
         //TODO EZ KELL? hogy frissitem a recyclerviewt?
-        //userMarkers.add(userMarker)
+        //az add elvileg nem kell!!!
+        userMarkers.add(userMarker)
+        Log.i("USERMARKER", userMarkers.size.toString())
         for (u in userMarkers){
             if (u.username == userMarker.username){
                 u.message = userMarker.message
             }
         }
         userMarkerAdapter.update(userMarkers)
+
+        //Beallitod, hogy az "I got help" gomb lathato legyen
+        binding.btnGotHelp.isVisible = true
     }
 
     private fun onFailure(message:String)
