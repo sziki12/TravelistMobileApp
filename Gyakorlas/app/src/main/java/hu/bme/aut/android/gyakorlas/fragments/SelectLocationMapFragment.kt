@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentMapsBinding
@@ -26,12 +28,13 @@ import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 
-class SelectLocationMapFragment : Fragment() {
+class SelectLocationMapFragment : Fragment(), GoogleMap.OnMarkerDragListener {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentSelectLocationMapBinding
     private var isInitialized = false
     private var selectedPosition:LatLng? = null
     private var marker:MarkerOptions? = null
+    private val args : SelectLocationMapFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +50,7 @@ class SelectLocationMapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.selectLocationMap) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
+        selectedPosition = args.position
     }
 
     @SuppressLint("MissingPermission")
@@ -66,6 +70,17 @@ class SelectLocationMapFragment : Fragment() {
                 Log.i("PERMISSION", "Map Disabled")
             }
         }
+        val pos = selectedPosition
+        if(pos!=null)
+        {
+            marker = MarkerOptions()
+                .position(pos)
+                .title("Selected Location")
+                .icon(BitmapDescriptorFactory.defaultMarker())
+                .draggable(true)
+            mMap.addMarker(marker!!)
+            binding.btnPlaceMarker.isEnabled=false
+        }
 
         //Set Map Center
         centerCamera()
@@ -75,20 +90,25 @@ class SelectLocationMapFragment : Fragment() {
 
         binding.btnPlaceMarker.setOnClickListener { view ->
             val latLang = mMap.cameraPosition.target
-            marker = MarkerOptions()
+            val newMarker = MarkerOptions()
                 .position(latLang)
                 .title("Selected Location")
                 .icon(BitmapDescriptorFactory.defaultMarker())
                 .draggable(true)
-            mMap.addMarker(marker!!)
+            mMap.addMarker(newMarker)
+
+            selectedPosition = newMarker.position
+            marker = newMarker
+
             binding.btnPlaceMarker.isEnabled=false
+            Log.i("position","Before: ${newMarker.position}")
         }
 
         binding.btnSaveMarker.setOnClickListener()
         {
             if(marker!=null)
             {
-                selectedPosition = marker!!.position
+                Log.i("position","After: ${marker!!.position}")
                 val action = SelectLocationMapFragmentDirections.actionSelectLocationMapFragmentToUploadNewPlaceFragment(selectedPosition)
                 NavHostFragment.findNavController(this as Fragment).navigate(action)
             }
@@ -102,6 +122,8 @@ class SelectLocationMapFragment : Fragment() {
         binding.imgbtnMenu.setOnClickListener(){
             findNavController().navigate(R.id.action_selectLocationMapFragment_to_menuFragment)
         }
+
+        mMap.setOnMarkerDragListener(this)
     }
 
     private fun enableGestures() {
@@ -131,5 +153,17 @@ class SelectLocationMapFragment : Fragment() {
             .tilt(50f)
             .build()
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(mapLocation))
+    }
+
+    override fun onMarkerDrag(p0: Marker) {
+    }
+
+    override fun onMarkerDragEnd(marker: Marker) {
+        selectedPosition = marker.position
+        Log.i("position","AfterDrag: $selectedPosition")
+        this.marker?.position(marker.position)
+    }
+
+    override fun onMarkerDragStart(p0: Marker) {
     }
 }

@@ -185,5 +185,9 @@
         <action
             android:id="@+id/action_selectLocationMapFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+        <argument
+            android:name="position"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            app:nullable="true" />
     </fragment>
 </navigation>

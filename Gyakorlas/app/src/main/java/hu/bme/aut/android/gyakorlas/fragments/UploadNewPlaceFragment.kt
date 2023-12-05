@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.maps.model.LatLng
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
@@ -119,7 +120,15 @@ class UploadNewPlaceFragment : Fragment() {
 
         binding.btnSelectLocation.setOnClickListener()
         {
-            val action = UploadNewPlaceFragmentDirections.actionUploadNewPlaceFragmentToSelectLocationMapFragment()
+            var position: LatLng? = null
+            if(binding.etLatitude.text.isNotEmpty()&&binding.etLongitude.text.isNotEmpty())
+            {
+                val lat = binding.etLatitude.text.toString().toDouble()
+                val lng = binding.etLongitude.text.toString().toDouble()
+                position = LatLng(lat,lng)
+
+            }
+            val action = UploadNewPlaceFragmentDirections.actionUploadNewPlaceFragmentToSelectLocationMapFragment(position)
             NavHostFragment.findNavController(this as Fragment).navigate(action)
         }
 
