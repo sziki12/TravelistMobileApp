@@ -109,8 +109,6 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     }
 
     override fun onRequestHelp(userMarker: UserMarker) {
-
-
         var user = DataAccess.UserMarkerServerData(token, userMarker.latitude, userMarker.longitude, userMarker.message)
         DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
 

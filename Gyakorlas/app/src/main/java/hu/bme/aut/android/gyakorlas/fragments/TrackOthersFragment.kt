@@ -20,6 +20,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentTrackOthersBinding
@@ -39,6 +40,7 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
     private lateinit var binding: FragmentTrackOthersBinding
     private var isInitialized = false
     var markers: ArrayList<UserMarker> = ArrayList()
+    var shownMarkers = ArrayList<Marker?>()
     private val handler = Handler(Looper.getMainLooper())
     private val updateIntervalMillis = 30 * 1000 // 30 seconds
 
@@ -102,7 +104,21 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             {
                 markers.clear()
                 markers.addAll(outMarkers)
+                showMarkers()
             }
+        }
+    }
+
+    private fun showMarkers()
+    {
+        for(marker in shownMarkers) {
+            marker?.remove()
+        }
+        shownMarkers.clear()
+
+        for(userMarker in markers) {
+            var latlng = LatLng(userMarker.latitude, userMarker.longitude)
+            shownMarkers.add(mMap.addMarker(MarkerOptions().position(latlng).title(userMarker.username)))
         }
     }
 
