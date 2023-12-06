@@ -303,9 +303,9 @@ object DataAccess {
             suspend fun uploadNewPlace(@Body requestBody: PlaceServerData): Response<ResponseBody>
             @GET("/api/places")
             suspend fun getPlaces(): Response<PlaceServerArray>
-            @POST("/api/requesthelp")
+            @POST("/api/request-help")
             suspend fun uploadNewHelpMessage(@Body requestBody: UserMarkerServerData): Response<ResponseBody>
-            @GET("/api/requesthelp")
+            @GET("/api/request-help")
             suspend fun getUserMarkers(): Response<UserMarkerServerArray>
         }
 

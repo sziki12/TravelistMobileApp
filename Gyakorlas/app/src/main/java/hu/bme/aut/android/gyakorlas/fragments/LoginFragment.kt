@@ -78,8 +78,15 @@ class LoginFragment : Fragment() {
     }
     private fun onSuccess(token: String)
     {
+        val tokenIndex = token.indexOf("token=")
+        val tokenString = token.substring(tokenIndex + "token=".length)
+
+        val endIndex = tokenString.indexOf("; path=/;")
+        val finalToken = tokenString.substring(0, endIndex)
+
+        Log.i("TOKEN", finalToken)
         tokenSharedPreferences.edit {
-            putString("token", token)
+            putString("token", finalToken)
             apply()
         }
         findNavController().navigate(R.id.action_loginFragment_to_menuFragment)
