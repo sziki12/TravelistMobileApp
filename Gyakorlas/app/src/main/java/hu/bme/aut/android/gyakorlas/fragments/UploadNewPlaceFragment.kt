@@ -9,11 +9,8 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.content.pm.PackageManager
-import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -29,7 +26,6 @@ import hu.bme.aut.android.gyakorlas.databinding.FragmentUploadNewPlaceBinding
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 import java.io.ByteArrayOutputStream
-import java.security.Permission
 
 
 class UploadNewPlaceFragment : Fragment() {
@@ -223,5 +219,11 @@ class UploadNewPlaceFragment : Fragment() {
     {
         findNavController().navigate(R.id.action_uploadNewPlaceFragment_to_menuFragment)
         Log.i("Retrofit","OnSuccess")
+    }
+
+    private fun transormBitmapToByteArray(bitmap: Bitmap): ByteArray {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+        return stream.toByteArray()
     }
 }
