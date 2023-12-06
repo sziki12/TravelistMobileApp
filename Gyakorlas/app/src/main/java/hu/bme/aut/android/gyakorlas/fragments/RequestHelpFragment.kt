@@ -51,12 +51,6 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
             }
         }
 
-        //Ebbol a userMarkers listabol atteszek minden egyes markert a helpMessages listaba, de minden userMarker-nek csak a username-t es message-t tarolom el.
-        /*for(u in userMarkers){
-            helpMessages.add(HelpMessage(u.username, u.message))
-        }
-
-        helpMessagesAdapter = UserMarkerAdapter(helpMessages)*/
         var requestedHelpUsers : ArrayList<UserMarker> = ArrayList()
         for (user in userMarkers){
             if (user.message != ""){
@@ -110,22 +104,6 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     override fun onRequestHelp(userMarker: UserMarker) {
         var user = DataAccess.UserMarkerServerData(userMarker.latitude, userMarker.longitude, userMarker.message)
         DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
-        //helpMessages.add(helpMessage)
-
-//        val selfLatLng = LocationService.currentLocation?.latitude?.let { LocationService.currentLocation?.longitude?.let { it1 ->
-//            LatLng(it,
-//                it1
-//            )
-//        } }
-//
-//        if (selfLatLng != null) {
-//            Log.i("SELFMARKER", selfLatLng.latitude.toString() + " " + selfLatLng.longitude.toString())
-//            markers.add(MapMarker(helpMessage.username, selfLatLng.latitude, selfLatLng.longitude))
-//        }
-//
-//
-//        for (m in markers)
-//            Log.i("RHMARKERS", m.name)
 
         //TODO EZ KELL? hogy frissitem a recyclerviewt?
         //az add elvileg nem kell!!!
