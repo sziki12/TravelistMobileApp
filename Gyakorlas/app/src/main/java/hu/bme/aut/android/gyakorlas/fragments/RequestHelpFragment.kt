@@ -1,39 +1,36 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
-import android.graphics.drawable.AnimationDrawable
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.SeekBar
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.maps.model.LatLng
 import hu.bme.aut.android.gyakorlas.R
-import hu.bme.aut.android.gyakorlas.comment.Comment
-import hu.bme.aut.android.gyakorlas.comment.NewCommentDialog
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRequestHelpBinding
+import hu.bme.aut.android.gyakorlas.getCurrentUser
 import hu.bme.aut.android.gyakorlas.location.LocationService
-import hu.bme.aut.android.gyakorlas.mapData.MapMarker
+import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import hu.bme.aut.android.gyakorlas.requestHelp.HelpMessage
-import hu.bme.aut.android.gyakorlas.requestHelp.HelpMessagesAdapter
+import hu.bme.aut.android.gyakorlas.requestHelp.UserMarkerAdapter
 import hu.bme.aut.android.gyakorlas.requestHelp.RequestHelpDialogFragment
 import hu.bme.aut.android.gyakorlas.requestHelp.RequestHelpListener
-import kotlin.concurrent.thread
+import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 
 class RequestHelpFragment : Fragment(), RequestHelpListener {
     private lateinit var binding : FragmentRequestHelpBinding
-    private lateinit var helpMessagesAdapter: HelpMessagesAdapter
-    private var helpMessages:ArrayList<HelpMessage> = ArrayList()
-    var markers: ArrayList<MapMarker> = ArrayList()
+    private lateinit var userMarkerAdapter: UserMarkerAdapter
+    private var userMarkers: ArrayList<UserMarker> = ArrayList()
+    private lateinit var tokenSharedPreferences: SharedPreferences
+    private lateinit var token: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,10 +43,31 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        helpMessagesAdapter = HelpMessagesAdapter(helpMessages)
 
+        tokenSharedPreferences = requireActivity().getSharedPreferences("user_token", Context.MODE_PRIVATE)
+        token = tokenSharedPreferences.getString("token", "")?:""
+
+        //Lekerem a UserMarker-eket tartalmazo listat
+        DataAccess.getUserMarkers()
+        {
+                outMarkers->
+            if(outMarkers!=null)
+            {
+                userMarkers.clear()
+                userMarkers.addAll(outMarkers)
+            }
+        }
+
+        var requestedHelpUsers : ArrayList<UserMarker> = ArrayList()
+        for (user in userMarkers){
+            if (user.message != ""){
+                requestedHelpUsers.add(user)
+            }
+        }
+
+        userMarkerAdapter = UserMarkerAdapter(requestedHelpUsers)
         binding.rvMessages.layoutManager = LinearLayoutManager(this.context)
-        binding.rvMessages.adapter = helpMessagesAdapter
+        binding.rvMessages.adapter = userMarkerAdapter
 
         val pulseAnimation = AnimationUtils.loadAnimation(this.context, R.anim.pulse_animation)
         binding.ibRequestHelp.startAnimation(pulseAnimation)
@@ -65,26 +83,57 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
         binding.imgbtnMenu.setOnClickListener {
             findNavController().navigate(R.id.action_requestHelpFragment_to_menuFragment)
         }
+
+        binding.btnGotHelp.setOnClickListener {
+            val (email,username) = requireActivity().getCurrentUser()
+            Log.i("EMAIL", email)
+            Log.i("USERNAME", username)
+
+            var lat = LocationService.currentLocation?.latitude
+            var lng = LocationService.currentLocation?.longitude
+            if (lat != null && lng != null) {
+                var user = DataAccess.UserMarkerServerData(token, lat, lng, "")
+                DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
+            }
+
+            //TODO EZ KELL?
+            for (u in userMarkers){
+                if (u.username == username){
+                    u.message = ""
+                }
+            }
+
+            userMarkerAdapter.update(userMarkers)
+            binding.btnGotHelp.isVisible = false
+        }
     }
 
-    override fun onRequestHelp(helpMessage: HelpMessage) {
-        helpMessages.add(helpMessage)
+    override fun onRequestHelp(userMarker: UserMarker) {
+        var user = DataAccess.UserMarkerServerData(token, userMarker.latitude, userMarker.longitude, userMarker.message)
+        DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
 
-//        val selfLatLng = LocationService.currentLocation?.latitude?.let { LocationService.currentLocation?.longitude?.let { it1 ->
-//            LatLng(it,
-//                it1
-//            )
-//        } }
-//
-//        if (selfLatLng != null) {
-//            Log.i("SELFMARKER", selfLatLng.latitude.toString() + " " + selfLatLng.longitude.toString())
-//            markers.add(MapMarker(helpMessage.username, selfLatLng.latitude, selfLatLng.longitude))
-//        }
-//
-//
-//        for (m in markers)
-//            Log.i("RHMARKERS", m.name)
+        //TODO EZ KELL? hogy frissitem a recyclerviewt?
+        //az add elvileg nem kell!!!
+        userMarkers.add(userMarker)
+        Log.i("USERMARKER", userMarkers.size.toString())
+        for (u in userMarkers){
+            if (u.username == userMarker.username){
+                u.message = userMarker.message
+            }
+        }
+        userMarkerAdapter.update(userMarkers)
 
-        helpMessagesAdapter.update(helpMessages)
+        //Beallitod, hogy az "I got help" gomb lathato legyen
+        binding.btnGotHelp.isVisible = true
+    }
+
+    private fun onFailure(message:String)
+    {
+        Toast.makeText(requireContext(),message, Toast.LENGTH_LONG).show()
+        Log.i("Retrofit","OnFailure")
+    }
+    private fun onSuccess()
+    {
+        Log.i("Retrofit","OnSuccess")
     }
 }

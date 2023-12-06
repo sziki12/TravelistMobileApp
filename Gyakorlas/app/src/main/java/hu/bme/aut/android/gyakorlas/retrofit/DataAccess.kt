@@ -1,8 +1,14 @@
 package hu.bme.aut.android.gyakorlas.retrofit
 
+import android.content.Context
+import android.util.JsonToken
 import android.util.Log
+import androidx.core.content.edit
+import androidx.preference.PreferenceManager
+import hu.bme.aut.android.gyakorlas.getCurrentUser
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.mapData.PlaceData
+import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -35,11 +41,11 @@ object DataAccess {
 
     enum class Process
     {
-        Login, Registration, UploadNewPlace,GetPlaces
+        Login, Registration, UploadNewPlace, GetPlaces, UploadHelpMessage, GetUserMarkers
     }
         fun startLoginListener(
             user: UserServerData,
-            onSuccess: () -> Unit,
+            onSuccess: (token: String) -> Unit,
             onFailure: (message: String) -> Unit,
             onUserNotExists: () -> Unit
         ) {
@@ -51,10 +57,12 @@ object DataAccess {
             CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val response = connection.userAPI.loginUser(user)
-
+                    val token = response.headers()["set-cookie"]
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful) {
-                            onSuccess.invoke() // Invoke success callback
+                            if (token != null) {
+                                onSuccess.invoke(token)
+                            } // Invoke success callback
                             val responseBody = response.body() // Access the response body here
                             // Process responseBody as needed
                         }else if(response.code()==400)
@@ -175,6 +183,71 @@ object DataAccess {
         }
     }
 
+    fun startHelpMessageListener( userMarker: UserMarkerServerData,
+                                     onSuccess: () -> Unit,
+                                     onFailure: (message: String) -> Unit)
+    {
+        if(isWorkInProgress[Process.UploadHelpMessage]!=false)
+            return
+
+        isWorkInProgress[Process.UploadHelpMessage]=true
+
+        val connection = Connection()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = connection.userAPI.uploadNewHelpMessage(userMarker)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        onSuccess.invoke() // Invoke success callback
+                        val responseBody = response.body() // Access the response body here
+                        // Process responseBody as needed
+                    } else {
+                        onFailure.invoke("Request failed with code: ${response.code()}")
+                        Log.i("Retrofit","Request failed with code: ${response.code()}")
+                    }
+                }
+            } catch (e: Exception) {
+                onFailure.invoke("Request failed: ${e.message}")
+                Log.i("Retrofit","Request failed: ${e.message}")
+            }
+            isWorkInProgress[Process.UploadHelpMessage]=false
+        }
+    }
+
+    fun getUserMarkers(onSuccess: (markers:ArrayList<UserMarker>?) -> Unit)
+    {
+        if(isWorkInProgress[Process.GetUserMarkers]!=false)
+            return
+
+        isWorkInProgress[Process.GetUserMarkers]=true
+
+        val connection = Connection()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = connection.userAPI.getUserMarkers()
+                if (response.isSuccessful) {
+                    val outMarkers = ArrayList<UserMarker>()
+                    for(userMarker in response.body()!!.userMarkers!!)
+                    {
+                        outMarkers.add(UserMarker(userMarker.token, userMarker.latitude, userMarker.longitude, userMarker.message))
+                        Log.i("Retrofit","UserMarker: $userMarker")
+                    }
+                    onSuccess(outMarkers)
+                } else {
+
+                    Log.i("Retrofit","Request failed with code: ${response.code()}")
+                }
+
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.i("Retrofit", "Request failed: ${e.message}")
+                }
+            }
+            isWorkInProgress[Process.GetUserMarkers]=false
+        }
+    }
+
         class Connection
         {
             val client = OkHttpClient.Builder()
@@ -206,8 +279,19 @@ object DataAccess {
             val rating: Double
         )
 
+        @Serializable
+        data class UserMarkerServerData(
+            val token: String,
+            val latitude: Double,
+            val longitude: Double,
+            val message: String
+        )
+
     @Serializable
     data class PlaceServerArray(val places :List<PlaceServerData>?)
+
+    @Serializable
+    data class UserMarkerServerArray(val userMarkers :List<UserMarkerServerData>?)
 
         interface UserAccessAPI {
             //@Headers("Content-Type: application/json")
@@ -219,6 +303,10 @@ object DataAccess {
             suspend fun uploadNewPlace(@Body requestBody: PlaceServerData): Response<ResponseBody>
             @GET("/api/places")
             suspend fun getPlaces(): Response<PlaceServerArray>
+            @POST("/api/requesthelp")
+            suspend fun uploadNewHelpMessage(@Body requestBody: UserMarkerServerData): Response<ResponseBody>
+            @GET("/api/requesthelp")
+            suspend fun getUserMarkers(): Response<UserMarkerServerArray>
         }
 
         class LoggingInterceptor : Interceptor {

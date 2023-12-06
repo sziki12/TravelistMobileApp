@@ -1,13 +1,16 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.JsonToken
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.edit
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import hu.bme.aut.android.gyakorlas.R
@@ -17,6 +20,7 @@ import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 class LoginFragment : Fragment() {
     private lateinit var binding : FragmentLoginBinding
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var tokenSharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +33,8 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tokenSharedPreferences = requireActivity().getSharedPreferences("user_token", Context.MODE_PRIVATE)
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val saveUser = sharedPreferences.getBoolean("saveUser", false)
@@ -70,8 +76,12 @@ class LoginFragment : Fragment() {
         Toast.makeText(requireContext(),message,Toast.LENGTH_LONG).show()
         Log.i("Retrofit","OnFailure")
     }
-    private fun onSuccess()
+    private fun onSuccess(token: String)
     {
+        tokenSharedPreferences.edit {
+            putString("token", token)
+            apply()
+        }
         findNavController().navigate(R.id.action_loginFragment_to_menuFragment)
         Log.i("Retrofit","OnSuccess")
     }
