@@ -14,13 +14,16 @@
   <component name="ChangeListManager">
     <list default="true" id="c9bf591d-c619-4982-a342-41e1efba38e5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/LoginFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/LoginFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/RequestHelpFragment.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/fragments/RequestHelpFragment.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/retrofit/DataAccess.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/hu/bme/aut/android/gyakorlas/retrofit/DataAccess.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Eszter\.android\avd\Labor_1_1.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[kfs4ongunzfm4pd6]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />

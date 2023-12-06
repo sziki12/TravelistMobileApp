@@ -1,5 +1,7 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +29,8 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     private lateinit var binding : FragmentRequestHelpBinding
     private lateinit var userMarkerAdapter: UserMarkerAdapter
     private var userMarkers: ArrayList<UserMarker> = ArrayList()
+    private lateinit var tokenSharedPreferences: SharedPreferences
+    private lateinit var token: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +43,9 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tokenSharedPreferences = requireActivity().getSharedPreferences("user_token", Context.MODE_PRIVATE)
+        token = tokenSharedPreferences.getString("token", "")?:""
 
         //Lekerem a UserMarker-eket tartalmazo listat
         DataAccess.getUserMarkers()
@@ -85,7 +92,7 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
             var lat = LocationService.currentLocation?.latitude
             var lng = LocationService.currentLocation?.longitude
             if (lat != null && lng != null) {
-                var user = DataAccess.UserMarkerServerData(lat, lng, "")
+                var user = DataAccess.UserMarkerServerData(token, lat, lng, "")
                 DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
             }
 
@@ -102,7 +109,9 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     }
 
     override fun onRequestHelp(userMarker: UserMarker) {
-        var user = DataAccess.UserMarkerServerData(userMarker.latitude, userMarker.longitude, userMarker.message)
+
+
+        var user = DataAccess.UserMarkerServerData(token, userMarker.latitude, userMarker.longitude, userMarker.message)
         DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
 
         //TODO EZ KELL? hogy frissitem a recyclerviewt?
