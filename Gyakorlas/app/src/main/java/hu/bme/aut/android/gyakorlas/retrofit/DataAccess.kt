@@ -5,6 +5,7 @@ import android.util.JsonToken
 import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import hu.bme.aut.android.gyakorlas.comment.Comment
 import hu.bme.aut.android.gyakorlas.getCurrentUser
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.mapData.PlaceData
@@ -41,7 +42,7 @@ object DataAccess {
 
     enum class Process
     {
-        Login, Registration, UploadNewPlace, GetPlaces, UploadHelpMessage, GetUserMarkers
+        Login, Registration, UploadNewPlace, GetPlaces, UploadHelpMessage, GetUserMarkers, GetComments,
     }
         fun startLoginListener(
             user: UserServerData,
@@ -164,7 +165,7 @@ object DataAccess {
                    val outMarkers = ArrayList<MapMarker>()
                    for(place in response.body()!!.places!!)
                    {
-                       //TODO Comments and Rating
+                       //TODO Rating
                        outMarkers.add(MapMarker(PlaceData(place.name,place.location,place.description),place.latitude,place.longitude))
                        Log.i("Retrofit","Place: $place")
                    }
@@ -180,6 +181,33 @@ object DataAccess {
                 }
             }
             isWorkInProgress[Process.GetPlaces]=false
+        }
+    }
+
+    fun getComments(onSuccess: (comments:ArrayList<Comment>?) -> Unit)
+    {
+        if(isWorkInProgress[Process.GetComments]!=false)
+            return
+
+        isWorkInProgress[Process.GetComments]=true
+
+        val connection = Connection()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = connection.userAPI.getComments()
+                if (response.isSuccessful) {
+                    val outComments = ArrayList<Comment>()
+                    for(comment in response.body()!!.comments!!)
+                    {
+                        outComments.add(Comment(comment.title,comment.description,comment.rating,comment.senderEmail))
+                        Log.i("Retrofit","Comment: $comment")
+                    }
+                    onSuccess(outComments)
+                }
+            } catch (e: Exception) {
+                Log.i("Retrofit","Request failed: ${e.message}")
+            }
+            isWorkInProgress[Process.GetComments]=false
         }
     }
 
@@ -263,6 +291,14 @@ object DataAccess {
             val userAPI = retrofit.create(UserAccessAPI::class.java)
         }
 
+    @Serializable
+    data class CommentServerData(
+        val title:String,
+        val description:String,
+        val rating:Float,
+        val senderEmail:String
+    )
+
         @Serializable
         data class UserServerData(
             val email: String,
@@ -291,6 +327,9 @@ object DataAccess {
     data class PlaceServerArray(val places :List<PlaceServerData>?)
 
     @Serializable
+    data class CommentServerArray(val comments :List<CommentServerData>?)
+
+    @Serializable
     data class UserMarkerServerArray(val userMarkers :List<UserMarkerServerData>?)
 
         interface UserAccessAPI {
@@ -307,6 +346,9 @@ object DataAccess {
             suspend fun uploadNewHelpMessage(@Body requestBody: UserMarkerServerData): Response<ResponseBody>
             @GET("/api/requesthelp")
             suspend fun getUserMarkers(): Response<UserMarkerServerArray>
+
+            @GET("/api/comments")//TODO Not valid URL
+            suspend fun getComments(): Response<CommentServerArray>
         }
 
         class LoggingInterceptor : Interceptor {

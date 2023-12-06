@@ -68,18 +68,28 @@ class MapDataProvider private constructor() {
         listeners.remove(listener)
     }
     fun updateMarkers() {
+        val newMarkers:ArrayList<MapMarker> = ArrayList()
         DataAccess.getMapMarkers()
         {
                 outMakrers->
             if(outMakrers!=null)
             {
-                markers.clear()
-                markers.addAll(outMakrers)
+                newMarkers.clear()
+                newMarkers.addAll(outMakrers)
             }
             for(listener in listeners)
             {
                 listener.onMapDataChanged(markers)
             }
+        }
+        DataAccess.getComments() {
+            outComments->
+            if (outComments != null) {
+                for(comment in outComments) {
+                    TODO("Add Comment To Place")
+                }
+            }
+            markers = newMarkers
         }
     }
 
