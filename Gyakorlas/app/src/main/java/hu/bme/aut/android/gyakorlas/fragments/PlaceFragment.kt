@@ -62,8 +62,6 @@ class PlaceFragment : Fragment() {
 
         if(place!=null)
         {
-            //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft02.jpg"), null))
-            //place!!.images.add(Drawable.createFromStream(assets.open("images/nyugati_barcraft03.jpg"), null))
             val size = Math.min(3, place!!.images.size)
             Log.i("IMAGES",size.toString())
 
@@ -82,19 +80,12 @@ class PlaceFragment : Fragment() {
                             it,place!!.images[i],600,600)
                     })
                 }
-
-
-                //images[i].setImageDrawable(R.)
             }
         }
         for((index, image) in images.withIndex())
         {
             image.setOnClickListener()
             {
-//                var intent = Intent(this, ImageViewActivity::class.java)
-//                intent.putExtra("PLACE",markerID)
-//                intent.putExtra("INDEX",index)
-//                startActivity(intent)
 
                 val action =
                     hu.bme.aut.android.gyakorlas.fragments.PlaceFragmentDirections.actionPlaceFragmentToImageViewFragment(
@@ -104,21 +95,6 @@ class PlaceFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
-
-        //var options = BitmapFactory.Options()
-        //options.inSampleSize = 2
-        /* images[0].setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft01)))
-         images[1].setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft02)))
-         images[2].setImageBitmap(BitmapFactory.decodeStream(resources.openRawResource(R.raw.nyugati_barcraft03)))*/
-
-
-
         return binding.root;
     }
-
-    /*override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-    }*/
 }

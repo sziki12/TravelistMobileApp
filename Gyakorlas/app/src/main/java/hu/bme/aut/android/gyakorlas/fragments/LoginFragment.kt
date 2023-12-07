@@ -86,10 +86,6 @@ class LoginFragment : Fragment() {
         val finalToken = tokenString.substring(0, endIndex)
 
         Log.i("TOKEN", finalToken)
-//        tokenSharedPreferences.edit {
-//            putString("token", finalToken)
-//            apply()
-//        }
         Token.token = finalToken
         findNavController().navigate(R.id.action_loginFragment_to_menuFragment)
         Log.i("Retrofit","OnSuccess")

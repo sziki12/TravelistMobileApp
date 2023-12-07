@@ -69,12 +69,6 @@ class ImageViewFragment : Fragment() {
                 }
             }
         }
-        //Log.i("IMAGES","Scroll View Width: ${binding.scrollView.width}")
-        //Log.i("IMAGES","Scroll View Height: ${binding.scrollView.height}")
-
-        //Log.i("IMAGES","Root Width: ${binding.root.width}")
-        //Log.i("IMAGES","Root Height: ${binding.root.height}")
-
         return binding.root;
     }
 }
