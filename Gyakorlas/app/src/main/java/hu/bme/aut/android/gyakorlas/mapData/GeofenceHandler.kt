@@ -92,9 +92,10 @@ class GeofenceHandler: BroadcastReceiver() {
         for(marker in allMarkers)
         {
             addGeofence(marker,geofenceRadius)
-            //Log.i("GEOFENCE","Added ${marker.name}")
+            Log.i("GEOFENCE","Added ${marker.name}")
         }
         markers.addAll(allMarkers)
+        Log.i("GEOFENCE","Add Markers: $markers")
         if(markers.isNotEmpty())
         {
             //Log.i("GEOFENCE","setUpGeofences Markers.Size ${markers.size}")
@@ -146,7 +147,7 @@ class GeofenceHandler: BroadcastReceiver() {
     {
         activeGeofences.clear()
         markers.clear()
-
+        Log.i("GEOFENCE","Remove Markers: $markers")
         geofencingClient?.removeGeofences(geofencePendingIntent)?.run {
             addOnSuccessListener {
                 // Geofences removed
