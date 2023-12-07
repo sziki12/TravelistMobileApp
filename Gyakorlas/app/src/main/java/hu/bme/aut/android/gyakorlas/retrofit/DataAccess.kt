@@ -232,7 +232,7 @@ object DataAccess {
                     val outMarkers = ArrayList<UserMarker>()
                     for(userMarker in response.body()!!.requestHelps!!)
                     {
-                        outMarkers.add(UserMarker(userMarker.userId, userMarker.latitude, userMarker.longitude, userMarker.message))
+                        outMarkers.add(UserMarker(userMarker.username, userMarker.latitude, userMarker.longitude, userMarker.message))
                         Log.i("USERMARKER", userMarker.message)
                         Log.i("Retrofit","UserMarker: $userMarker")
                     }
@@ -299,6 +299,7 @@ object DataAccess {
 
     @Serializable
     data class UserMarkerData(
+        val username: String,
         val userId: String,
         val latitude: Double,
         val longitude: Double,

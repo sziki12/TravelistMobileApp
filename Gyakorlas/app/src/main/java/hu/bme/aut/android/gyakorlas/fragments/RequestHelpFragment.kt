@@ -35,6 +35,10 @@ class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProv
     private lateinit var token: String
     private val trackOthersDataProvider = TrackOthersDataProvider.instance
 
+    companion object {
+        var requesetedHelp: Boolean = false
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,24 +53,11 @@ class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProv
 
         trackOthersDataProvider.addListener(this)
 
-        tokenSharedPreferences = requireActivity().getSharedPreferences("user_token", Context.MODE_PRIVATE)
-        token = tokenSharedPreferences.getString("token", "")?:""
-
-        //Lekerem a UserMarker-eket tartalmazo listat
-        /*DataAccess.getUserMarkers()
-        {
-                outMarkers->
-            if(outMarkers!=null)
-            {
-                userMarkers.clear()
-                userMarkers.addAll(outMarkers)
-            }
-        }*/
-        Log.i("REQUESTMARKERSIZE", userMarkers.size.toString())
-
         userMarkerAdapter = UserMarkerAdapter(getRequestedHelpUsers(trackOthersDataProvider.markers))
         binding.rvMessages.layoutManager = LinearLayoutManager(this.context)
         binding.rvMessages.adapter = userMarkerAdapter
+
+        binding.btnGotHelp.isVisible = requesetedHelp
 
         val pulseAnimation = AnimationUtils.loadAnimation(this.context, R.anim.pulse_animation)
         binding.ibRequestHelp.startAnimation(pulseAnimation)
@@ -98,20 +89,11 @@ class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProv
             if (lat != null && lng != null) {
                 var user = DataAccess.UserMarkerServerData(Token.token, lat, lng, "solved")
                 DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
-
-                //TODO ne lat, lng-gal azonositsuk a usert, hanem id/username
-                for (m in trackOthersDataProvider.markers){
-                    if (m.latitude == user.latitude && m.longitude == user.longitude){
-                        m.message = user.message
-                    }
-                }
-            }
-
-            activity?.runOnUiThread {
-                userMarkerAdapter.update(getRequestedHelpUsers(trackOthersDataProvider.markers))
             }
 
             binding.btnGotHelp.isVisible = false
+
+            requesetedHelp = false
         }
     }
 
@@ -119,16 +101,7 @@ class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProv
         var user = DataAccess.UserMarkerServerData(Token.token, userMarker.latitude, userMarker.longitude, userMarker.message)
         DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
 
-        //TODO ne lat, lng-gal azonositsuk a usert, hanem id/username
-        for (m in trackOthersDataProvider.markers){
-            if (m.latitude == userMarker.latitude && m.longitude == userMarker.longitude){
-                m.message = userMarker.message
-            }
-        }
-
-        activity?.runOnUiThread {
-            userMarkerAdapter.update(getRequestedHelpUsers(trackOthersDataProvider.markers))
-        }
+        requesetedHelp = true
 
         //Beallitod, hogy az "I got help" gomb lathato legyen
         binding.btnGotHelp.isVisible = true

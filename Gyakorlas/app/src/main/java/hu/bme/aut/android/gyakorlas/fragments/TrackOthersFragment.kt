@@ -77,10 +77,8 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
                 outMarkers->
             if(outMarkers!=null)
             {
-                Log.i("OUTMARKERS", outMarkers.toString())
                 markers.clear()
                 markers.addAll(outMarkers)
-                Log.i("MARKERSLoist", markers.toString())
                 for (m in markers){
                     Log.i("MARKERS", m.message)
                 }
@@ -88,22 +86,18 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             }
         }
 
-        Log.i("MARKERSSIZE", markers.size.toString())
         for (m in markers) {
             val userLatLng = LatLng(m.latitude, m.longitude)
 
             if (m.message == ""){
-                Log.i("NOMESSAGE", m.longitude.toString())
                 val markerOptions = MarkerOptions().position(userLatLng).title(m.username).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 mMap.addMarker(markerOptions)
             }
             else {
                 //Distance between current location and userLatLng in meters:
                 val distance = LocationService.calculateDistance(userLatLng)
-                Log.i("BEJOND", "IDE")
                 if (distance != null){
                     if (distance <= 5000){
-                        Log.i("YESMESSAGE", m.longitude.toString())
                         val markerOptions = MarkerOptions().position(userLatLng).title(m.username)
                         mMap.addMarker(markerOptions)
                     }
@@ -120,10 +114,8 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             }
             shownMarkers.clear()
 
-            Log.i("ILYENINCSSEHOL", markers.toString())
             activity?.runOnUiThread {
                 for (userMarker in markers) {
-                    Log.i("TRACKUSERMARKER", markers.size.toString())
                     var latlng = LatLng(userMarker.latitude, userMarker.longitude)
                     try {
                         shownMarkers.add(
@@ -132,10 +124,8 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
                             )
                         )
                     } catch (e: Exception) {
-                        Log.i("JAJAJ", e.message.toString())
                         continue
                     }
-                    Log.i("SHOWNMARKER", shownMarkers.get(shownMarkers.size - 1).toString())
                 }
             }
 
@@ -143,17 +133,14 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
                 val userLatLng = LatLng(m.latitude, m.longitude)
 
                 if (m.message == "") {
-                    Log.i("NOMESSAGE", m.longitude.toString())
                     val markerOptions = MarkerOptions().position(userLatLng).title(m.username)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                     mMap.addMarker(markerOptions)
                 } else {
                     //Distance between current location and userLatLng in meters:
                     val distance = LocationService.calculateDistance(userLatLng)
-                    Log.i("BEJOND", "IDE")
                     if (distance != null) {
                         if (distance <= 5000) {
-                            Log.i("YESMESSAGE", m.longitude.toString())
                             val markerOptions =
                                 MarkerOptions().position(userLatLng).title(m.username)
                             mMap.addMarker(markerOptions)
@@ -184,7 +171,7 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
     @SuppressLint("MissingPermission")
     private val callback = OnMapReadyCallback { googleMap ->
 
-        Log.i("PLACEE","map ready callback")
+        Log.i("PLACE","map ready callback")
         mMap = googleMap
         this.activity?.let {
             PermissionHandler.requestPermission(
