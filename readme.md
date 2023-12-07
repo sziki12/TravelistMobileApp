@@ -20,19 +20,28 @@ Ezután megjelenik az alkalmazás menüje, ahonnan kiválaszthatja a felhasznál
 
 ![](assets/menu.png)
 
-A jobb alsó sarokban lévő beállítások ikonra kattintva módosíthatjuk, hogy milyen időközönként frissüljön a helyzetünk.
+A jobb alsó sarokban lévő beállítások ikonra kattintva módosíthatjuk, hogy milyen időközönként frissüljön a helyzetünk, illetve beállíthatjuk, hogy az applikáció jegyezze meg a bejelentkezéshez használt email-címünket.
 
 ![](assets/settings.png)
 ![](assets/location_update_interval.png)
 
-Ha a menüből a Profile opciót választjuk, megtekinthetjük a profilunkat, módosíthatjuk a felhasználónevünket és a profilképünket.
+Ha a menüből a Profile opciót választjuk, megtekinthetjük a profilunkat, módosíthatjuk a felhasználónevünket és a profilképünket. Tölthetünk fel a galériánkból is képet, illetve a kamerát is használhatjuk erre a célra.
 
 ![](assets/profile.png)
 
-A menüből a Search opciót választva megjelennek a térképen a már elmentett helyek, amelyekről adatokat tárolunk. Egy legördülő menüből kiválaszthatjuk, hogy mely város helyszíneit jelenítse meg a térkép.
+A menüből a Search opciót választva megjelennek a térképen a már elmentett helyek, amelyekről adatokat tárolunk. Egy legördülő menüből kiválaszthatjuk, hogy mely város helyszíneit jelenítse meg a térkép. Ha valamelyik térkép markerre ráklikkelünk, megjelenik fölötte az adott hely neve. Ha pedig erre a névre nyomunk rá, megjelenik egy részletesebb nézet a helyszínről, ahol megtekinthetjük az erről feltöltött képeket, leírást, és a hely értékelését.
 
 ![](assets/search.png)
 
+![](assets/place_info.png)
+
+Ha a képeket szeretnénk nagyobb méretben megnézni, akkor bármelyik fotóra kattintva egy részletesebb nézettel találjuk szemben magunkat, ahol görgetni tudunk a képek között.
+
+![](assets/image_view.png)
+
+Ha valamelyik helyről meg szeretnénk nézi a mások által írt kommenteket, vagy mi magunk is szeretnénk megjegyzést hozzáfűzni, akkor a Comments gombra kell kattintanunk. Itt láthatjuk, hogy melyik felhasználó milyen megjegyzést írt, hanyasra értékelte a helyszínt.A New Comment gomb megnyomása után egy dialógusablakba írhatjuk be a saját véleményünk, értékelésünk. A Details gombra kattintva visszanavigálunk a hely részletes nézetére.
+
+![](assets/comments.png)
 
 A Recommended For You opcióra klikkelve a menüben egy RecyclerView-ban megjelennek a számunkra ajánlott helyek.
 
@@ -42,16 +51,10 @@ Alapértelmezetten 7,5 kilométeres körzetből ajánl az app helyeket, viszont 
 
 ![](assets/recommended_modify_distance.png)
 
-Ha valamelyik helyről részletesebb információkat szeretnénk kapni, akkor a helyhez tartozó Details gombra kell kattintanunk. Ezután megjelennek a helyszínről készült képek, nyitvatartási idő, elérhetőség, leírás.
-
-![](assets/place_info.png)
-
-Ha a képeket szeretnénk nagyobb méretben megnézni, akkor bármelyik fotóra kattintva egy részletesebb nézettel találjuk szemben magunkat, ahol görgetni tudunk a képek között.
-
-![](assets/image_view.png)
 
 
-Ha a menüből a Track Others opciót választjuk, akkor megtekinthetjük a térképen az 5 kilométeres körzetünkben lévő felhasználók helyzetét.
+
+Ha a menüből a Track Others opciót választjuk, akkor megtekinthetjük a térképen az 5 kilométeres körzetünkben lévő felhasználók helyzetét. Ezen a térképen kékkel megjelennek a
 
 ![](assets/track_others.png)
 

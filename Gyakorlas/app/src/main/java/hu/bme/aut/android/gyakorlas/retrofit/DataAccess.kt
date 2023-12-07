@@ -61,6 +61,7 @@ object DataAccess {
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful) {
                             if (token != null) {
+                                Log.i("DATAACCESSTOKEN", token)
                                 onSuccess.invoke(token)
                             } // Invoke success callback
                             val responseBody = response.body() // Access the response body here
@@ -226,11 +227,13 @@ object DataAccess {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = connection.userAPI.getUserMarkers()
+                Log.i("GETUSERMARKERS", response.toString())
                 if (response.isSuccessful) {
                     val outMarkers = ArrayList<UserMarker>()
-                    for(userMarker in response.body()!!.userMarkers!!)
+                    for(userMarker in response.body()!!.requestHelps!!)
                     {
-                        outMarkers.add(UserMarker(userMarker.token, userMarker.latitude, userMarker.longitude, userMarker.message))
+                        outMarkers.add(UserMarker(userMarker.userId, userMarker.latitude, userMarker.longitude, userMarker.message))
+                        Log.i("USERMARKER", userMarker.message)
                         Log.i("Retrofit","UserMarker: $userMarker")
                     }
                     onSuccess(outMarkers)
@@ -288,10 +291,18 @@ object DataAccess {
         )
 
     @Serializable
+    data class UserMarkerData(
+        val userId: String,
+        val latitude: Double,
+        val longitude: Double,
+        val message: String
+    )
+
+    @Serializable
     data class PlaceServerArray(val places :List<PlaceServerData>?)
 
     @Serializable
-    data class UserMarkerServerArray(val userMarkers :List<UserMarkerServerData>?)
+    data class UserMarkerServerArray(val requestHelps :List<UserMarkerData>?)
 
         interface UserAccessAPI {
             //@Headers("Content-Type: application/json")

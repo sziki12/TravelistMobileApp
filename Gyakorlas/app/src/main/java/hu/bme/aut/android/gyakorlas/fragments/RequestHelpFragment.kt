@@ -17,6 +17,7 @@ import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRequestHelpBinding
 import hu.bme.aut.android.gyakorlas.getCurrentUser
 import hu.bme.aut.android.gyakorlas.location.LocationService
+import hu.bme.aut.android.gyakorlas.mapData.TrackOthersDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import hu.bme.aut.android.gyakorlas.requestHelp.HelpMessage
 import hu.bme.aut.android.gyakorlas.requestHelp.UserMarkerAdapter
@@ -25,12 +26,13 @@ import hu.bme.aut.android.gyakorlas.requestHelp.RequestHelpListener
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 
-class RequestHelpFragment : Fragment(), RequestHelpListener {
+class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProvider.TrackOthersDataChangedListener {
     private lateinit var binding : FragmentRequestHelpBinding
     private lateinit var userMarkerAdapter: UserMarkerAdapter
     private var userMarkers: ArrayList<UserMarker> = ArrayList()
     private lateinit var tokenSharedPreferences: SharedPreferences
     private lateinit var token: String
+    private val trackOthersDataProvider = TrackOthersDataProvider.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,11 +46,13 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        trackOthersDataProvider.addListener(this)
+
         tokenSharedPreferences = requireActivity().getSharedPreferences("user_token", Context.MODE_PRIVATE)
         token = tokenSharedPreferences.getString("token", "")?:""
 
         //Lekerem a UserMarker-eket tartalmazo listat
-        DataAccess.getUserMarkers()
+        /*DataAccess.getUserMarkers()
         {
                 outMarkers->
             if(outMarkers!=null)
@@ -56,16 +60,10 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
                 userMarkers.clear()
                 userMarkers.addAll(outMarkers)
             }
-        }
+        }*/
+        Log.i("REQUESTMARKERSIZE", userMarkers.size.toString())
 
-        var requestedHelpUsers : ArrayList<UserMarker> = ArrayList()
-        for (user in userMarkers){
-            if (user.message != ""){
-                requestedHelpUsers.add(user)
-            }
-        }
-
-        userMarkerAdapter = UserMarkerAdapter(requestedHelpUsers)
+        userMarkerAdapter = UserMarkerAdapter(getRequestedHelpUsers(trackOthersDataProvider.markers))
         binding.rvMessages.layoutManager = LinearLayoutManager(this.context)
         binding.rvMessages.adapter = userMarkerAdapter
 
@@ -81,7 +79,12 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
             )
         }
         binding.imgbtnMenu.setOnClickListener {
-            findNavController().navigate(R.id.action_requestHelpFragment_to_menuFragment)
+            try{
+                findNavController().navigate(R.id.action_requestHelpFragment_to_menuFragment)
+            }
+            catch(e: Exception){
+                Log.i("REQEX", e.message.toString())
+            }
         }
 
         binding.btnGotHelp.setOnClickListener {
@@ -94,16 +97,19 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
             if (lat != null && lng != null) {
                 var user = DataAccess.UserMarkerServerData(token, lat, lng, "")
                 DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
-            }
 
-            //TODO EZ KELL?
-            for (u in userMarkers){
-                if (u.username == username){
-                    u.message = ""
+                //TODO ne lat, lng-gal azonositsuk a usert, hanem id/username
+                for (m in trackOthersDataProvider.markers){
+                    if (m.latitude == user.latitude && m.longitude == user.longitude){
+                        m.message = user.message
+                    }
                 }
             }
 
-            userMarkerAdapter.update(userMarkers)
+            activity?.runOnUiThread {
+                userMarkerAdapter.update(getRequestedHelpUsers(trackOthersDataProvider.markers))
+            }
+
             binding.btnGotHelp.isVisible = false
         }
     }
@@ -112,16 +118,16 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
         var user = DataAccess.UserMarkerServerData(token, userMarker.latitude, userMarker.longitude, userMarker.message)
         DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
 
-        //TODO EZ KELL? hogy frissitem a recyclerviewt?
-        //az add elvileg nem kell!!!
-        userMarkers.add(userMarker)
-        Log.i("USERMARKER", userMarkers.size.toString())
-        for (u in userMarkers){
-            if (u.username == userMarker.username){
-                u.message = userMarker.message
+        //TODO ne lat, lng-gal azonositsuk a usert, hanem id/username
+        for (m in trackOthersDataProvider.markers){
+            if (m.latitude == userMarker.latitude && m.longitude == userMarker.longitude){
+                m.message = userMarker.message
             }
         }
-        userMarkerAdapter.update(userMarkers)
+
+        activity?.runOnUiThread {
+            userMarkerAdapter.update(getRequestedHelpUsers(trackOthersDataProvider.markers))
+        }
 
         //Beallitod, hogy az "I got help" gomb lathato legyen
         binding.btnGotHelp.isVisible = true
@@ -135,5 +141,27 @@ class RequestHelpFragment : Fragment(), RequestHelpListener {
     private fun onSuccess()
     {
         Log.i("Retrofit","OnSuccess")
+    }
+
+    override fun onTrackOthersDataChanged(markers: List<UserMarker>) {
+        activity?.runOnUiThread {
+            userMarkerAdapter.update(getRequestedHelpUsers(markers))
+        }
+    }
+
+    private fun getRequestedHelpUsers(markers: List<UserMarker>) : ArrayList<UserMarker> {
+        var requestedHelpUsers : ArrayList<UserMarker> = ArrayList()
+        for (user in markers){
+            if (user.message != ""){
+                requestedHelpUsers.add(user)
+                Log.i("REQUESTEDHELP", user.message)
+            }
+        }
+        return requestedHelpUsers
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        trackOthersDataProvider.removeListener(this)
     }
 }
