@@ -1,6 +1,8 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -28,21 +30,21 @@ import hu.bme.aut.android.gyakorlas.location.LocationData
 import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.MapMarker
+import hu.bme.aut.android.gyakorlas.mapData.TrackOthersDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 import java.lang.StringBuilder
 
 class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
-    GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+    GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, TrackOthersDataProvider.TrackOthersDataChangedListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: FragmentTrackOthersBinding
     private var isInitialized = false
     var markers: ArrayList<UserMarker> = ArrayList()
     var shownMarkers = ArrayList<Marker?>()
-    private val handler = Handler(Looper.getMainLooper())
-    private val updateIntervalMillis = 30 * 1000 // 30 seconds
+    private val trackOthersDataProvider = TrackOthersDataProvider.instance
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,9 +58,9 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        startUpdateTimer()
 
-        //setUpMapData("All")
+        trackOthersDataProvider.addListener(this)
+
         updateMarkers()
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.trackOthersMap) as SupportMapFragment?
@@ -69,33 +71,6 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
         }
     }
 
-    /**
-     * Contains the initiations of the userLocations ArrayList
-     */
-
-    /*private fun setUpMapData(selectedLocation: String) {
-//        this.activity?.let { LocationData.initUsers() }
-        DataAccess.getUserMarkers()
-        {
-                outMarkers->
-            if(outMarkers!=null)
-            {
-                markers.clear()
-                markers.addAll(outMarkers)
-            }
-        }
-    }*/
-
-    private fun startUpdateTimer() {
-        handler.postDelayed(object : Runnable {
-            override fun run() {
-                updateMarkers()
-
-                handler.postDelayed(this, updateIntervalMillis.toLong())
-            }
-        }, updateIntervalMillis.toLong())
-    }
-
     private fun updateMarkers() {
         DataAccess.getUserMarkers()
         {
@@ -104,21 +79,75 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
             {
                 markers.clear()
                 markers.addAll(outMarkers)
+                for (m in markers){
+                    Log.i("MARKERS", m.message)
+                }
                 showMarkers()
+            }
+        }
+
+        for (m in markers) {
+            val userLatLng = LatLng(m.latitude, m.longitude)
+
+            if (m.message == ""){
+                val markerOptions = MarkerOptions().position(userLatLng).title(m.username).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                mMap.addMarker(markerOptions)
+            }
+            else {
+                //Distance between current location and userLatLng in meters:
+                val distance = LocationService.calculateDistance(userLatLng)
+                if (distance != null){
+                    if (distance <= 5000){
+                        val markerOptions = MarkerOptions().position(userLatLng).title(m.username)
+                        mMap.addMarker(markerOptions)
+                    }
+                }
             }
         }
     }
 
     private fun showMarkers()
     {
-        for(marker in shownMarkers) {
-            marker?.remove()
-        }
-        shownMarkers.clear()
+        activity?.runOnUiThread {
+            for (marker in shownMarkers) {
+                marker?.remove()
+            }
+            shownMarkers.clear()
 
-        for(userMarker in markers) {
-            var latlng = LatLng(userMarker.latitude, userMarker.longitude)
-            shownMarkers.add(mMap.addMarker(MarkerOptions().position(latlng).title(userMarker.username)))
+            activity?.runOnUiThread {
+                for (userMarker in markers) {
+                    var latlng = LatLng(userMarker.latitude, userMarker.longitude)
+                    try {
+                        shownMarkers.add(
+                            mMap.addMarker(
+                                MarkerOptions().position(latlng).title(userMarker.username)
+                            )
+                        )
+                    } catch (e: Exception) {
+                        continue
+                    }
+                }
+            }
+
+            for (m in markers) {
+                val userLatLng = LatLng(m.latitude, m.longitude)
+
+                if (m.message == "") {
+                    val markerOptions = MarkerOptions().position(userLatLng).title(m.username)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    mMap.addMarker(markerOptions)
+                } else {
+                    //Distance between current location and userLatLng in meters:
+                    val distance = LocationService.calculateDistance(userLatLng)
+                    if (distance != null) {
+                        if (distance <= 5000) {
+                            val markerOptions =
+                                MarkerOptions().position(userLatLng).title(m.username)
+                            mMap.addMarker(markerOptions)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -156,26 +185,7 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
                 Log.i("PERMISSION", "Map Disabled")
             }
         }
-
-        for (m in markers) {
-            val userLatLng = LatLng(m.latitude, m.longitude)
-
-            if (m.message != ""){
-                val markerOptions = MarkerOptions().position(userLatLng).title(m.username).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                mMap.addMarker(markerOptions)
-            }
-            else {
-                //Distance between current location and userLatLng in meters:
-                val distance = LocationService.calculateDistance(userLatLng)
-
-                if (distance != null){
-                    if (distance <= 5000){
-                        val markerOptions = MarkerOptions().position(userLatLng).title(m.username)
-                        mMap.addMarker(markerOptions)
-                    }
-                }
-            }
-        }
+        showMarkers()
 
         //Set Map Center
         centerCamera()
@@ -249,7 +259,15 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
 
     override fun onDestroy() {
         // Stop the timer when the fragment is destroyed
-        handler.removeCallbacksAndMessages(null)
+        //handler.removeCallbacksAndMessages(null)
+        trackOthersDataProvider.removeListener(this)
         super.onDestroy()
+    }
+
+    override fun onTrackOthersDataChanged(markers: List<UserMarker>) {
+        Log.i("TRACKDATACHANGED", markers.size.toString())
+        this.markers.clear()
+        this.markers.addAll(markers)
+        showMarkers()
     }
 }

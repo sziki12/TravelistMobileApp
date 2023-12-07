@@ -1,5 +1,6 @@
 package hu.bme.aut.android.gyakorlas.location
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
@@ -7,6 +8,7 @@ import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.fragments.SettingsFragment
 import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
+import hu.bme.aut.android.gyakorlas.mapData.TrackOthersDataProvider
 import java.util.Timer
 import java.util.TimerTask
 
@@ -62,6 +64,8 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
         override fun run() {
             //Updates Map Markers
             MapDataProvider.instance.updateMarkers()
+            TrackOthersDataProvider.instance.updateUserMarkers()
+            TrackOthersDataProvider.instance.postUserMarker()
 
             if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
             {

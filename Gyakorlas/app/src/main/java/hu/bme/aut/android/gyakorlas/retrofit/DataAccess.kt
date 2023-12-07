@@ -61,6 +61,7 @@ object DataAccess {
                     withContext(Dispatchers.Main) {
                         if (response.isSuccessful) {
                             if (token != null) {
+                                Log.i("DATAACCESSTOKEN", token)
                                 onSuccess.invoke(token)
                             } // Invoke success callback
                             val responseBody = response.body() // Access the response body here
@@ -81,7 +82,7 @@ object DataAccess {
             }
         }
 
-    fun startRegistrationListener( user: UserServerData,
+    fun startRegistrationListener( user: RegistrationServerData,
                                    onSuccess: () -> Unit,
                                    onFailure: (message: String) -> Unit,
                                    onUserExists: () -> Unit)
@@ -226,11 +227,13 @@ object DataAccess {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = connection.userAPI.getUserMarkers()
+                Log.i("GETUSERMARKERS", response.toString())
                 if (response.isSuccessful) {
                     val outMarkers = ArrayList<UserMarker>()
-                    for(userMarker in response.body()!!.userMarkers!!)
+                    for(userMarker in response.body()!!.requestHelps!!)
                     {
-                        outMarkers.add(UserMarker(userMarker.token, userMarker.latitude, userMarker.longitude, userMarker.message))
+                        outMarkers.add(UserMarker(userMarker.username, userMarker.latitude, userMarker.longitude, userMarker.message))
+                        Log.i("USERMARKER", userMarker.message)
                         Log.i("Retrofit","UserMarker: $userMarker")
                     }
                     onSuccess(outMarkers)
@@ -263,42 +266,58 @@ object DataAccess {
             val userAPI = retrofit.create(UserAccessAPI::class.java)
         }
 
-        @Serializable
-        data class UserServerData(
-            val email: String,
-            val password: String
-        )
+    @Serializable
+    data class UserServerData(
+        val email: String,
+        val password: String
+    )
 
-        @Serializable
-        data class PlaceServerData(
-            val name: String,
-            val location: String,
-            val latitude: Double,
-            val longitude: Double,
-            val description: String,
-            val rating: Double
-        )
+    @Serializable
+    data class RegistrationServerData(
+        val username: String,
+        val email: String,
+        val password: String
+    )
 
-        @Serializable
-        data class UserMarkerServerData(
-            val token: String,
-            val latitude: Double,
-            val longitude: Double,
-            val message: String
-        )
+    @Serializable
+    data class PlaceServerData(
+        val name: String,
+        val location: String,
+        val latitude: Double,
+        val longitude: Double,
+        val description: String,
+        val rating: Double
+    )
+
+    @Serializable
+    data class UserMarkerServerData(
+        var token: String,
+        val latitude: Double,
+        val longitude: Double,
+        val message: String
+    )
+
+    @Serializable
+    data class UserMarkerData(
+        val username: String,
+        val userId: String,
+        val latitude: Double,
+        val longitude: Double,
+        val message: String
+    )
 
     @Serializable
     data class PlaceServerArray(val places :List<PlaceServerData>?)
 
     @Serializable
-    data class UserMarkerServerArray(val userMarkers :List<UserMarkerServerData>?)
+    data class UserMarkerServerArray(val requestHelps :List<UserMarkerData>?)
 
         interface UserAccessAPI {
             //@Headers("Content-Type: application/json")
             @POST("/api/login")
             suspend fun loginUser(@Body requestBody: UserServerData): Response<ResponseBody>
             @POST("/api/registration")
-            suspend fun registerUser(@Body requestBody: UserServerData): Response<ResponseBody>
+            suspend fun registerUser(@Body requestBody: RegistrationServerData): Response<ResponseBody>
             @POST("/api/places")
             suspend fun uploadNewPlace(@Body requestBody: PlaceServerData): Response<ResponseBody>
             @GET("/api/places")
