@@ -1,12 +1,8 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,15 +22,11 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentTrackOthersBinding
-import hu.bme.aut.android.gyakorlas.location.LocationData
 import hu.bme.aut.android.gyakorlas.location.LocationService
-import hu.bme.aut.android.gyakorlas.mapData.MapDataProvider
-import hu.bme.aut.android.gyakorlas.mapData.MapMarker
 import hu.bme.aut.android.gyakorlas.mapData.TrackOthersDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import hu.bme.aut.android.gyakorlas.permission.PermissionHandler
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
-import java.lang.StringBuilder
 
 class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
     GoogleMap.OnMyLocationClickListener, ActivityCompat.OnRequestPermissionsResultCallback, TrackOthersDataProvider.TrackOthersDataChangedListener {
@@ -258,8 +250,6 @@ class TrackOthersFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListene
     }
 
     override fun onDestroy() {
-        // Stop the timer when the fragment is destroyed
-        //handler.removeCallbacksAndMessages(null)
         trackOthersDataProvider.removeListener(this)
         super.onDestroy()
     }

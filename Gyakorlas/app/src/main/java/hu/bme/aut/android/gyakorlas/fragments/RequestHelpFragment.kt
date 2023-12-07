@@ -1,7 +1,5 @@
 package hu.bme.aut.android.gyakorlas.fragments
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,7 +18,6 @@ import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.mapData.Token
 import hu.bme.aut.android.gyakorlas.mapData.TrackOthersDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.UserMarker
-import hu.bme.aut.android.gyakorlas.requestHelp.HelpMessage
 import hu.bme.aut.android.gyakorlas.requestHelp.UserMarkerAdapter
 import hu.bme.aut.android.gyakorlas.requestHelp.RequestHelpDialogFragment
 import hu.bme.aut.android.gyakorlas.requestHelp.RequestHelpListener
@@ -31,8 +28,6 @@ class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProv
     private lateinit var binding : FragmentRequestHelpBinding
     private lateinit var userMarkerAdapter: UserMarkerAdapter
     private var userMarkers: ArrayList<UserMarker> = ArrayList()
-    private lateinit var tokenSharedPreferences: SharedPreferences
-    private lateinit var token: String
     private val trackOthersDataProvider = TrackOthersDataProvider.instance
 
     companion object {

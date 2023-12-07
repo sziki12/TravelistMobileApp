@@ -151,11 +151,6 @@ class MapsFragment : Fragment(), GoogleMap.OnMyLocationButtonClickListener,
             //Finds the appropriate MapMarker by its position
             for (mapMarker in markers) {
                 if (mapMarker.isOwnMarker(marker) && mapMarker.place != null) {
-//                    var intent = Intent(this, PlaceActivity::class.java)
-//                    //intent.putParcelableArrayListExtra("IMAGES", mapMarker.place.images)
-//                    intent.putExtra("PLACE", MapDataProvider.getIDByMarker(mapMarker))
-//                    Log.i("PLACE","Place ID:${MapDataProvider.getIDByMarker(mapMarker)}")
-//                    startActivity(intent)
 
                     val markerID = mapDataProvider.getIDByMarker(mapMarker)
                     Log.i("PLACE","Place ID:$markerID")

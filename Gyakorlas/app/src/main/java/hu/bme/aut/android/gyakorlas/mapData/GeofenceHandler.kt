@@ -109,10 +109,6 @@ class GeofenceHandler: BroadcastReceiver() {
                     // Failed to add geofences
                     // ...
                     Log.i("GEOFENCE","Adding Failed")
-                    /*if(activity as? MenuActivity != null)
-                    {
-                       //Enable/Disable Recommended For You button
-                    }*/
                 }
             }
         }
@@ -120,15 +116,12 @@ class GeofenceHandler: BroadcastReceiver() {
             Thread.sleep(3000)
             activity?.let { setUpGeofencingClient(it) }
         }
-        //Log.i("GEOFENCE","Add Called")
     }
     fun calculateNearbyMarkers():ArrayList<MapMarker>
     {
         val nearbyMarkers:ArrayList<MapMarker> = ArrayList()
-        //Log.i("GEOFENCE","activeGeofences.size: ${activeGeofences.size}")
         for(geofence in activeGeofences)
         {
-            //Log.i("GEOFENCE","Markers.size: ${markers.size}")
             for(marker in markers)
             {
                 var distance = LocationService.calculateDistance(LatLng(marker.lat, marker.lng))
@@ -176,7 +169,6 @@ class GeofenceHandler: BroadcastReceiver() {
         {
             Geofence.GEOFENCE_TRANSITION_ENTER ->
             {
-                //Log.i("GEOFENCE","Enter")
                 if(triggeringGeofences!=null)
                 {
                     for(geofence in triggeringGeofences)
@@ -192,7 +184,6 @@ class GeofenceHandler: BroadcastReceiver() {
 
             Geofence.GEOFENCE_TRANSITION_EXIT ->
             {
-                //Log.i("GEOFENCE","Exit")
                 if(triggeringGeofences!=null)
                 {
                     for(geofence in triggeringGeofences)

@@ -96,7 +96,6 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
         {
             locationService.setUpHashMaps()
             SettingsFragment.registerListener(this)
-            //locationService.preferences.registerOnSharedPreferenceChangeListener(this)
             if(locationService.isSuccess)
             {
                 if(locationService.waitOnSuccess==0)
@@ -118,7 +117,6 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
                 }
             }
             SettingsFragment.unregisterListener(this)
-            //locationService.preferences.unregisterOnSharedPreferenceChangeListener(this)
         }
     }
 }
