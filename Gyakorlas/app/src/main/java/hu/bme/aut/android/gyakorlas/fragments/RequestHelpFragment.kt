@@ -17,6 +17,7 @@ import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentRequestHelpBinding
 import hu.bme.aut.android.gyakorlas.getCurrentUser
 import hu.bme.aut.android.gyakorlas.location.LocationService
+import hu.bme.aut.android.gyakorlas.mapData.Token
 import hu.bme.aut.android.gyakorlas.mapData.TrackOthersDataProvider
 import hu.bme.aut.android.gyakorlas.mapData.UserMarker
 import hu.bme.aut.android.gyakorlas.requestHelp.HelpMessage
@@ -95,7 +96,7 @@ class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProv
             var lat = LocationService.currentLocation?.latitude
             var lng = LocationService.currentLocation?.longitude
             if (lat != null && lng != null) {
-                var user = DataAccess.UserMarkerServerData(token, lat, lng, "")
+                var user = DataAccess.UserMarkerServerData(Token.token, lat, lng, "solved")
                 DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
 
                 //TODO ne lat, lng-gal azonositsuk a usert, hanem id/username
@@ -115,7 +116,7 @@ class RequestHelpFragment : Fragment(), RequestHelpListener, TrackOthersDataProv
     }
 
     override fun onRequestHelp(userMarker: UserMarker) {
-        var user = DataAccess.UserMarkerServerData(token, userMarker.latitude, userMarker.longitude, userMarker.message)
+        var user = DataAccess.UserMarkerServerData(Token.token, userMarker.latitude, userMarker.longitude, userMarker.message)
         DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
 
         //TODO ne lat, lng-gal azonositsuk a usert, hanem id/username

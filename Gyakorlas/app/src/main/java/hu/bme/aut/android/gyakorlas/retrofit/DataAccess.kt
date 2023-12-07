@@ -82,7 +82,7 @@ object DataAccess {
             }
         }
 
-    fun startRegistrationListener( user: UserServerData,
+    fun startRegistrationListener( user: RegistrationServerData,
                                    onSuccess: () -> Unit,
                                    onFailure: (message: String) -> Unit,
                                    onUserExists: () -> Unit)
@@ -266,29 +266,36 @@ object DataAccess {
             val userAPI = retrofit.create(UserAccessAPI::class.java)
         }
 
-        @Serializable
-        data class UserServerData(
-            val email: String,
-            val password: String
-        )
+    @Serializable
+    data class UserServerData(
+        val email: String,
+        val password: String
+    )
 
-        @Serializable
-        data class PlaceServerData(
-            val name: String,
-            val location: String,
-            val latitude: Double,
-            val longitude: Double,
-            val description: String,
-            val rating: Double
-        )
+    @Serializable
+    data class RegistrationServerData(
+        val username: String,
+        val email: String,
+        val password: String
+    )
 
-        @Serializable
-        data class UserMarkerServerData(
-            val token: String,
-            val latitude: Double,
-            val longitude: Double,
-            val message: String
-        )
+    @Serializable
+    data class PlaceServerData(
+        val name: String,
+        val location: String,
+        val latitude: Double,
+        val longitude: Double,
+        val description: String,
+        val rating: Double
+    )
+
+    @Serializable
+    data class UserMarkerServerData(
+        var token: String,
+        val latitude: Double,
+        val longitude: Double,
+        val message: String
+    )
 
     @Serializable
     data class UserMarkerData(
@@ -309,7 +316,7 @@ object DataAccess {
             @POST("/api/login")
             suspend fun loginUser(@Body requestBody: UserServerData): Response<ResponseBody>
             @POST("/api/registration")
-            suspend fun registerUser(@Body requestBody: UserServerData): Response<ResponseBody>
+            suspend fun registerUser(@Body requestBody: RegistrationServerData): Response<ResponseBody>
             @POST("/api/places")
             suspend fun uploadNewPlace(@Body requestBody: PlaceServerData): Response<ResponseBody>
             @GET("/api/places")

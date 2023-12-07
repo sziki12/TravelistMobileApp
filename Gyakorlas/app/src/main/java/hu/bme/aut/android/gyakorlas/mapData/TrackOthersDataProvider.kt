@@ -1,5 +1,12 @@
 package hu.bme.aut.android.gyakorlas.mapData
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
+import android.widget.Toast
+import hu.bme.aut.android.gyakorlas.MainActivity
+import hu.bme.aut.android.gyakorlas.fragments.TrackOthersFragment
+import hu.bme.aut.android.gyakorlas.location.LocationService
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 class TrackOthersDataProvider {
@@ -41,5 +48,25 @@ class TrackOthersDataProvider {
                 listener.onTrackOthersDataChanged(markers)
             }
         }
+    }
+
+    fun postUserMarker(){
+        var lat = LocationService.currentLocation?.latitude
+        var lng = LocationService.currentLocation?.longitude
+        Log.i("POSTUSERMARKER", Token.token)
+
+        if (lat != null && lng != null){
+            var user = DataAccess.UserMarkerServerData(Token.token, lat, lng, "")
+            DataAccess.startHelpMessageListener(user, ::onSuccess, ::onFailure)
+        }
+    }
+
+    private fun onFailure(message:String)
+    {
+        Log.i("Retrofit","OnFailure")
+    }
+    private fun onSuccess()
+    {
+        Log.i("Retrofit","OnSuccess")
     }
 }

@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import hu.bme.aut.android.gyakorlas.R
 import hu.bme.aut.android.gyakorlas.databinding.FragmentLoginBinding
+import hu.bme.aut.android.gyakorlas.mapData.Token
 import hu.bme.aut.android.gyakorlas.retrofit.DataAccess
 
 class LoginFragment : Fragment() {
@@ -85,10 +86,11 @@ class LoginFragment : Fragment() {
         val finalToken = tokenString.substring(0, endIndex)
 
         Log.i("TOKEN", finalToken)
-        tokenSharedPreferences.edit {
-            putString("token", finalToken)
-            apply()
-        }
+//        tokenSharedPreferences.edit {
+//            putString("token", finalToken)
+//            apply()
+//        }
+        Token.token = finalToken
         findNavController().navigate(R.id.action_loginFragment_to_menuFragment)
         Log.i("Retrofit","OnSuccess")
     }

@@ -1,5 +1,6 @@
 package hu.bme.aut.android.gyakorlas.location
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
@@ -64,6 +65,7 @@ class LocationThread(private var locationService: LocationService) : Thread(), S
             //Updates Map Markers
             MapDataProvider.instance.updateMarkers()
             TrackOthersDataProvider.instance.updateUserMarkers()
+            TrackOthersDataProvider.instance.postUserMarker()
 
             if (PermissionHandler.hasPermission[PermissionHandler.LOCATION_PERMISSION_REQUEST_CODE] == true)
             {

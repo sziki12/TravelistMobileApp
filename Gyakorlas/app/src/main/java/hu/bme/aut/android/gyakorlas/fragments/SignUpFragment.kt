@@ -57,9 +57,10 @@ class SignUpFragment : Fragment() {
             }
             else {
                 saveUserData()
+                val username = binding.etUsername.text.toString()
                 val email = binding.etEmail.text.toString()
                 val password = binding.etPassword.text.toString()
-                val user = DataAccess.UserServerData(email,password)
+                val user = DataAccess.RegistrationServerData(username,email,password)
                 DataAccess.startRegistrationListener(user,::onSuccess,::onFailure,::onUserExists)
             }
         }
