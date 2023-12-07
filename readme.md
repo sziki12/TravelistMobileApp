@@ -39,7 +39,7 @@ Ha a képeket szeretnénk nagyobb méretben megnézni, akkor bármelyik fotóra 
 
 ![](assets/image_view.png)
 
-Ha valamelyik helyről meg szeretnénk nézi a mások által írt kommenteket, vagy mi magunk is szeretnénk megjegyzést hozzáfűzni, akkor a Comments gombra kell kattintanunk. Itt láthatjuk, hogy melyik felhasználó milyen megjegyzést írt, hanyasra értékelte a helyszínt.A New Comment gomb megnyomása után egy dialógusablakba írhatjuk be a saját véleményünk, értékelésünk. A Details gombra kattintva visszanavigálunk a hely részletes nézetére.
+Ha valamelyik helyről meg szeretnénk nézi a mások által írt kommenteket, vagy mi magunk is szeretnénk megjegyzést hozzáfűzni, akkor a Comments gombra kell kattintanunk. Itt láthatjuk, hogy melyik felhasználó milyen megjegyzést írt, hanyasra értékelte a helyszínt. A New Comment gomb megnyomása után egy dialógusablakba írhatjuk be a saját véleményünk, értékelésünk. A Details gombra kattintva visszanavigálunk a hely részletes nézetére.
 
 ![](assets/comments.png)
 
@@ -54,14 +54,17 @@ Alapértelmezetten 7,5 kilométeres körzetből ajánl az app helyeket, viszont 
 
 
 
-Ha a menüből a Track Others opciót választjuk, akkor megtekinthetjük a térképen az 5 kilométeres körzetünkben lévő felhasználók helyzetét. Ezen a térképen kékkel megjelennek a
+Ha a menüből a Track Others opciót választjuk, akkor megtekinthetjük a térképen az 5 kilométeres körzetünkben lévő felhasználók helyzetét. Alapértelmezetten a felhasználók markerei kékek, viszont ha valaki a Request Help megnyomásával segítséget kért, akkor ő ezen a térképen pirossal fog megjelenni.
 
 ![](assets/track_others.png)
 
-Az Upload New Place opciót választva feltölthetünk egy új helyről értékelést, képeket, leírást.
+Az Upload New Place opciót választva feltölthetünk egy új helyről értékelést, képeket, leírást. A térkép ikonra kattintva az applikáció behoz egy térképet, ahol ki tudjuk választani a feltölteni kívánt hely pontos helyzetét. Ha ezután megnyomjuk a képernyő alján található másolás gombot, akkor beilleszti a szélességi és hosszúsági koordinátákat a megfelelő szövegdobozba. Képet itt is tölthetünk fel a galéránkból, vagy készíthetjük őket egyenesen a kameránkkal.
 
 ![](assets/upload_new_place.png)
+![](assets/upload_new_place_map.png)
 
-A Request Help opciót választva pedig segítséget kérhetünk a közelünkben lévőktől, akik ekkor egy értesítést kapnak. A képernyő közepén lévő nagy gombot kell csupán megnyomni ehhez.
+A Request Help opciót választva pedig segítséget kérhetünk a közelünkben lévőktől. A képernyő tetején lévő gombot kell csupán megnyomni ehhez. Minden felhasználónál megjelenik ekkor ezen a képernyőn az általunk írt üzenet.
+Ha jeleztük, hogy segítséget szeretnénk kérni, akkor megjelenik egy "I got help" nevű gomb. Ha megoldódik a problémánk, akkor ezt megnyomva eltűnik az üzenetünk.
 
 ![](assets/request_help.png)
+![](assets/request_help_igothelp.png)
