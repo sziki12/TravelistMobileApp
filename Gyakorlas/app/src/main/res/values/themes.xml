@@ -1,0 +1,24 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Travelist" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.Travelist" parent="Base.Theme.Travelist" />
+
+    <style name="Theme.Travelist.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/darkblue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/travelistlogo</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="s">@color/darkblue</item>
+        <item name="postSplashScreenTheme">@style/Theme.Travelist</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Travelist.SettingsButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:backgroundTint">@color/darkblue</item>
+    </style>
+
+</resources>

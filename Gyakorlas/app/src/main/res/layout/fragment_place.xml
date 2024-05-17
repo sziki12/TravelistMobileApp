@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkblue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imgbtnMap"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginEnd="9dp"
+                android:src="@drawable/menu_mapicon" />
+
+            <ImageView
+                android:id="@+id/imgbtnMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="9dp"
+                android:src="@drawable/menu" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="40sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="92dp"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:textAlignment="textStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/placeCommentsButton" />
+
+        <ImageButton
+            android:id="@+id/pictureButton1"
+            android:layout_width="270dp"
+            android:layout_height="210dp"
+            android:layout_marginTop="44dp"
+            android:src="@drawable/travelistlogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <ImageButton
+            android:id="@+id/pictureButton2"
+            android:layout_width="184dp"
+            android:layout_height="184dp"
+            android:layout_marginTop="44dp"
+            app:layout_constraintEnd_toStartOf="@+id/pictureButton3"
+            app:layout_constraintHorizontal_bias="0.842"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pictureButton1"
+            app:srcCompat="@drawable/travelistlogo" />
+
+        <ImageButton
+            android:id="@+id/pictureButton3"
+            android:layout_width="184dp"
+            android:layout_height="184dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pictureButton1"
+            app:srcCompat="@drawable/travelistlogo" />
+
+        <RatingBar
+            android:id="@+id/placeRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/pictureButton3"
+            tools:layout_editor_absoluteX="8dp" />
+
+        <Button
+            android:id="@+id/placeDetailesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detailes"
+            app:layout_constraintStart_toStartOf="@+id/tvDescription"
+            app:layout_constraintTop_toBottomOf="@+id/placeRating" />
+
+        <Button
+            android:id="@+id/placeCommentsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comments"
+            app:layout_constraintStart_toEndOf="@+id/placeDetailesButton"
+            app:layout_constraintTop_toBottomOf="@+id/placeRating" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+

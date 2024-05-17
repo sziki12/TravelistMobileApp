@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">Travelist</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="permission_required_toast">Permission Required!</string>
+    <string name="location_permission_denied">Location Permission Denied!</string>
+    <string name="permission_rationale_location">Grant Location Permission For The Correct Functionality</string>
+    <string name="profile">Profile</string>
+    <string name="search">Search</string>
+    <string name="recommended_for_you">Recommended For You</string>
+    <string name="track_others">Track Others</string>
+    <string name="upload_new_place">Upload New Place</string>
+    <string name="request_help">Request Help</string>
+    <string name="upload_new_picture">Upload New Picture</string>
+    <string name="profile_name">Profile Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="login">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="create_account">Create Account</string>
+
+    <string name="new_comment">New Comment</string>
+    <string name="edit_comment">Edit Comment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pictures">Pictures</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="accurate">Accurate</string>
+    <string name="location_and_geofencing">Location and Geofencing</string>
+    <string name="location_update_interval">Location Update Interval</string>
+    <string name="location_update_interval_on_failure">Location Update Interval On Failure</string>
+    <string name="remember_username">Remember Username</string>
+    <string name="recommendend_for_you">Recommendend For You</string>
+    <string name="email_address">Email Address</string>
+    <string name="select_location_on_map">Select Location On Map</string>
+</resources>

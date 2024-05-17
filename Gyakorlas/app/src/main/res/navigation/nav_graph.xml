@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.MenuFragment"
+        android:label="fragment_menu"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_mapsFragment"
+            app:destination="@id/mapsFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_menuFragment_to_recommendedFragment"
+            app:destination="@id/recommendedFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_uploadNewPlaceFragment"
+            app:destination="@id/uploadNewPlaceFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_requestHelpFragment"
+            app:destination="@id/requestHelpFragment" />
+      <action
+            android:id="@+id/action_menuFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_trackOthersFragment"
+            app:destination="@id/trackOthersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_placeFragment"
+            app:destination="@id/placeFragment" />
+        <action
+            android:id="@+id/action_mapsFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recommendedFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.RecommendedFragment"
+        android:label="fragment_recommended"
+        tools:layout="@layout/fragment_recommended" >
+        <action
+            android:id="@+id/action_recommendedFragment_to_placeFragment"
+            app:destination="@id/placeFragment" />
+        <action
+            android:id="@+id/action_recommendedFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+        <action
+            android:id="@+id/action_recommendedFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/placeFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.PlaceFragment"
+        android:label="fragment_place"
+        tools:layout="@layout/fragment_place" >
+        <argument
+            android:name="markerID"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_placeFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+        <action
+            android:id="@+id/action_placeFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
+        <action
+            android:id="@+id/action_placeFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.ImageViewFragment"
+        android:label="fragment_image_view"
+        tools:layout="@layout/fragment_image_view" >
+        <argument
+            android:name="markerID"
+            app:argType="integer" />
+        <argument
+            android:name="index"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_imageViewFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/uploadNewPlaceFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.UploadNewPlaceFragment"
+        android:label="fragment_upload_new_place"
+        tools:layout="@layout/fragment_upload_new_place" >
+        <action
+            android:id="@+id/action_uploadNewPlaceFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_uploadNewPlaceFragment_to_selectLocationMapFragment"
+            app:destination="@id/selectLocationMapFragment" />
+        <argument
+            android:name="Location"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/requestHelpFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.RequestHelpFragment"
+        android:label="fragment_request_help"
+        tools:layout="@layout/fragment_request_help" >
+        <action
+            android:id="@+id/action_requestHelpFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/trackOthersFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.TrackOthersFragment"
+        android:label="TrackOthersFragment" >
+        <action
+            android:id="@+id/action_trackOthersFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.CommentsFragment"
+        android:label="fragment_comments"
+        tools:layout="@layout/fragment_comments" >
+        <action
+            android:id="@+id/action_commentsFragment_to_placeFragment"
+            app:destination="@id/placeFragment" />
+        <argument
+            android:name="markerID"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_commentsFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectLocationMapFragment"
+        android:name="hu.bme.aut.android.gyakorlas.fragments.SelectLocationMapFragment"
+        android:label="SelectLocationMapFragment" >
+        <action
+            android:id="@+id/action_selectLocationMapFragment_to_uploadNewPlaceFragment"
+            app:destination="@id/uploadNewPlaceFragment" />
+        <action
+            android:id="@+id/action_selectLocationMapFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
+        <argument
+            android:name="position"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            app:nullable="true" />
+    </fragment>
+</navigation>

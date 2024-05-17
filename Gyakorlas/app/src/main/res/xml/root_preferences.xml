@@ -1,0 +1,43 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<EditTextPreference
+        app:key="signature"
+        app:title="@string/signature_title"
+        app:useSimpleSummaryProvider="true" />-->
+
+        <!--app:summaryOff="@string/attachment_summary_off"
+        app:summaryOn="@string/attachment_summary_on"-->
+
+    <PreferenceCategory app:title="@string/location_and_geofencing">
+        <ListPreference
+            app:defaultValue="@string/accurate"
+            app:entries="@array/location_accuray"
+            app:entryValues="@array/location_accuray"
+            app:key="locationAccuracy"
+            app:title="Location Accuracy"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="5 s"
+            app:entries="@array/update_location_interval"
+            app:entryValues="@array/update_location_interval"
+            app:key="locationUpdateInterval"
+            app:title="@string/location_update_interval"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="5 s"
+            app:entries="@array/update_location_interval"
+            app:entryValues="@array/update_location_interval"
+            app:key="locationUpdateIntervalOnFailure"
+            app:title="@string/location_update_interval_on_failure"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/profile">
+        <SwitchPreferenceCompat
+            app:key="saveUser"
+            app:title="@string/remember_username" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
